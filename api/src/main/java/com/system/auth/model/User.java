@@ -1,26 +1,37 @@
 package com.system.auth.model;
 
+
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotNull;
+
 public class User {
-    private Integer userId = 0;
+    @NotNull(message = "user id must not be null")
+    @Range(min = 0, max = Integer.MAX_VALUE, message = "用户ID必须为正整数")
+    private Integer userId;
 
-    private String userName = "";
+    @NotNull(message = "user name must not be null")
+    private String userName;
 
-    private String password = "";
+    @NotNull(message = "password must not be null")
+    private String password;
 
-    private Boolean status = true;
+    private Boolean status;
 
-    private String mobileNumber = "";
+    @NotNull(message = "mobile number must not be null")
+    private String mobileNumber;
 
-    private String contactName = "";
+    @NotNull(message = "contact name must not be null")
+    private String contactName;
 
-    private String description = "";
+    private String description;
 
-    private Integer createUserId = 0;
-    private String createUserName = "";
+    private Integer createUserId;
+    private String createUserName;
 
-    private Long updateTime = new Long(0);
+    private Long updateTime;
 
-    private Long createTime = new Long(0);
+    private Long createTime;
 
     public Integer getUserId() {
         return userId;

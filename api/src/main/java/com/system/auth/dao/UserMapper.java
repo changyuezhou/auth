@@ -57,6 +57,28 @@ public interface UserMapper {
     })
     User selectByPrimaryKey(Integer userId);
 
+    @Select({
+            "select",
+            "a.user_id, a.user_name, a.password, a.status, a.mobile_number, a.contact_name, a.description, ",
+            "a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
+            "from t_user a, t_user b",
+            "where a.user_name=#{userName, jdbcType=VARCHAR} and a.user_id = b.user_id"
+    })
+    @Results({
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+            @Result(column="status", property="status", jdbcType=JdbcType.BIT),
+            @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
+            @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    User selectByUserName(String userName);
+
     @UpdateProvider(type=UserSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(User record);
 

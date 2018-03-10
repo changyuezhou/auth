@@ -1,4 +1,4 @@
-CREATE DATABASE db_auth;
+CREATE DATABASE db_auth default character set utf8 collate utf8_general_ci;
 USE db_auth;
 
 /*######################################################################################
@@ -52,8 +52,12 @@ CREATE TABLE `t_user` (
 */
 CREATE TABLE `t_admin_user` (
   `user_id`     int(11)           NOT NULL DEFAULT 0 COMMENT '用户ID',
+  `user_name`   varchar(128)      NOT NULL  UNIQUE COMMENT '用户名称',
+  `password`    varchar(256)      NOT NULL DEFAULT '' COMMENT '用户密码',
+  `status`      int(10)        NOT NULL DEFAULT 0 COMMENT '状态 1 超级用户 2 系统权限维护人员',
+  `mobile_number` varchar(64)     NOT NULL DEFAULT '' COMMENT '电话号码',
+  `contact_name`  varchar(256)    NOT NULL DEFAULT '' COMMENT '联系人',  
   `system_id`     int(11)      NOT NULL DEFAULT 0 COMMENT '系统ID',
-  `flag`     tinyint      NOT NULL DEFAULT 0 COMMENT '是否超级用户标示 1 是 0 不是',
   `description` varchar(1024)     NOT NULL DEFAULT '' COMMENT '描述信息',
   `create_user_id` int(11) NOT NULL DEFAULT 0 COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',

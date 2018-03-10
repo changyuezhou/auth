@@ -3,9 +3,17 @@ package com.system.auth.model;
 public class AdminUser {
     private Integer userId;
 
-    private Integer systemId;
+    private String userName;
 
-    private Byte flag;
+    private String password;
+
+    private Integer status;
+
+    private String mobileNumber;
+
+    private String contactName;
+
+    private Integer systemId;
 
     private String description;
 
@@ -23,20 +31,52 @@ public class AdminUser {
         this.userId = userId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber == null ? null : mobileNumber.trim();
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName == null ? null : contactName.trim();
+    }
+
     public Integer getSystemId() {
         return systemId;
     }
 
     public void setSystemId(Integer systemId) {
         this.systemId = systemId;
-    }
-
-    public Byte getFlag() {
-        return flag;
-    }
-
-    public void setFlag(Byte flag) {
-        this.flag = flag;
     }
 
     public String getDescription() {

@@ -1,6 +1,6 @@
 package com.system.auth.bean;
 
-public class OperationMessage {
+public class OperationMessage implements MessageInterface {
     private int code;
     private String msg;
 

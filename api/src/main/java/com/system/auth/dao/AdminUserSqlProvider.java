@@ -20,12 +20,28 @@ public class AdminUserSqlProvider {
             VALUES("user_id", "#{userId,jdbcType=INTEGER}");
         }
         
-        if (record.getSystemId() != null) {
-            VALUES("system_id", "#{systemId,jdbcType=INTEGER}");
+        if (record.getUserName() != null) {
+            VALUES("user_name", "#{userName,jdbcType=VARCHAR}");
         }
         
-        if (record.getFlag() != null) {
-            VALUES("flag", "#{flag,jdbcType=TINYINT}");
+        if (record.getPassword() != null) {
+            VALUES("password", "#{password,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getStatus() != null) {
+            VALUES("status", "#{status,jdbcType=INTEGER}");
+        }
+        
+        if (record.getMobileNumber() != null) {
+            VALUES("mobile_number", "#{mobileNumber,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getContactName() != null) {
+            VALUES("contact_name", "#{contactName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getSystemId() != null) {
+            VALUES("system_id", "#{systemId,jdbcType=INTEGER}");
         }
         
         if (record.getDescription() != null) {
@@ -51,12 +67,28 @@ public class AdminUserSqlProvider {
         BEGIN();
         UPDATE("t_admin_user");
         
-        if (record.getSystemId() != null) {
-            SET("system_id = #{systemId,jdbcType=INTEGER}");
+        if (record.getUserName() != null) {
+            SET("user_name = #{userName,jdbcType=VARCHAR}");
         }
         
-        if (record.getFlag() != null) {
-            SET("flag = #{flag,jdbcType=TINYINT}");
+        if (record.getPassword() != null) {
+            SET("password = #{password,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getStatus() != null) {
+            SET("status = #{status,jdbcType=INTEGER}");
+        }
+        
+        if (record.getMobileNumber() != null) {
+            SET("mobile_number = #{mobileNumber,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getContactName() != null) {
+            SET("contact_name = #{contactName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getSystemId() != null) {
+            SET("system_id = #{systemId,jdbcType=INTEGER}");
         }
         
         if (record.getDescription() != null) {

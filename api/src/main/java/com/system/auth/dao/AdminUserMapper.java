@@ -19,12 +19,16 @@ public interface AdminUserMapper {
     int deleteByPrimaryKey(Integer userId);
 
     @Insert({
-        "insert into t_admin_user (user_id, system_id, ",
-        "flag, description, ",
+        "insert into t_admin_user (user_id, user_name, ",
+        "password, status, ",
+        "mobile_number, contact_name, ",
+        "system_id, description, ",
         "create_user_id, update_time, ",
         "create_time)",
-        "values (#{userId,jdbcType=INTEGER}, #{systemId,jdbcType=INTEGER}, ",
-        "#{flag,jdbcType=TINYINT}, #{description,jdbcType=VARCHAR}, ",
+        "values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, ",
+        "#{password,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, ",
+        "#{mobileNumber,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, ",
+        "#{systemId,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, ",
         "#{createUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=BIGINT}, ",
         "#{createTime,jdbcType=BIGINT})"
     })
@@ -35,14 +39,19 @@ public interface AdminUserMapper {
 
     @Select({
         "select",
-        "user_id, system_id, flag, description, create_user_id, update_time, create_time",
+        "user_id, user_name, password, status, mobile_number, contact_name, system_id, ",
+        "description, create_user_id, update_time, create_time",
         "from t_admin_user",
         "where user_id = #{userId,jdbcType=INTEGER}"
     })
     @Results({
         @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+        @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
+        @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+        @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
+        @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
+        @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
         @Result(column="system_id", property="systemId", jdbcType=JdbcType.INTEGER),
-        @Result(column="flag", property="flag", jdbcType=JdbcType.TINYINT),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.INTEGER),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
@@ -55,8 +64,12 @@ public interface AdminUserMapper {
 
     @Update({
         "update t_admin_user",
-        "set system_id = #{systemId,jdbcType=INTEGER},",
-          "flag = #{flag,jdbcType=TINYINT},",
+        "set user_name = #{userName,jdbcType=VARCHAR},",
+          "password = #{password,jdbcType=VARCHAR},",
+          "status = #{status,jdbcType=INTEGER},",
+          "mobile_number = #{mobileNumber,jdbcType=VARCHAR},",
+          "contact_name = #{contactName,jdbcType=VARCHAR},",
+          "system_id = #{systemId,jdbcType=INTEGER},",
           "description = #{description,jdbcType=VARCHAR},",
           "create_user_id = #{createUserId,jdbcType=INTEGER},",
           "update_time = #{updateTime,jdbcType=BIGINT},",
