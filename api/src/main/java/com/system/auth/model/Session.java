@@ -3,7 +3,7 @@ package com.system.auth.model;
 public class Session {
     private Integer id;
 
-    private Integer platformId;
+    private String platformId;
 
     private Integer authTokenCreateTime;
 
@@ -15,7 +15,7 @@ public class Session {
 
     private String openId;
 
-    private Integer userId;
+    private String userId;
 
     private String code;
 
@@ -49,12 +49,12 @@ public class Session {
         this.id = id;
     }
 
-    public Integer getPlatformId() {
+    public String getPlatformId() {
         return platformId;
     }
 
-    public void setPlatformId(Integer platformId) {
-        this.platformId = platformId;
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId == null ? null : platformId.trim();
     }
 
     public Integer getAuthTokenCreateTime() {
@@ -97,12 +97,12 @@ public class Session {
         this.openId = openId == null ? null : openId.trim();
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getCode() {

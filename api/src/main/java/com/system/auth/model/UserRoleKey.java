@@ -1,33 +1,33 @@
 package com.system.auth.model;
 
 public class UserRoleKey {
-    private Integer userId;
+    private String userId;
 
-    private Integer roleId;
+    private String roleId;
 
-    private Integer platformId;
+    private String platformId;
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
-    public Integer getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
     }
 
-    public Integer getPlatformId() {
+    public String getPlatformId() {
         return platformId;
     }
 
-    public void setPlatformId(Integer platformId) {
-        this.platformId = platformId;
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId == null ? null : platformId.trim();
     }
 }

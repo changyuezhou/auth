@@ -1,6 +1,6 @@
 package com.system.auth.model;
 
-public class UserRole extends UserRoleKey {
+public class UserCustomArch extends UserCustomArchKey {
     private String createUserId;
 
     private Long updateTime;

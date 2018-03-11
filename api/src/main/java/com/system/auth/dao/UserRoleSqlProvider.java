@@ -17,19 +17,19 @@ public class UserRoleSqlProvider {
         INSERT_INTO("t_user_role");
         
         if (record.getUserId() != null) {
-            VALUES("user_id", "#{userId,jdbcType=INTEGER}");
+            VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getRoleId() != null) {
-            VALUES("role_id", "#{roleId,jdbcType=INTEGER}");
+            VALUES("role_id", "#{roleId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformId() != null) {
-            VALUES("platform_id", "#{platformId,jdbcType=INTEGER}");
+            VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateUserId() != null) {
-            VALUES("create_user_id", "#{createUserId,jdbcType=INTEGER}");
+            VALUES("create_user_id", "#{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -48,7 +48,7 @@ public class UserRoleSqlProvider {
         UPDATE("t_user_role");
         
         if (record.getCreateUserId() != null) {
-            SET("create_user_id = #{createUserId,jdbcType=INTEGER}");
+            SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -59,9 +59,9 @@ public class UserRoleSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("user_id = #{userId,jdbcType=INTEGER}");
-        WHERE("role_id = #{roleId,jdbcType=INTEGER}");
-        WHERE("platform_id = #{platformId,jdbcType=INTEGER}");
+        WHERE("user_id = #{userId,jdbcType=VARCHAR}");
+        WHERE("role_id = #{roleId,jdbcType=VARCHAR}");
+        WHERE("platform_id = #{platformId,jdbcType=VARCHAR}");
         
         return SQL();
     }

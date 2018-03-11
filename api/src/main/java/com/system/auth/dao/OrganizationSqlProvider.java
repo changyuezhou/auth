@@ -8,24 +8,36 @@ import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
 import static org.apache.ibatis.jdbc.SqlBuilder.VALUES;
 import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
 
-import com.system.auth.model.Role;
+import com.system.auth.model.Organization;
 
-public class RoleSqlProvider {
+public class OrganizationSqlProvider {
 
-    public String insertSelective(Role record) {
+    public String insertSelective(Organization record) {
         BEGIN();
-        INSERT_INTO("t_role");
+        INSERT_INTO("t_organization");
         
-        if (record.getRoleId() != null) {
-            VALUES("role_id", "#{roleId,jdbcType=VARCHAR}");
+        if (record.getOrganizationId() != null) {
+            VALUES("organization_id", "#{organizationId,jdbcType=VARCHAR}");
         }
         
-        if (record.getRoleName() != null) {
-            VALUES("role_name", "#{roleName,jdbcType=VARCHAR}");
+        if (record.getOrganizationName() != null) {
+            VALUES("organization_name", "#{organizationName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getOrganizationFId() != null) {
+            VALUES("organization_f_id", "#{organizationFId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformId() != null) {
             VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getOrganizationLevel() != null) {
+            VALUES("organization_level", "#{organizationLevel,jdbcType=INTEGER}");
+        }
+        
+        if (record.getOrganizationFTree() != null) {
+            VALUES("organization_f_tree", "#{organizationFTree,jdbcType=VARCHAR}");
         }
         
         if (record.getDescription() != null) {
@@ -47,16 +59,28 @@ public class RoleSqlProvider {
         return SQL();
     }
 
-    public String updateByPrimaryKeySelective(Role record) {
+    public String updateByPrimaryKeySelective(Organization record) {
         BEGIN();
-        UPDATE("t_role");
+        UPDATE("t_organization");
         
-        if (record.getRoleName() != null) {
-            SET("role_name = #{roleName,jdbcType=VARCHAR}");
+        if (record.getOrganizationName() != null) {
+            SET("organization_name = #{organizationName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getOrganizationFId() != null) {
+            SET("organization_f_id = #{organizationFId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformId() != null) {
             SET("platform_id = #{platformId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getOrganizationLevel() != null) {
+            SET("organization_level = #{organizationLevel,jdbcType=INTEGER}");
+        }
+        
+        if (record.getOrganizationFTree() != null) {
+            SET("organization_f_tree = #{organizationFTree,jdbcType=VARCHAR}");
         }
         
         if (record.getDescription() != null) {
@@ -75,7 +99,7 @@ public class RoleSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("role_id = #{roleId,jdbcType=VARCHAR}");
+        WHERE("organization_id = #{organizationId,jdbcType=VARCHAR}");
         
         return SQL();
     }

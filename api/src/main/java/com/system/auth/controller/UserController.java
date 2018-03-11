@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -45,11 +46,12 @@ public class UserController {
         }
 
         try {
-            user.setStatus(true);
+            user.setUserId("U" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""));
+            user.setStatus(0);
             if (null == user.getDescription()) {
                 user.setDescription("");
             }
-            user.setCreateUserId(0);
+            user.setCreateUserId("0");
             user.setCreateTime(System.currentTimeMillis());
             user.setUpdateTime(System.currentTimeMillis());
             userTMapper.insert(user);
@@ -71,12 +73,12 @@ public class UserController {
     )
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
     public OperationMessage update(@RequestBody User user, BindingResult result) {
-        if (null == user.getUserId() || 0 >= user.getUserId() || Integer.MAX_VALUE < user.getUserId()) {
-            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null or must between 0 and " + Integer.toString(Integer.MAX_VALUE));
+        if (null == user.getUserId()) {
+            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null");
         }
 
         if (!IsUserIdExists(user.getUserId())) {
-            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id: " + Integer.toString(user.getUserId()) + " is not exists");
+            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id: " + user.getUserId() + " is not exists");
         }
 
         if (IsUserNameExists(user.getUserName())) {
@@ -103,8 +105,8 @@ public class UserController {
             )
     @RequestMapping(value = "/query", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
     public QueryMessage<User> query(@RequestBody User user) {
-        if (null == user.getUserId() || 0 >= user.getUserId() || Integer.MAX_VALUE < user.getUserId()) {
-            return new QueryMessage<User>(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null or must between 0 and " + Integer.toString(Integer.MAX_VALUE), null);
+        if (null == user.getUserId()) {
+            return new QueryMessage<User>(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null", null);
         }
 
         return new QueryMessage<User>(0, "", userTMapper.selectByPrimaryKey(user.getUserId()));
@@ -120,8 +122,8 @@ public class UserController {
     )
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
     public OperationMessage delete(@RequestBody User user) {
-        if (null == user.getUserId() || 0 >= user.getUserId() || Integer.MAX_VALUE < user.getUserId()) {
-            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null or must between 0 and " + Integer.toString(Integer.MAX_VALUE));
+        if (null == user.getUserId()) {
+            return new OperationMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null");
         }
 
         int result = userTMapper.deleteByPrimaryKey(user.getUserId());
@@ -166,7 +168,7 @@ public class UserController {
         return false;
     }
 
-    public Boolean IsUserIdExists(Integer userId) {
+    public Boolean IsUserIdExists(String userId) {
         if (null != userTMapper.selectByPrimaryKey(userId)) {
             return true;
         }

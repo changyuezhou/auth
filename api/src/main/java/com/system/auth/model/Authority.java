@@ -1,13 +1,13 @@
 package com.system.auth.model;
 
 public class Authority {
-    private Integer authId;
+    private String authId;
 
     private String authName;
 
-    private Integer authFId;
+    private String authFId;
 
-    private Integer systemId;
+    private String systemId;
 
     private Integer authLevel;
 
@@ -15,18 +15,18 @@ public class Authority {
 
     private String description;
 
-    private Integer createUserId;
+    private String createUserId;
 
     private Long updateTime;
 
     private Long createTime;
 
-    public Integer getAuthId() {
+    public String getAuthId() {
         return authId;
     }
 
-    public void setAuthId(Integer authId) {
-        this.authId = authId;
+    public void setAuthId(String authId) {
+        this.authId = authId == null ? null : authId.trim();
     }
 
     public String getAuthName() {
@@ -37,20 +37,20 @@ public class Authority {
         this.authName = authName == null ? null : authName.trim();
     }
 
-    public Integer getAuthFId() {
+    public String getAuthFId() {
         return authFId;
     }
 
-    public void setAuthFId(Integer authFId) {
-        this.authFId = authFId;
+    public void setAuthFId(String authFId) {
+        this.authFId = authFId == null ? null : authFId.trim();
     }
 
-    public Integer getSystemId() {
+    public String getSystemId() {
         return systemId;
     }
 
-    public void setSystemId(Integer systemId) {
-        this.systemId = systemId;
+    public void setSystemId(String systemId) {
+        this.systemId = systemId == null ? null : systemId.trim();
     }
 
     public Integer getAuthLevel() {
@@ -77,12 +77,12 @@ public class Authority {
         this.description = description == null ? null : description.trim();
     }
 
-    public Integer getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     public Long getUpdateTime() {

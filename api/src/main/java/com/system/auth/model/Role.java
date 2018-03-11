@@ -1,26 +1,26 @@
 package com.system.auth.model;
 
 public class Role {
-    private Integer roleId;
+    private String roleId;
 
     private String roleName;
 
-    private Integer platformId;
+    private String platformId;
 
     private String description;
 
-    private Integer createUserId;
+    private String createUserId;
 
     private Long updateTime;
 
     private Long createTime;
 
-    public Integer getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
     }
 
     public String getRoleName() {
@@ -31,12 +31,12 @@ public class Role {
         this.roleName = roleName == null ? null : roleName.trim();
     }
 
-    public Integer getPlatformId() {
+    public String getPlatformId() {
         return platformId;
     }
 
-    public void setPlatformId(Integer platformId) {
-        this.platformId = platformId;
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId == null ? null : platformId.trim();
     }
 
     public String getDescription() {
@@ -47,12 +47,12 @@ public class Role {
         this.description = description == null ? null : description.trim();
     }
 
-    public Integer getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     public Long getUpdateTime() {

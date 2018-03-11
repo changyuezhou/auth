@@ -17,7 +17,7 @@ public class PlatformSqlProvider {
         INSERT_INTO("t_platform");
         
         if (record.getPlatformId() != null) {
-            VALUES("platform_id", "#{platformId,jdbcType=INTEGER}");
+            VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformName() != null) {
@@ -29,7 +29,7 @@ public class PlatformSqlProvider {
         }
         
         if (record.getSystemId() != null) {
-            VALUES("system_id", "#{systemId,jdbcType=INTEGER}");
+            VALUES("system_id", "#{systemId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformDomain() != null) {
@@ -41,7 +41,7 @@ public class PlatformSqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            VALUES("create_user_id", "#{createUserId,jdbcType=INTEGER}");
+            VALUES("create_user_id", "#{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -68,7 +68,7 @@ public class PlatformSqlProvider {
         }
         
         if (record.getSystemId() != null) {
-            SET("system_id = #{systemId,jdbcType=INTEGER}");
+            SET("system_id = #{systemId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformDomain() != null) {
@@ -80,7 +80,7 @@ public class PlatformSqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            SET("create_user_id = #{createUserId,jdbcType=INTEGER}");
+            SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -91,7 +91,7 @@ public class PlatformSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("platform_id = #{platformId,jdbcType=INTEGER}");
+        WHERE("platform_id = #{platformId,jdbcType=VARCHAR}");
         
         return SQL();
     }

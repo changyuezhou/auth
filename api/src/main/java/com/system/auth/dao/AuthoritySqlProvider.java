@@ -17,7 +17,7 @@ public class AuthoritySqlProvider {
         INSERT_INTO("t_authority");
         
         if (record.getAuthId() != null) {
-            VALUES("auth_id", "#{authId,jdbcType=INTEGER}");
+            VALUES("auth_id", "#{authId,jdbcType=VARCHAR}");
         }
         
         if (record.getAuthName() != null) {
@@ -25,11 +25,11 @@ public class AuthoritySqlProvider {
         }
         
         if (record.getAuthFId() != null) {
-            VALUES("auth_f_id", "#{authFId,jdbcType=INTEGER}");
+            VALUES("auth_f_id", "#{authFId,jdbcType=VARCHAR}");
         }
         
         if (record.getSystemId() != null) {
-            VALUES("system_id", "#{systemId,jdbcType=INTEGER}");
+            VALUES("system_id", "#{systemId,jdbcType=VARCHAR}");
         }
         
         if (record.getAuthLevel() != null) {
@@ -45,7 +45,7 @@ public class AuthoritySqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            VALUES("create_user_id", "#{createUserId,jdbcType=INTEGER}");
+            VALUES("create_user_id", "#{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -68,11 +68,11 @@ public class AuthoritySqlProvider {
         }
         
         if (record.getAuthFId() != null) {
-            SET("auth_f_id = #{authFId,jdbcType=INTEGER}");
+            SET("auth_f_id = #{authFId,jdbcType=VARCHAR}");
         }
         
         if (record.getSystemId() != null) {
-            SET("system_id = #{systemId,jdbcType=INTEGER}");
+            SET("system_id = #{systemId,jdbcType=VARCHAR}");
         }
         
         if (record.getAuthLevel() != null) {
@@ -88,7 +88,7 @@ public class AuthoritySqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            SET("create_user_id = #{createUserId,jdbcType=INTEGER}");
+            SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -99,7 +99,7 @@ public class AuthoritySqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("auth_id = #{authId,jdbcType=INTEGER}");
+        WHERE("auth_id = #{authId,jdbcType=VARCHAR}");
         
         return SQL();
     }

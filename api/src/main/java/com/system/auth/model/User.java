@@ -1,13 +1,9 @@
 package com.system.auth.model;
 
-
-import org.hibernate.validator.constraints.Range;
-
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
-public class User implements Serializable {
-    private Integer userId;
+public class User {
+    private String userId;
 
     @NotNull(message = "user name must not be null")
     private String userName;
@@ -15,7 +11,7 @@ public class User implements Serializable {
     @NotNull(message = "password must not be null")
     private String password;
 
-    private Boolean status;
+    private Integer status;
 
     @NotNull(message = "mobile number must not be null")
     private String mobileNumber;
@@ -25,19 +21,18 @@ public class User implements Serializable {
 
     private String description;
 
-    private Integer createUserId;
-    private String createUserName;
+    private String createUserId;
 
     private Long updateTime;
 
     private Long createTime;
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
     }
 
     public String getUserName() {
@@ -56,11 +51,11 @@ public class User implements Serializable {
         this.password = password == null ? null : password.trim();
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -88,20 +83,12 @@ public class User implements Serializable {
         this.description = description == null ? null : description.trim();
     }
 
-    public Integer getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     public Long getUpdateTime() {

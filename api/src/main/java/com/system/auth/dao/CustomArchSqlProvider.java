@@ -8,24 +8,40 @@ import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
 import static org.apache.ibatis.jdbc.SqlBuilder.VALUES;
 import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
 
-import com.system.auth.model.Role;
+import com.system.auth.model.CustomArch;
 
-public class RoleSqlProvider {
+public class CustomArchSqlProvider {
 
-    public String insertSelective(Role record) {
+    public String insertSelective(CustomArch record) {
         BEGIN();
-        INSERT_INTO("t_role");
+        INSERT_INTO("t_custom_arch");
         
-        if (record.getRoleId() != null) {
-            VALUES("role_id", "#{roleId,jdbcType=VARCHAR}");
+        if (record.getCustomArchId() != null) {
+            VALUES("custom_arch_id", "#{customArchId,jdbcType=VARCHAR}");
         }
         
-        if (record.getRoleName() != null) {
-            VALUES("role_name", "#{roleName,jdbcType=VARCHAR}");
+        if (record.getCustomArchName() != null) {
+            VALUES("custom_arch_name", "#{customArchName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCustomArchFId() != null) {
+            VALUES("custom_arch_f_id", "#{customArchFId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformId() != null) {
             VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getFlag() != null) {
+            VALUES("flag", "#{flag,jdbcType=INTEGER}");
+        }
+        
+        if (record.getCustomArchLevel() != null) {
+            VALUES("custom_arch_level", "#{customArchLevel,jdbcType=INTEGER}");
+        }
+        
+        if (record.getCustomArchFTree() != null) {
+            VALUES("custom_arch_f_tree", "#{customArchFTree,jdbcType=VARCHAR}");
         }
         
         if (record.getDescription() != null) {
@@ -47,16 +63,32 @@ public class RoleSqlProvider {
         return SQL();
     }
 
-    public String updateByPrimaryKeySelective(Role record) {
+    public String updateByPrimaryKeySelective(CustomArch record) {
         BEGIN();
-        UPDATE("t_role");
+        UPDATE("t_custom_arch");
         
-        if (record.getRoleName() != null) {
-            SET("role_name = #{roleName,jdbcType=VARCHAR}");
+        if (record.getCustomArchName() != null) {
+            SET("custom_arch_name = #{customArchName,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCustomArchFId() != null) {
+            SET("custom_arch_f_id = #{customArchFId,jdbcType=VARCHAR}");
         }
         
         if (record.getPlatformId() != null) {
             SET("platform_id = #{platformId,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getFlag() != null) {
+            SET("flag = #{flag,jdbcType=INTEGER}");
+        }
+        
+        if (record.getCustomArchLevel() != null) {
+            SET("custom_arch_level = #{customArchLevel,jdbcType=INTEGER}");
+        }
+        
+        if (record.getCustomArchFTree() != null) {
+            SET("custom_arch_f_tree = #{customArchFTree,jdbcType=VARCHAR}");
         }
         
         if (record.getDescription() != null) {
@@ -75,7 +107,7 @@ public class RoleSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("role_id = #{roleId,jdbcType=VARCHAR}");
+        WHERE("custom_arch_id = #{customArchId,jdbcType=VARCHAR}");
         
         return SQL();
     }

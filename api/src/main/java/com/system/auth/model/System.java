@@ -1,24 +1,24 @@
 package com.system.auth.model;
 
 public class System {
-    private Integer systemId;
+    private String systemId;
 
     private String systemName;
 
     private String description;
 
-    private Integer createUserId;
+    private String createUserId;
 
     private Long updateTime;
 
     private Long createTime;
 
-    public Integer getSystemId() {
+    public String getSystemId() {
         return systemId;
     }
 
-    public void setSystemId(Integer systemId) {
-        this.systemId = systemId;
+    public void setSystemId(String systemId) {
+        this.systemId = systemId == null ? null : systemId.trim();
     }
 
     public String getSystemName() {
@@ -37,12 +37,12 @@ public class System {
         this.description = description == null ? null : description.trim();
     }
 
-    public Integer getCreateUserId() {
+    public String getCreateUserId() {
         return createUserId;
     }
 
-    public void setCreateUserId(Integer createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
     public Long getUpdateTime() {

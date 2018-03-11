@@ -21,7 +21,7 @@ public class SessionSqlProvider {
         }
         
         if (record.getPlatformId() != null) {
-            VALUES("platform_id", "#{platformId,jdbcType=INTEGER}");
+            VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
         }
         
         if (record.getAuthTokenCreateTime() != null) {
@@ -45,7 +45,7 @@ public class SessionSqlProvider {
         }
         
         if (record.getUserId() != null) {
-            VALUES("user_id", "#{userId,jdbcType=INTEGER}");
+            VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getCode() != null) {
@@ -104,7 +104,7 @@ public class SessionSqlProvider {
         UPDATE("t_session");
         
         if (record.getPlatformId() != null) {
-            SET("platform_id = #{platformId,jdbcType=INTEGER}");
+            SET("platform_id = #{platformId,jdbcType=VARCHAR}");
         }
         
         if (record.getAuthTokenCreateTime() != null) {
@@ -128,7 +128,7 @@ public class SessionSqlProvider {
         }
         
         if (record.getUserId() != null) {
-            SET("user_id = #{userId,jdbcType=INTEGER}");
+            SET("user_id = #{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getCode() != null) {

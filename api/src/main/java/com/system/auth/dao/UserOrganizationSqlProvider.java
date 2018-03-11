@@ -8,28 +8,20 @@ import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
 import static org.apache.ibatis.jdbc.SqlBuilder.VALUES;
 import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
 
-import com.system.auth.model.Role;
+import com.system.auth.model.UserOrganization;
 
-public class RoleSqlProvider {
+public class UserOrganizationSqlProvider {
 
-    public String insertSelective(Role record) {
+    public String insertSelective(UserOrganization record) {
         BEGIN();
-        INSERT_INTO("t_role");
+        INSERT_INTO("t_user_organization");
         
-        if (record.getRoleId() != null) {
-            VALUES("role_id", "#{roleId,jdbcType=VARCHAR}");
+        if (record.getUserId() != null) {
+            VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
         }
         
-        if (record.getRoleName() != null) {
-            VALUES("role_name", "#{roleName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getPlatformId() != null) {
-            VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getDescription() != null) {
-            VALUES("description", "#{description,jdbcType=VARCHAR}");
+        if (record.getOrganizationId() != null) {
+            VALUES("organization_id", "#{organizationId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateUserId() != null) {
@@ -47,21 +39,9 @@ public class RoleSqlProvider {
         return SQL();
     }
 
-    public String updateByPrimaryKeySelective(Role record) {
+    public String updateByPrimaryKeySelective(UserOrganization record) {
         BEGIN();
-        UPDATE("t_role");
-        
-        if (record.getRoleName() != null) {
-            SET("role_name = #{roleName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getPlatformId() != null) {
-            SET("platform_id = #{platformId,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getDescription() != null) {
-            SET("description = #{description,jdbcType=VARCHAR}");
-        }
+        UPDATE("t_user_organization");
         
         if (record.getCreateUserId() != null) {
             SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
@@ -75,7 +55,8 @@ public class RoleSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("role_id = #{roleId,jdbcType=VARCHAR}");
+        WHERE("user_id = #{userId,jdbcType=VARCHAR}");
+        WHERE("organization_id = #{organizationId,jdbcType=VARCHAR}");
         
         return SQL();
     }

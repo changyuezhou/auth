@@ -17,7 +17,7 @@ public class SystemSqlProvider {
         INSERT_INTO("t_system");
         
         if (record.getSystemId() != null) {
-            VALUES("system_id", "#{systemId,jdbcType=INTEGER}");
+            VALUES("system_id", "#{systemId,jdbcType=VARCHAR}");
         }
         
         if (record.getSystemName() != null) {
@@ -29,7 +29,7 @@ public class SystemSqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            VALUES("create_user_id", "#{createUserId,jdbcType=INTEGER}");
+            VALUES("create_user_id", "#{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -56,7 +56,7 @@ public class SystemSqlProvider {
         }
         
         if (record.getCreateUserId() != null) {
-            SET("create_user_id = #{createUserId,jdbcType=INTEGER}");
+            SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getUpdateTime() != null) {
@@ -67,7 +67,7 @@ public class SystemSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("system_id = #{systemId,jdbcType=INTEGER}");
+        WHERE("system_id = #{systemId,jdbcType=VARCHAR}");
         
         return SQL();
     }
