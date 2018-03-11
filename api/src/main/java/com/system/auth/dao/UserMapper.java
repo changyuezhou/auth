@@ -1,15 +1,13 @@
 package com.system.auth.dao;
 
+import com.github.pagehelper.Page;
 import com.system.auth.model.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import com.system.auth.sql.UserSQL;
+import com.system.auth.sql.condition.UserListCondition;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface UserMapper {
     @Delete({
@@ -78,6 +76,22 @@ public interface UserMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
     User selectByUserName(String userName);
+
+    @SelectProvider(type=UserSQL.class, method="selectBySelective")
+    @Results({
+            @Result(column="user_id", property="userId", jdbcType=JdbcType.INTEGER, id=true),
+            @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+            @Result(column="status", property="status", jdbcType=JdbcType.BIT),
+            @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
+            @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.INTEGER),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<User> selectBySelective(UserListCondition condition);
 
     @UpdateProvider(type=UserSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(User record);

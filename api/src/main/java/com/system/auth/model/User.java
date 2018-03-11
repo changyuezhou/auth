@@ -4,10 +4,9 @@ package com.system.auth.model;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class User {
-    @NotNull(message = "user id must not be null")
-    @Range(min = 0, max = Integer.MAX_VALUE, message = "用户ID必须为正整数")
+public class User implements Serializable {
     private Integer userId;
 
     @NotNull(message = "user name must not be null")

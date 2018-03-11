@@ -2,9 +2,7 @@ package com.system.auth.bean;
 
 import com.system.auth.model.User;
 
-public class QueryUserMessage implements MessageInterface {
-    private int code;
-    private String msg;
+public class QueryUserMessage extends OperationMessage {
     private User data;
 
     public void setMsg(String msg) {

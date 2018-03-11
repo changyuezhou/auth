@@ -1,8 +1,8 @@
 package com.system.auth.bean;
 
-public class OperationMessage implements MessageInterface {
-    private int code;
-    private String msg;
+public class OperationMessage {
+    public int code;
+    public String msg;
 
     public void setMsg(String msg) {
         this.msg = msg;
@@ -18,6 +18,11 @@ public class OperationMessage implements MessageInterface {
 
     public int getCode() {
         return code;
+    }
+
+    public OperationMessage() {
+        this.code = 0;
+        this.msg = "";
     }
 
     public OperationMessage(int code, String msg) {
