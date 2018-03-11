@@ -3,8 +3,8 @@ package com.system.auth.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.system.auth.bean.OperationMessage;
-import com.system.auth.bean.QueryUserListMessage;
-import com.system.auth.bean.QueryUserMessage;
+import com.system.auth.bean.QueryListMessage;
+import com.system.auth.bean.QueryMessage;
 import com.system.auth.dao.UserMapper;
 import com.system.auth.model.User;
 import com.system.auth.sql.condition.UserListCondition;
@@ -102,12 +102,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
             )
     @RequestMapping(value = "/query", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public QueryUserMessage query(@RequestBody User user) {
+    public QueryMessage<User> query(@RequestBody User user) {
         if (null == user.getUserId() || 0 >= user.getUserId() || Integer.MAX_VALUE < user.getUserId()) {
-            return new QueryUserMessage(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null or must between 0 and " + Integer.toString(Integer.MAX_VALUE), null);
+            return new QueryMessage<User>(CustomErrorController.USER_INPUT_EXCEPTION, "user id must not be null or must between 0 and " + Integer.toString(Integer.MAX_VALUE), null);
         }
 
-        return new QueryUserMessage(0, "", userTMapper.selectByPrimaryKey(user.getUserId()));
+        return new QueryMessage<User>(0, "", userTMapper.selectByPrimaryKey(user.getUserId()));
     }
 
     @ApiOperation(value="删除用户", notes="根据用户ID删除用户详细信息")
@@ -142,15 +142,15 @@ public class UserController {
     )
 
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public QueryUserListMessage list(@Validated @RequestBody UserListCondition condition, BindingResult check) {
+    public QueryListMessage<User> list(@Validated @RequestBody UserListCondition condition, BindingResult check) {
         if (check.hasErrors()) {
-            return new QueryUserListMessage(CustomErrorController.USER_INPUT_EXCEPTION, check.getAllErrors().get(0).getDefaultMessage(), null);
+            return new QueryListMessage<User>(CustomErrorController.USER_INPUT_EXCEPTION, check.getAllErrors().get(0).getDefaultMessage(), null);
         }
 
         PageHelper.startPage(condition.getPageNum(), condition.getPageSize());
         List<User> user_list = userTMapper.selectBySelective(condition);
         PageInfo<User> user_list_info = new PageInfo<User>(user_list);
-        QueryUserListMessage result = new QueryUserListMessage(0, "", user_list);
+        QueryListMessage<User> result = new QueryListMessage<User>(0, "", user_list);
         result.setPageNum(condition.getPageNum());
         result.setPageSize(condition.getPageSize());
         result.setTotalNum(user_list_info.getTotal());

@@ -6,7 +6,48 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class UserSQL {
     public String insertSelective(User record) {
-        return "";
+        return new SQL() {{
+            INSERT_INTO("t_user");
+            if (null != record.getUserId()) {
+                VALUES("user_id", "#{userId,jdbcType=INTEGER}");
+            }
+
+            if (null != record.getUserName()) {
+                VALUES("user_name", "#{userName,jdbcType=VARCHAR}");
+            }
+
+            if (null != record.getCreateUserId()) {
+                VALUES("create_user_id", "#{createUserId,jdbcType=INTEGER}");
+            }
+
+            if (null != record.getContactName()) {
+                VALUES("contact_name", "#{contactName,jdbcType=VARCHAR}");
+            }
+
+            if (null != record.getMobileNumber()) {
+                VALUES("mobile_number", "#{mobileNumber,jdbcType=VARCHAR}");
+            }
+
+            if (null != record.getDescription()) {
+                VALUES("description", "#{description,jdbcType=VARCHAR}");
+            }
+
+            if (null != record.getPassword()) {
+                VALUES("password", "#{password,jdbcType=VARCHAR}");
+            }
+
+            if (null != record.getStatus()) {
+                VALUES("status", "#{status,jdbcType=INTEGER}");
+            }
+
+            if (null != record.getCreateTime()) {
+                VALUES("create_time", "#{createTime,jdbcType=BIGINT}");
+            }
+
+            if (null != record.getUpdateTime()) {
+                VALUES("update_time", "#{updateTime,jdbcType=BIGINT}");
+            }
+        }}.toString();
     }
 
     public String updateByPrimaryKeySelective(User record) {

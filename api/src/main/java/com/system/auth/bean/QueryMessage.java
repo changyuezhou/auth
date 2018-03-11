@@ -1,9 +1,7 @@
 package com.system.auth.bean;
 
-import com.system.auth.model.User;
-
-public class QueryUserMessage extends OperationMessage {
-    private User data;
+public class QueryMessage<T> extends OperationMessage {
+    private T data;
 
     public void setMsg(String msg) {
         this.msg = msg;
@@ -21,15 +19,15 @@ public class QueryUserMessage extends OperationMessage {
         return code;
     }
 
-    public void setData(User data) {
+    public void setData(T data) {
         this.data = data;
     }
 
-    public User getData() {
+    public T getData() {
         return data;
     }
 
-    public QueryUserMessage(int code, String msg, User data) {
+    public QueryMessage(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

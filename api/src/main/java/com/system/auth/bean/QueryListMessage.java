@@ -1,15 +1,13 @@
 package com.system.auth.bean;
 
-import com.system.auth.model.User;
-
 import java.util.List;
 
-public class QueryUserListMessage extends OperationMessage {
+public class QueryListMessage<T> extends OperationMessage {
     private int pageSize;
     private int pageNum;
     private Long totalNum;
 
-    private List<User> data;
+    private List<T> data;
 
     public void setMsg(String msg) {
         this.msg = msg;
@@ -51,15 +49,15 @@ public class QueryUserListMessage extends OperationMessage {
         return totalNum;
     }
 
-    public void setData(List<User> data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 
-    public List<User> getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public QueryUserListMessage(int code, String msg, List<User> data) {
+    public QueryListMessage(int code, String msg, List<T> data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
