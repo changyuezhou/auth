@@ -1,6 +1,6 @@
 package com.system.auth.bean;
 
-public class QueryMessage<T> extends OperationMessage {
+public class ResponseMessage<T> extends OperationMessage {
     private T data;
 
     public void setMsg(String msg) {
@@ -27,7 +27,7 @@ public class QueryMessage<T> extends OperationMessage {
         return data;
     }
 
-    public QueryMessage(int code, String msg, T data) {
+    public ResponseMessage(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

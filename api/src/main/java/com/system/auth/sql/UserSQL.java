@@ -1,7 +1,7 @@
 package com.system.auth.sql;
 
 import com.system.auth.model.User;
-import com.system.auth.sql.condition.UserListCondition;
+import com.system.auth.bean.model.request.UserListCondition;
 import org.apache.ibatis.jdbc.SQL;
 
 public class UserSQL {
@@ -74,7 +74,7 @@ public class UserSQL {
                 WHERE("a.user_name = #{userName, jdbcType=VARCHAR}");
             }
 
-            WHERE("a.user_id = b.user_id");
+            WHERE("a.create_user_id = b.user_id");
 
             ORDER_BY("a.update_time");
         }}.toString();

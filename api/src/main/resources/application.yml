@@ -1,6 +1,13 @@
+server:
+  port: 8081
+
 spring:
   datasource:
      url: jdbc:mysql://127.0.0.1:13306/db_auth
      username: suxin
      password: suxin@2017
      driver-class-name: com.mysql.jdbc.Driver
+
+  profiles:
+    active: dev
+

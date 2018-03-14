@@ -1,0 +1,346 @@
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.web.servlet.resource.ResourceUrlProvider 155 detectResourceHandlers - Found resource handler mapping: URL pattern="/webjars/**", locations=[class path resource [META-INF/resources/webjars/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@27e2287c]
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.web.servlet.resource.ResourceUrlProvider 155 detectResourceHandlers - Found resource handler mapping: URL pattern="/**", locations=[class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/], ServletContext resource [/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@e829999]
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'createRestApi'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'classOrApiAnnotationResourceGrouping'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationModelsProvider'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerOperationModelsProvider'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'cachingAspect'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiModelPropertyPropertyBuilder'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiModelTypeNameProvider'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiModelBuilder'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'mediaTypeReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'defaultOperationReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationDeprecatedReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationParameterReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationParameterRequestConditionReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationResponseClassReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationTagsReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'responseMessagesReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationAuthReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationHiddenReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationHttpMethodReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationImplicitParameterReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationImplicitParametersReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationNicknameIntoUniqueIdReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationNotesReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationPositionReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationSummaryReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerMediaTypeReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerOperationResponseClassReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerOperationTagsReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerResponseMessageReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'vendorExtensionsReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'operationPathDecorator'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'pathMappingDecorator'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'pathSanitizer'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'queryStringUriTemplateDecorator'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'mediaTypeReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiListingTagReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swagger2ParameterNameReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterDataTypeReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterDefaultReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterMultiplesReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterNameReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterRequiredReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'parameterTypeReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterAccessReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterAllowableReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterDefaultReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterDescriptionReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterMultiplesReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swaggerParameterRequiredReader'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 115 logKeyFound - Found key 'spring.liveBeansView.mbeanDomain' in PropertySource 'systemProperties' with value of type String
+2018-03-12 at 11:01:34 CST INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer 205 start - Tomcat started on port(s): 8081 (http) with context path ''
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'springApplicationAdminRegistrar'
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.core.env.MutablePropertySources 98 addFirst - Adding PropertySource 'server.ports' with highest search precedence
+2018-03-12 at 11:01:34 CST INFO  org.springframework.boot.StartupInfoLogger 59 logStarted - Started AuthApplication in 5.563 seconds (JVM running for 6.739)
+2018-03-12 at 11:01:34 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'springApplicationAdminRegistrar'
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 115 logKeyFound - Found key 'local.server.port' in PropertySource 'server.ports' with value of type Integer
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serverSslKeyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serversslkeystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVERSSLKEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ssl_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ssl_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SSL_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SSL_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ssl_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ssl_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_key-store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_key_store' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_keyStore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_keystore' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_KEY-STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_KEY_STORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL.KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SSL_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SSL_KEYSTORE' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.context-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.context_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_context-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serverContextPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'servercontextpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.CONTEXT-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.CONTEXT_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_CONTEXT-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVERCONTEXTPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_context_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.contextPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_contextPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.contextpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_contextpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.CONTEXT-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_CONTEXT-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.CONTEXT_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_CONTEXT_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.CONTEXTPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_CONTEXTPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.context-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_context-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.context_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_context_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.contextPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_contextPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.contextpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_contextpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_CONTEXT_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.CONTEXTPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_CONTEXTPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.servlet-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.servlet_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_servlet-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serverServletPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serverservletpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SERVLET-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SERVLET_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SERVLET-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVERSERVLETPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_servlet_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.servletPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_servletPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.servletpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_servletpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SERVLET-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SERVLET-PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SERVLET_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SERVLET_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.SERVLETPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_SERVLETPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.servlet-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_servlet-path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.servlet_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_servlet_path' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.servletPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_servletPath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.servletpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_servletpath' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SERVLET_PATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.SERVLETPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_SERVLETPATH' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.address' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_address' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serverAddress' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'serveraddress' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.ADDRESS' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_ADDRESS' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVERADDRESS' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server.ADDRESS' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'server_ADDRESS' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER.address' in any property source
+2018-03-12 at 11:01:35 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 96 getProperty - Could not find key 'SERVER_address' in any property source
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.HttpServletBean 150 init - Initializing servlet 'dispatcherServlet'
+2018-03-12 at 11:01:41 CST INFO  org.springframework.web.servlet.FrameworkServlet 494 initServletBean - FrameworkServlet 'dispatcherServlet': initialization started
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'multipartResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 518 initMultipartResolver - Using MultipartResolver [org.springframework.web.multipart.support.StandardServletMultipartResolver@34da28c8]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 467 createBean - Creating instance of bean 'org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 504 createBean - Finished creating instance of bean 'org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 547 initLocaleResolver - Unable to locate LocaleResolver with name 'localeResolver': using default [org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver@3abf02a0]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 467 createBean - Creating instance of bean 'org.springframework.web.servlet.theme.FixedThemeResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 504 createBean - Finished creating instance of bean 'org.springframework.web.servlet.theme.FixedThemeResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 569 initThemeResolver - Unable to locate ThemeResolver with name 'themeResolver': using default [org.springframework.web.servlet.theme.FixedThemeResolver@64d3ac48]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'requestMappingHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'viewControllerHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'beanNameHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'resourceHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'defaultServletHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'faviconHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'welcomePageHandlerMapping'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'requestMappingHandlerAdapter'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'httpRequestHandlerAdapter'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'simpleControllerHandlerAdapter'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'errorAttributes'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'handlerExceptionResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 467 createBean - Creating instance of bean 'org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 504 createBean - Finished creating instance of bean 'org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 706 initRequestToViewNameTranslator - Unable to locate RequestToViewNameTranslator with name 'viewNameTranslator': using default [org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@546184c9]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'beanNameViewResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'mvcViewResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'defaultViewResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'viewResolver'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 467 createBean - Creating instance of bean 'org.springframework.web.servlet.support.SessionFlashMapManager'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'org.springframework.transaction.config.internalTransactionAdvisor'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory 504 createBean - Finished creating instance of bean 'org.springframework.web.servlet.support.SessionFlashMapManager'
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 767 initFlashMapManager - Unable to locate FlashMapManager with name 'flashMapManager': using default [org.springframework.web.servlet.support.SessionFlashMapManager@57bad2c9]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.FrameworkServlet 573 initWebApplicationContext - Published WebApplicationContext of servlet 'dispatcherServlet' as ServletContext attribute with name [org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcherServlet]
+2018-03-12 at 11:01:41 CST INFO  org.springframework.web.servlet.FrameworkServlet 513 initServletBean - FrameworkServlet 'dispatcherServlet': initialization completed in 20 ms
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.HttpServletBean 175 init - Servlet 'dispatcherServlet' configured successfully
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.filter.RequestContextFilter 114 initContextHolders - Bound request context to thread: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 891 doService - DispatcherServlet with name 'dispatcherServlet' processing GET request for [/swagger-ui.html]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 313 getHandlerInternal - Looking up handler method for path /swagger-ui.html
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 323 getHandlerInternal - Did not find handler method for [/swagger-ui.html]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.handler.AbstractUrlHandlerMapping 199 lookupHandler - Matching patterns for request [/swagger-ui.html] are [/**]
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.handler.AbstractUrlHandlerMapping 233 lookupHandler - URI Template variables for request [/swagger-ui.html] are {}
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.handler.AbstractUrlHandlerMapping 146 getHandlerInternal - Mapping [/swagger-ui.html] to HandlerExecutionChain with handler [ResourceHttpRequestHandler [locations=[class path resource [META-INF/resources/], class path resource [resources/], class path resource [static/], class path resource [public/], ServletContext resource [/]], resolvers=[org.springframework.web.servlet.resource.PathResourceResolver@e829999]]] and 1 interceptor
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 979 doDispatch - Last-Modified value for [/swagger-ui.html] is: -1
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.DispatcherServlet 1076 processDispatchResult - Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.servlet.FrameworkServlet 1004 processRequest - Successfully completed request
+2018-03-12 at 11:01:41 CST DEBUG org.springframework.web.filter.RequestContextFilter 104 doFilterInternal - Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 114 initContextHolders - Bound request context to thread: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 891 doService - DispatcherServlet with name 'dispatcherServlet' processing GET request for [/swagger-resources]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 313 getHandlerInternal - Looking up handler method for path /swagger-resources
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 320 getHandlerInternal - Returning handler method [org.springframework.http.ResponseEntity<java.util.List<springfox.documentation.swagger.web.SwaggerResource>> springfox.documentation.swagger.web.ApiResourceController.swaggerResources()]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiResourceController'
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 979 doDispatch - Last-Modified value for [/swagger-resources] is: -1
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor 277 writeWithMessageConverters - Written [[springfox.documentation.swagger.web.SwaggerResource@f71ae39]] as "application/json" using [org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@111d5c97]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 1076 processDispatchResult - Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.FrameworkServlet 1004 processRequest - Successfully completed request
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 104 doFilterInternal - Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 114 initContextHolders - Bound request context to thread: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 891 doService - DispatcherServlet with name 'dispatcherServlet' processing GET request for [/v2/api-docs]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 313 getHandlerInternal - Looking up handler method for path /v2/api-docs
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 320 getHandlerInternal - Returning handler method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String)]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'swagger2Controller'
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 979 doDispatch - Last-Modified value for [/v2/api-docs] is: -1
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor 277 writeWithMessageConverters - Written [springfox.documentation.spring.web.json.Json@64124cb3] as "application/json;charset=utf-8" using [org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@111d5c97]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 1076 processDispatchResult - Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.FrameworkServlet 1004 processRequest - Successfully completed request
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 104 doFilterInternal - Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 114 initContextHolders - Bound request context to thread: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 891 doService - DispatcherServlet with name 'dispatcherServlet' processing GET request for [/configuration/security]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 313 getHandlerInternal - Looking up handler method for path /configuration/security
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 320 getHandlerInternal - Returning handler method [org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.SecurityConfiguration> springfox.documentation.swagger.web.ApiResourceController.securityConfiguration()]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 114 initContextHolders - Bound request context to thread: org.apache.catalina.connector.RequestFacade@547b7a45
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiResourceController'
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 891 doService - DispatcherServlet with name 'dispatcherServlet' processing GET request for [/configuration/ui]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 979 doDispatch - Last-Modified value for [/configuration/security] is: -1
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 313 getHandlerInternal - Looking up handler method for path /configuration/ui
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.handler.AbstractHandlerMethodMapping 320 getHandlerInternal - Returning handler method [org.springframework.http.ResponseEntity<springfox.documentation.swagger.web.UiConfiguration> springfox.documentation.swagger.web.ApiResourceController.uiConfiguration()]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.beans.factory.support.AbstractBeanFactory 255 doGetBean - Returning cached instance of singleton bean 'apiResourceController'
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 979 doDispatch - Last-Modified value for [/configuration/ui] is: -1
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor 277 writeWithMessageConverters - Written [springfox.documentation.swagger.web.UiConfiguration@5044f412] as "application/json" using [org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@111d5c97]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 1076 processDispatchResult - Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.FrameworkServlet 1004 processRequest - Successfully completed request
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 104 doFilterInternal - Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@547b7a45
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor 277 writeWithMessageConverters - Written [springfox.documentation.swagger.web.SecurityConfiguration@2e3f3759] as "application/json" using [org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@111d5c97]
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.DispatcherServlet 1076 processDispatchResult - Null ModelAndView returned to DispatcherServlet with name 'dispatcherServlet': assuming HandlerAdapter completed request handling
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.servlet.FrameworkServlet 1004 processRequest - Successfully completed request
+2018-03-12 at 11:01:42 CST DEBUG org.springframework.web.filter.RequestContextFilter 104 doFilterInternal - Cleared thread-bound request context: org.apache.catalina.connector.RequestFacade@2193a43b
+2018-03-12 at 11:03:13 CST INFO  org.springframework.context.support.AbstractApplicationContext 989 doClose - Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@2a7ed1f: startup date [Mon Mar 12 11:01:30 CST 2018]; root of context hierarchy
+2018-03-12 at 11:03:13 CST DEBUG org.springframework.core.env.PropertySourcesPropertyResolver 115 logKeyFound - Found key 'spring.liveBeansView.mbeanDomain' in PropertySource 'systemProperties' with value of type String

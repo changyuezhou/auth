@@ -1,8 +1,9 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.User;
+import com.system.auth.model.ext.UserView;
 import com.system.auth.sql.UserSQL;
-import com.system.auth.sql.condition.UserListCondition;
+import com.system.auth.bean.model.request.UserListCondition;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -35,10 +36,10 @@ public interface UserMapper {
 
     @Select({
         "select",
-        "user_id, user_name, password, status, mobile_number, contact_name, description, ",
-        "create_user_id, update_time, create_time",
-        "from t_user",
-        "where user_id = #{userId,jdbcType=VARCHAR}"
+        "a.user_id, a.user_name, a.password, a.status, a.mobile_number, a.contact_name, a.description, ",
+        "a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_user a, t_user b",
+        "where a.user_id = #{userId,jdbcType=VARCHAR} and a.create_user_id=b.user_id"
     })
     @Results({
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
@@ -49,17 +50,18 @@ public interface UserMapper {
         @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    User selectByPrimaryKey(String userId);
+    UserView selectByPrimaryKey(String userId);
 
     @Select({
             "select",
             "a.user_id, a.user_name, a.password, a.status, a.mobile_number, a.contact_name, a.description, ",
             "a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
             "from t_user a, t_user b",
-            "where a.user_name=#{userName, jdbcType=VARCHAR} and a.user_id = b.user_id"
+            "where a.user_name=#{userName, jdbcType=VARCHAR} and a.create_user_id = b.user_id"
     })
     @Results({
             @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
@@ -70,7 +72,6 @@ public interface UserMapper {
             @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
             @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
             @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.INTEGER),
-            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
@@ -90,7 +91,7 @@ public interface UserMapper {
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    List<User> selectBySelective(UserListCondition condition);
+    List<UserView> selectBySelective(UserListCondition condition);
 
     @UpdateProvider(type=UserSQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(User record);

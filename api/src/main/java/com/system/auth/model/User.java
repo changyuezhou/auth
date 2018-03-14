@@ -1,5 +1,7 @@
 package com.system.auth.model;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotNull;
 
 public class User {
@@ -11,6 +13,7 @@ public class User {
     @NotNull(message = "password must not be null")
     private String password;
 
+    @Range(min = 1, max = 256, message = "status must be 1 and 256")
     private Integer status;
 
     @NotNull(message = "mobile number must not be null")
