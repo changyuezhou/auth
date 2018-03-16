@@ -53,6 +53,6 @@ public class ErrorControllerAdvise implements ErrorController {
 
         SystemLogging.LoggingException(OperationException.getUserInputException(), ex.getLocalizedMessage() + " - " + mapper.writeValueAsString(ex.getStackTrace()));
 
-        return new ResponseEntity<OperationMessage>(new OperationMessage(OperationException.getUserInputException(), "maybe path is not found or params is not valid, and so plz contact administrator"), HttpStatus.OK);
+        return new ResponseEntity<OperationMessage>(new OperationMessage(OperationException.getServiceException(), OperationException.getExceptionMsg()), HttpStatus.OK);
     }
 }

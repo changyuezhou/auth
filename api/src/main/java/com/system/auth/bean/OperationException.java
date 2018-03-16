@@ -7,10 +7,13 @@ public class OperationException extends RuntimeException {
 
     private static final int RECORD_IS_NOT_EXISTS = -100999;
 
+    private static final String EXCEPTION_MSG = "maybe path is not found or params is not valid, and so plz contact administrator";
+
     public static int getServiceException() { return SERVICE_EXCEPTION; }
     public static int getUserInputException() { return USER_INPUT_EXCEPTION; }
     public static int getSqlOpException() { return SQL_OP_EXCEPTION; }
     public static int getRecordIsNotExists() { return RECORD_IS_NOT_EXISTS; }
+    public static String getExceptionMsg() { return EXCEPTION_MSG; }
 
     public Integer code;
     public String msg;

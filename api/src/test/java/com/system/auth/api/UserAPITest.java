@@ -1,9 +1,6 @@
 package com.system.auth.api;
 
-import com.system.auth.bean.OperationMessage;
-import com.system.auth.bean.UserAddResponseTest;
-import com.system.auth.bean.UserListByConditionResponseTest;
-import com.system.auth.bean.UserQueryByPrimaryKeyResponseTest;
+import com.system.auth.bean.*;
 import com.system.auth.bean.model.request.UserListCondition;
 import com.system.auth.bean.model.request.UserPrimaryKeyRequest;
 import com.system.auth.model.User;
@@ -155,5 +152,15 @@ public class UserAPITest {
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    @Test
+    public void test06() throws Exception {
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user/not_found", "",  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());
+        then(entity.getBody().getMsg()).isEqualTo(OperationException.getExceptionMsg());
     }
 }
