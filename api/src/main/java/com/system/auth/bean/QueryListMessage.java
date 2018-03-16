@@ -3,8 +3,8 @@ package com.system.auth.bean;
 import java.util.List;
 
 public class QueryListMessage<T> extends OperationMessage {
-    private int pageSize;
-    private int pageNum;
+    private Integer pageSize;
+    private Integer pageNum;
     private Long totalNum;
 
     private List<T> data;
@@ -17,19 +17,19 @@ public class QueryListMessage<T> extends OperationMessage {
         return msg;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setPageNum(int pageNum) {
+    public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -37,11 +37,11 @@ public class QueryListMessage<T> extends OperationMessage {
         this.totalNum = totalNum;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public int getPageNum() {
+    public Integer getPageNum() {
         return pageNum;
     }
 
@@ -57,7 +57,10 @@ public class QueryListMessage<T> extends OperationMessage {
         return data;
     }
 
-    public QueryListMessage(int code, String msg, List<T> data) {
+    public QueryListMessage() {
+    }
+
+    public QueryListMessage(Integer code, String msg, List<T> data) {
         this.code = code;
         this.msg = msg;
         this.data = data;

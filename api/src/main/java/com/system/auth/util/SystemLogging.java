@@ -19,7 +19,15 @@ public class SystemLogging {
 
     // private static String json_format = "{\"path\":\"%s\",\"method\": \"%s\", \"post_data\":\"%s\", \"response\":\"%s\", \"result\":\"%s\"}";
 
-    private static Logger logger = LogManager.getLogger(AuthApplication.class.getName());
+    private static Logger logger;
+
+    static {
+        logger = LogManager.getLogger(AuthApplication.class.getName());
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
 
     public static void Logging(int level, String postObj, HttpServletRequest request, String response, int operationResult) {
         String operation_result = "SUCCESS";

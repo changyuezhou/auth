@@ -17,4 +17,11 @@ public class UserPrimaryKeyRequest {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public UserPrimaryKeyRequest() {
+    }
+
+    public UserPrimaryKeyRequest(String userId) {
+        this.userId = userId;
+    }
 }

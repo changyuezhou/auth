@@ -1,7 +1,7 @@
 package com.system.auth.bean;
 
 public class OperationMessage {
-    public int code;
+    public Integer code;
     public String msg;
 
     public void setMsg(String msg) {
@@ -12,11 +12,11 @@ public class OperationMessage {
         return msg;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
@@ -25,7 +25,7 @@ public class OperationMessage {
         this.msg = "";
     }
 
-    public OperationMessage(int code, String msg) {
+    public OperationMessage(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

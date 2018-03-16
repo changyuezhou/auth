@@ -20,6 +20,11 @@ public class UserAddResponse {
         return userId;
     }
 
+    public UserAddResponse() {
+        this.userId = "";
+        this.userName = "";
+    }
+
     public UserAddResponse(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;

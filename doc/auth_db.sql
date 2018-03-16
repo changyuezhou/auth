@@ -28,7 +28,7 @@ CREATE TABLE `t_platform` (
 
 CREATE TABLE `t_user` (
   `user_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '用户ID',
-  `user_name`   varchar(128)      NOT NULL  UNIQUE COMMENT '用户名称',
+  `user_name`   varchar(128)      NOT NULL  DEFAULT '' COMMENT '用户名称',
   `password`    varchar(256)      NOT NULL DEFAULT '' COMMENT '用户密码',
   `status`      int(10)        NOT NULL DEFAULT 0 COMMENT '状态 1 超级用户 2 系统权限维护人员',
   `mobile_number` varchar(64)     NOT NULL DEFAULT '' COMMENT '电话号码',

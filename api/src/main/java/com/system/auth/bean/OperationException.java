@@ -12,7 +12,7 @@ public class OperationException extends RuntimeException {
     public static int getSqlOpException() { return SQL_OP_EXCEPTION; }
     public static int getRecordIsNotExists() { return RECORD_IS_NOT_EXISTS; }
 
-    public int code;
+    public Integer code;
     public String msg;
 
     public void setMsg(String msg) {
@@ -23,11 +23,11 @@ public class OperationException extends RuntimeException {
         return msg;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
@@ -36,7 +36,7 @@ public class OperationException extends RuntimeException {
         this.msg = "";
     }
 
-    public OperationException(int code, String msg) {
+    public OperationException(Integer code, String msg) {
         super(msg);
         this.code = code;
         this.msg = msg;

@@ -3,11 +3,11 @@ package com.system.auth.bean.model.request;
 import javax.validation.constraints.NotNull;
 
 public class UserListCondition {
-    private Integer userId;
+    private String userId;
 
     private String userName;
 
-    private Boolean status;
+    private Integer status;
 
     private String mobileNumber;
 
@@ -18,11 +18,11 @@ public class UserListCondition {
     @NotNull(message = "pageSize can not be null")
     private Integer pageSize;
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
@@ -46,7 +46,7 @@ public class UserListCondition {
         return pageSize;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -58,7 +58,7 @@ public class UserListCondition {
         this.mobileNumber = mobileNumber;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
