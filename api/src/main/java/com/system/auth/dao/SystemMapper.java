@@ -1,15 +1,14 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.System;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import com.system.auth.model.ext.SystemView;
+import com.system.auth.model.request.SystemBulk;
+import com.system.auth.model.request.SystemListCondition;
+import com.system.auth.sql.SystemSQL;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface SystemMapper {
     @Delete({
@@ -17,6 +16,9 @@ public interface SystemMapper {
         "where system_id = #{systemId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String systemId);
+
+    @DeleteProvider(type = SystemSQL.class, method = "deleteBySystemIds")
+    int deleteBySystemIds(SystemBulk systems);
 
     @Insert({
         "insert into t_system (system_id, system_name, ",
@@ -28,26 +30,58 @@ public interface SystemMapper {
     })
     int insert(System record);
 
-    @InsertProvider(type=SystemSqlProvider.class, method="insertSelective")
+    @InsertProvider(type=SystemSQL.class, method="insertSelective")
     int insertSelective(System record);
 
     @Select({
         "select",
-        "system_id, system_name, description, create_user_id, update_time, create_time",
-        "from t_system",
-        "where system_id = #{systemId,jdbcType=VARCHAR}"
+        "a.system_id, a.system_name, a.description, a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_system a, t_user b",
+        "where a.system_id = #{systemId,jdbcType=VARCHAR}",
+            " and a.create_user_id= b.user_id"
     })
     @Results({
         @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    System selectByPrimaryKey(String systemId);
+    SystemView selectByPrimaryKey(String systemId);
 
-    @UpdateProvider(type=SystemSqlProvider.class, method="updateByPrimaryKeySelective")
+    @Select({
+            "select",
+            "a.system_id, a.system_name, a.description, a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
+            "from t_system a, t_user b",
+            "where a.system_name = #{systemName,jdbcType=VARCHAR}",
+            " and a.create_user_id= b.user_id"
+    })
+    @Results({
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    SystemView selectBySystemName(String systemName);
+
+    @SelectProvider(type=SystemSQL.class, method="selectBySelective")
+    @Results({
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<SystemView> selectBySelective(SystemListCondition condition);
+
+    @UpdateProvider(type=SystemSQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(System record);
 
     @Update({

@@ -1,4 +1,4 @@
-package com.system.auth.bean.model.request;
+package com.system.auth.model.request;
 
 import javax.validation.constraints.NotNull;
 

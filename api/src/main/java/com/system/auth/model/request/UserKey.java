@@ -1,10 +1,10 @@
-package com.system.auth.bean.model.request;
+package com.system.auth.model.request;
 
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 
-public class UserPrimaryKeyRequest {
+public class UserKey {
 
     @NotNull(message = "userId must not be null")
     @Length(min = 16, max = 128, message = "userId must be string and length is between 16,128")
@@ -18,10 +18,11 @@ public class UserPrimaryKeyRequest {
         this.userId = userId;
     }
 
-    public UserPrimaryKeyRequest() {
+    public UserKey() {
+        this.userId = null;
     }
 
-    public UserPrimaryKeyRequest(String userId) {
+    public UserKey(String userId) {
         this.userId = userId;
     }
 }

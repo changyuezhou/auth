@@ -32,5 +32,9 @@
     </environments>
     <mappers>
         <mapper class="com.system.auth.dao.UserMapper" />
+        <mapper class="com.system.auth.dao.SystemMapper" />
+        <mapper class="com.system.auth.dao.PlatformMapper" />
+        <mapper class="com.system.auth.dao.GroupMapper" />
+        <mapper class="com.system.auth.dao.UserGroupMapper" />
     </mappers>
 </configuration>

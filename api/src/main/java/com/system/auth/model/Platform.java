@@ -1,14 +1,20 @@
 package com.system.auth.model;
 
+import javax.validation.constraints.NotNull;
+
 public class Platform {
     private String platformId;
 
+    @NotNull(message = "platform name must not be null")
     private String platformName;
 
+    @NotNull(message = "secret key must not be null")
     private String secretKey;
 
+    @NotNull(message = "system id must not be null")
     private String systemId;
 
+    @NotNull(message = "platform domain must not be null")
     private String platformDomain;
 
     private String description;

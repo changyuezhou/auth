@@ -1,7 +1,8 @@
 package com.system.auth.sql;
 
 import com.system.auth.model.User;
-import com.system.auth.bean.model.request.UserListCondition;
+import com.system.auth.model.request.UserBulk;
+import com.system.auth.model.request.UserListCondition;
 import org.apache.ibatis.jdbc.SQL;
 
 public class UserSQL {
@@ -56,8 +57,6 @@ public class UserSQL {
             if (null != record.getUserName()) {
                 SET("user_name = #{userName,jdbcType=VARCHAR}");
             }
-
-
 
             if (null != record.getCreateUserId()) {
                 SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
@@ -125,5 +124,13 @@ public class UserSQL {
             DELETE_FROM("t_user");
             WHERE("user_name = #{userName, jdbcType=VARCHAR}");
         }}.toString();
+    }
+
+    public String deleteByUserIds(UserBulk users) {
+        String strUserIds = "";
+        for (String item: users.getUserIds()) {
+            strUserIds += ",'" + item + "'";
+        }
+        return "delete from t_user where group_id in (" + strUserIds.substring(1) + ")";
     }
 }

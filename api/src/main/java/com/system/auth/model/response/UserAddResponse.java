@@ -1,4 +1,4 @@
-package com.system.auth.bean.model.response;
+package com.system.auth.model.response;
 
 public class UserAddResponse {
     private String userId;

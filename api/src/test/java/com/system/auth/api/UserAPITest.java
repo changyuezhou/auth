@@ -1,8 +1,8 @@
 package com.system.auth.api;
 
 import com.system.auth.bean.*;
-import com.system.auth.bean.model.request.UserListCondition;
-import com.system.auth.bean.model.request.UserPrimaryKeyRequest;
+import com.system.auth.model.request.UserListCondition;
+import com.system.auth.model.request.UserKey;
 import com.system.auth.model.User;
 import com.system.auth.model.ext.UserView;
 import org.junit.*;
@@ -67,7 +67,7 @@ public class UserAPITest {
     // query
     @Test
     public void test02() throws Exception {
-        UserPrimaryKeyRequest user_req = new UserPrimaryKeyRequest(new_user.getUserId());
+        UserKey user_req = new UserKey(new_user.getUserId());
         ResponseEntity<UserQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/user/query", user_req,  UserQueryByPrimaryKeyResponseTest.class);
 
@@ -87,7 +87,6 @@ public class UserAPITest {
         then(user_view.getCreateTime()/time_diff_base).isEqualTo(new_user.getCreateTime()/time_diff_base);
         then(user_view.getUpdateTime()/time_diff_base).isEqualTo(new_user.getUpdateTime()/time_diff_base);
         then(user_view.getDescription()).isEqualTo(new_user.getDescription());
-        then(user_view.getPassword()).isEqualTo(new_user.getPassword());
     }
 
     // update
@@ -139,13 +138,12 @@ public class UserAPITest {
         then(user_view.getCreateTime()/time_diff_base).isEqualTo(new_user.getCreateTime()/time_diff_base);
         then(user_view.getUpdateTime()/time_diff_base).isEqualTo(new_user.getUpdateTime()/time_diff_base);
         then(user_view.getDescription()).isEqualTo(new_user.getDescription());
-        then(user_view.getPassword()).isEqualTo(new_user.getPassword());
     }
 
     // delete
     @Test
     public void test05() throws Exception {
-        UserPrimaryKeyRequest user_req = new UserPrimaryKeyRequest(new_user.getUserId());
+        UserKey user_req = new UserKey(new_user.getUserId());
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/user/delete", user_req,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);

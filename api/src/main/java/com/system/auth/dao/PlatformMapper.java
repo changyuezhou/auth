@@ -1,15 +1,14 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.Platform;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import com.system.auth.model.ext.PlatformView;
+import com.system.auth.model.request.PlatformBulk;
+import com.system.auth.model.request.PlatformListCondition;
+import com.system.auth.sql.PlatformSQL;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface PlatformMapper {
     @Delete({
@@ -17,6 +16,9 @@ public interface PlatformMapper {
         "where platform_id = #{platformId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String platformId);
+
+    @DeleteProvider(type = PlatformSQL.class, method = "deleteByPlatformIds")
+    int deleteByPlatformIds(PlatformBulk platforms);
 
     @Insert({
         "insert into t_platform (platform_id, platform_name, ",
@@ -32,30 +34,72 @@ public interface PlatformMapper {
     })
     int insert(Platform record);
 
-    @InsertProvider(type=PlatformSqlProvider.class, method="insertSelective")
+    @InsertProvider(type=PlatformSQL.class, method="insertSelective")
     int insertSelective(Platform record);
 
     @Select({
         "select",
-        "platform_id, platform_name, secret_key, system_id, platform_domain, description, ",
-        "create_user_id, update_time, create_time",
-        "from t_platform",
-        "where platform_id = #{platformId,jdbcType=VARCHAR}"
+        "a.platform_id, a.platform_name, a.secret_key, a.system_id, b.system_name, a.platform_domain, a.description, ",
+        "a.create_user_id, c.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_platform a, t_system b, t_user c",
+        "where a.platform_id = #{platformId,jdbcType=VARCHAR}",
+            "and a.system_id = b.system_id and a.create_user_id = c.user_id"
     })
     @Results({
         @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
         @Result(column="secret_key", property="secretKey", jdbcType=JdbcType.VARCHAR),
         @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
         @Result(column="platform_domain", property="platformDomain", jdbcType=JdbcType.VARCHAR),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    Platform selectByPrimaryKey(String platformId);
+    PlatformView selectByPrimaryKey(String platformId);
 
-    @UpdateProvider(type=PlatformSqlProvider.class, method="updateByPrimaryKeySelective")
+    @Select({
+            "select",
+            "a.platform_id, a.platform_name, a.secret_key, a.system_id, b.system_name, a.platform_domain, a.description, ",
+            "a.create_user_id, c.user_name as create_user_name, a.update_time, a.create_time",
+            "from t_platform a, t_system b, t_user c",
+            "where a.platform_name = #{platformName,jdbcType=VARCHAR}",
+            "and a.system_id = b.system_id and a.create_user_id = c.user_id"
+    })
+    @Results({
+            @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="secret_key", property="secretKey", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_domain", property="platformDomain", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    PlatformView selectByPlatformName(String platformName);
+
+    @SelectProvider(type=PlatformSQL.class, method="selectBySelective")
+    @Results({
+            @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="secret_key", property="secretKey", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_domain", property="platformDomain", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<PlatformView> selectBySelective(PlatformListCondition condition);
+
+    @UpdateProvider(type=PlatformSQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Platform record);
 
     @Update({

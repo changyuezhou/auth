@@ -4,17 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.system.auth.bean.*;
-import com.system.auth.bean.model.request.UserPrimaryKeyRequest;
-import com.system.auth.bean.model.response.UserAddResponse;
+import com.system.auth.model.request.UserBulk;
+import com.system.auth.model.request.UserKey;
+import com.system.auth.model.response.UserAddResponse;
 import com.system.auth.dao.UserMapper;
 import com.system.auth.model.User;
-import com.system.auth.bean.model.request.UserListCondition;
+import com.system.auth.model.request.UserListCondition;
 import com.system.auth.model.ext.UserView;
 import com.system.auth.util.MybatisUtil;
 import com.system.auth.util.SystemLogging;
 import io.swagger.annotations.*;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -94,7 +94,7 @@ public class UserController {
             throw new OperationException(OperationException.getUserInputException(), "user id: " + user.getUserId() + " is not exists");
         }
 
-        if (null != user.getUserName() && IsUserNameExists(user.getUserName())) {
+        if (null != user.getUserName() && !CanUpdate(user.getUserId(), user.getUserName())) {
             throw new OperationException(OperationException.getServiceException(), "user name:" + user.getUserName() + " is exists");
         }
 
@@ -106,7 +106,7 @@ public class UserController {
         return new OperationMessage(0, "");
     }
 
-    @ApiOperation(value="删除用户", notes="根据用户ID删除用户详细信息")
+    @ApiOperation(value="删除用户", notes="根据用户ID删除用户")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
             @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
@@ -115,7 +115,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public OperationMessage delete(@RequestBody UserPrimaryKeyRequest user, HttpServletRequest request) throws Exception {
+    public OperationMessage delete(@RequestBody UserKey user, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
 
@@ -130,6 +130,30 @@ public class UserController {
         return new OperationMessage(0, "");
     }
 
+    @ApiOperation(value="批量删除用户", notes="根据用户ID批量删除用户")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/bulk/delete", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public OperationMessage delete(@RequestBody UserBulk users, HttpServletRequest request) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(users), request, "", SystemLogging.getOperationStart());
+
+        if (null == users.getUserIds()) {
+            throw new OperationException(OperationException.getUserInputException(), "user id list must not be null");
+        }
+
+        userMapper.deleteByUserIds(users);
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(users), request, mapper.writeValueAsString(new OperationMessage(0, "")), SystemLogging.getSUCCESS());
+
+        return new OperationMessage(0, "");
+    }
+
     @ApiOperation(value="查询用户", notes="根据用户ID查询用户详细信息")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
@@ -139,7 +163,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/query", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public ResponseMessage<UserView> query(@Validated @RequestBody UserPrimaryKeyRequest user, BindingResult check, HttpServletRequest request) throws Exception {
+    public ResponseMessage<UserView> query(@Validated @RequestBody UserKey user, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -149,7 +173,7 @@ public class UserController {
 
         UserView result = userMapper.selectByPrimaryKey(user.getUserId());
         if (null == result) {
-            throw new OperationException(OperationException.getRecordIsNotExists(), "there is no record in database");
+            throw new OperationException(OperationException.getRecordIsNotExists(), OperationException.getNoRecordsMsg());
         }
 
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());
@@ -189,6 +213,19 @@ public class UserController {
 
     public Boolean IsUserNameExists(String userName) {
         if (null != userMapper.selectByUserName(userName)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Boolean CanUpdate(String userId, String userName) {
+        UserView user = userMapper.selectByUserName(userName);
+        if (null == user) {
+            return true;
+        }
+
+        if (userId.equals(user.getUserId())) {
             return true;
         }
 

@@ -40,6 +40,35 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=200000 AVG_ROW_LENGTH=2000;
 
+CREATE TABLE `t_group` (
+  `group_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '组ID',
+  `group_name`   varchar(256)     NOT NULL DEFAULT '' COMMENT '组名称',
+  `platform_id`   varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
+  `description` varchar(1024)     NOT NULL DEFAULT '' COMMENT '描述',
+  `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
+  `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=200 AVG_ROW_LENGTH=2000;
+
+CREATE TABLE `t_user_group` (
+  `user_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '用户ID',
+  `group_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '组ID',
+  `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
+  `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`user_id`, `group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=1000;
+
+CREATE TABLE `t_group_authority` (
+  `group_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '组ID',
+  `auth_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '权限ID',
+  `platform_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
+  `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
+  `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`group_id`, `auth_id`, `platform_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=2000;
 
 CREATE TABLE `t_role` (
   `role_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '角色ID',

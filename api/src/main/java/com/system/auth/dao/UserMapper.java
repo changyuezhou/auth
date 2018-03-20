@@ -2,8 +2,9 @@ package com.system.auth.dao;
 
 import com.system.auth.model.User;
 import com.system.auth.model.ext.UserView;
+import com.system.auth.model.request.UserBulk;
 import com.system.auth.sql.UserSQL;
-import com.system.auth.bean.model.request.UserListCondition;
+import com.system.auth.model.request.UserListCondition;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -15,6 +16,9 @@ public interface UserMapper {
         "where user_id = #{userId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String userId);
+
+    @DeleteProvider(type = UserSQL.class, method = "deleteByUserIds")
+    int deleteByUserIds(UserBulk users);
 
     @Insert({
         "insert into t_user (user_id, user_name, ",
@@ -44,7 +48,6 @@ public interface UserMapper {
     @Results({
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
-        @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
         @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
         @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
@@ -66,7 +69,6 @@ public interface UserMapper {
     @Results({
             @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
-            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
             @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
             @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
             @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),
@@ -75,13 +77,12 @@ public interface UserMapper {
             @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    User selectByUserName(String userName);
+    UserView selectByUserName(String userName);
 
     @SelectProvider(type=UserSQL.class, method="selectBySelective")
     @Results({
             @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
             @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
-            @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
             @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
             @Result(column="mobile_number", property="mobileNumber", jdbcType=JdbcType.VARCHAR),
             @Result(column="contact_name", property="contactName", jdbcType=JdbcType.VARCHAR),

@@ -1,6 +1,6 @@
 package com.system.auth.bean;
 
-import com.system.auth.bean.model.response.UserAddResponse;
+import com.system.auth.model.response.UserAddResponse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 

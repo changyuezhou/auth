@@ -1,12 +1,11 @@
 package com.system.auth.model;
 
-import javax.validation.constraints.NotNull;
+public class Group {
+    private String groupId;
 
-public class System {
-    private String systemId;
+    private String groupName;
 
-    @NotNull(message = "user name must not be null")
-    private String systemName;
+    private String platformId;
 
     private String description;
 
@@ -16,20 +15,28 @@ public class System {
 
     private Long createTime;
 
-    public String getSystemId() {
-        return systemId;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setSystemId(String systemId) {
-        this.systemId = systemId == null ? null : systemId.trim();
+    public void setGroupId(String groupId) {
+        this.groupId = groupId == null ? null : groupId.trim();
     }
 
-    public String getSystemName() {
-        return systemName;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setSystemName(String systemName) {
-        this.systemName = systemName == null ? null : systemName.trim();
+    public void setGroupName(String groupName) {
+        this.groupName = groupName == null ? null : groupName.trim();
+    }
+
+    public String getPlatformId() {
+        return platformId;
+    }
+
+    public void setPlatformId(String platformId) {
+        this.platformId = platformId == null ? null : platformId.trim();
     }
 
     public String getDescription() {

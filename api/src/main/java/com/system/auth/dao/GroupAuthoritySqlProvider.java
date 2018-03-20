@@ -8,24 +8,24 @@ import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
 import static org.apache.ibatis.jdbc.SqlBuilder.VALUES;
 import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
 
-import com.system.auth.model.System;
+import com.system.auth.model.GroupAuthority;
 
-public class SystemSqlProvider {
+public class GroupAuthoritySqlProvider {
 
-    public String insertSelective(System record) {
+    public String insertSelective(GroupAuthority record) {
         BEGIN();
-        INSERT_INTO("t_system");
+        INSERT_INTO("t_group_authority");
         
-        if (record.getSystemId() != null) {
-            VALUES("system_id", "#{systemId,jdbcType=VARCHAR}");
+        if (record.getGroupId() != null) {
+            VALUES("group_id", "#{groupId,jdbcType=VARCHAR}");
         }
         
-        if (record.getSystemName() != null) {
-            VALUES("system_name", "#{systemName,jdbcType=VARCHAR}");
+        if (record.getAuthId() != null) {
+            VALUES("auth_id", "#{authId,jdbcType=VARCHAR}");
         }
         
-        if (record.getDescription() != null) {
-            VALUES("description", "#{description,jdbcType=VARCHAR}");
+        if (record.getPlatformId() != null) {
+            VALUES("platform_id", "#{platformId,jdbcType=VARCHAR}");
         }
         
         if (record.getCreateUserId() != null) {
@@ -43,17 +43,9 @@ public class SystemSqlProvider {
         return SQL();
     }
 
-    public String updateByPrimaryKeySelective(System record) {
+    public String updateByPrimaryKeySelective(GroupAuthority record) {
         BEGIN();
-        UPDATE("t_system");
-        
-        if (record.getSystemName() != null) {
-            SET("system_name = #{systemName,jdbcType=VARCHAR}");
-        }
-        
-        if (record.getDescription() != null) {
-            SET("description = #{description,jdbcType=VARCHAR}");
-        }
+        UPDATE("t_group_authority");
         
         if (record.getCreateUserId() != null) {
             SET("create_user_id = #{createUserId,jdbcType=VARCHAR}");
@@ -67,7 +59,9 @@ public class SystemSqlProvider {
             SET("create_time = #{createTime,jdbcType=BIGINT}");
         }
         
-        WHERE("system_id = #{systemId,jdbcType=VARCHAR}");
+        WHERE("group_id = #{groupId,jdbcType=VARCHAR}");
+        WHERE("auth_id = #{authId,jdbcType=VARCHAR}");
+        WHERE("platform_id = #{platformId,jdbcType=VARCHAR}");
         
         return SQL();
     }
