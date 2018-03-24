@@ -8,6 +8,7 @@ import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
 import com.system.auth.bean.ResponseMessage;
 import com.system.auth.dao.PlatformMapper;
+import com.system.auth.dao.SystemMapper;
 import com.system.auth.model.Platform;
 import com.system.auth.model.request.PlatformBulk;
 import com.system.auth.model.request.PlatformKey;
@@ -95,11 +96,17 @@ public class PlatformController {
             throw new OperationException(OperationException.getUserInputException(), "platform id must not be null");
         }
 
-        if (!IsPlatformIdExists(platform.getPlatformId())) {
+        PlatformView platform_view = platformMapper.selectByPrimaryKey(platform.getPlatformId());
+
+        if (null == platform_view) {
             throw new OperationException(OperationException.getUserInputException(), "platform id: " + platform.getPlatformId() + " is not exists");
         }
 
-        if (null != platform.getPlatformName() && !CanUpdate(platform.getPlatformId(), platform.getPlatformName())) {
+        if (null != platform.getSystemId() && !platform.getSystemId().equalsIgnoreCase(platform_view.getSystemId()) && IsSystemIdExists(platform.getSystemId())) {
+            throw new OperationException(OperationException.getServiceException(), "system id:" + platform.getSystemId() + " is exists");
+        }
+
+        if (null != platform.getPlatformName() && !platform.getPlatformName().equalsIgnoreCase(platform_view.getPlatformName()) && IsPlatformNameExists(platform.getPlatformName())) {
             throw new OperationException(OperationException.getServiceException(), "platform name:" + platform.getPlatformName() + " is exists");
         }
 
@@ -224,6 +231,16 @@ public class PlatformController {
         return false;
     }
 
+    public Boolean IsSystemIdExists(String systemId) {
+        SystemMapper systemMapper = session.getMapper(SystemMapper.class);
+
+        if (null != systemMapper.selectByPrimaryKey(systemId)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public Boolean CanUpdate(String platformId, String platformName) {
         PlatformView platform = platformMapper.selectByPlatformName(platformName);
         if (null == platform) {
@@ -231,14 +248,6 @@ public class PlatformController {
         }
 
         if (platformId.equals(platform.getPlatformId())) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Boolean IsPlatformIdExists(String platformId) {
-        if (null != platformMapper.selectByPrimaryKey(platformId)) {
             return true;
         }
 

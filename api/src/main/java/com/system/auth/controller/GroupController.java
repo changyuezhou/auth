@@ -8,7 +8,9 @@ import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
 import com.system.auth.bean.ResponseMessage;
 import com.system.auth.dao.GroupMapper;
+import com.system.auth.dao.PlatformMapper;
 import com.system.auth.model.Group;
+import com.system.auth.model.Platform;
 import com.system.auth.model.ext.GroupView;
 import com.system.auth.model.request.GroupBulk;
 import com.system.auth.model.request.GroupKey;
@@ -58,6 +60,10 @@ public class GroupController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(group), request, "", SystemLogging.getOperationStart());
 
+        if (!IsPlatformIdExists(group.getPlatformId())) {
+            throw new OperationException(OperationException.getUserInputException(), "platform id:" + group.getPlatformId() + " is not exists");
+        }
+
         if (IsGroupNameExists(group.getPlatformId(), group.getGroupName())) {
             throw new OperationException(OperationException.getUserInputException(), "platform id:" + group.getPlatformId() + " group name:" + group.getGroupName() + " is exists");
         }
@@ -96,12 +102,18 @@ public class GroupController {
         }
 
         GroupView group_view = groupMapper.selectByPrimaryKey(group.getGroupId());
-        if (null == group) {
+        if (null == group_view) {
             throw new OperationException(OperationException.getUserInputException(), "group id: " + group.getGroupId() + " is not exists");
         }
 
-        if (null != group.getGroupName() && !CanUpdate(group_view, group.getGroupName())) {
-            throw new OperationException(OperationException.getServiceException(), "platform id:" + group.getPlatformId() + " group name:" + group.getGroupName() +  " is exists");
+        String platformId = (null == group.getPlatformId())? group_view.getPlatformId(): group.getPlatformId();
+
+        if (null != group.getPlatformId() && !group.getPlatformId().equalsIgnoreCase(group_view.getPlatformId()) && !IsPlatformIdExists(group.getPlatformId())) {
+            throw new OperationException(OperationException.getUserInputException(), "platform id: " + group.getPlatformId() + " is not exists");
+        }
+
+        if (null != group.getGroupName() && !group.getGroupName().equalsIgnoreCase(group_view.getGroupName()) && IsGroupNameExists(platformId, group.getGroupName())) {
+            throw new OperationException(OperationException.getServiceException(), "platform id:" + platformId + " group name:" + group.getGroupName() +  " is exists");
         }
 
         group.setUpdateTime(java.lang.System.currentTimeMillis());
@@ -228,24 +240,10 @@ public class GroupController {
         return false;
     }
 
-    public Boolean CanUpdate(GroupView group_view, String groupName) {
-        GroupListCondition condition = new GroupListCondition();
-        condition.setPlatformId(group_view.getPlatformId());
-        condition.setGroupName(groupName);
-        GroupView result = groupMapper.selectByPlatformIdAndGroupName(condition);
-        if (null == result) {
-            return true;
-        }
+    public Boolean IsPlatformIdExists(String platformId) {
+        PlatformMapper platformMapper = session.getMapper(PlatformMapper.class);
 
-        if (group_view.getGroupId().equals(result.getGroupId())) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Boolean IsGroupIdExists(String groupId) {
-        if (null != groupMapper.selectByPrimaryKey(groupId)) {
+        if (null != platformMapper.selectByPrimaryKey(platformId)) {
             return true;
         }
 

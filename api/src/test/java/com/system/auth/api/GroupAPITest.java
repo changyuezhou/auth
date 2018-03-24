@@ -117,7 +117,6 @@ public class GroupAPITest {
         condition.setGroupName(name_prefix);
         condition.setGroupId(new_group.getGroupId());
         condition.setPlatformId(platformId);
-        condition.setPlatformName(platformName);
         condition.setCreateUserId(userId);
         condition.setCreateUserName(userName);
         condition.setPageSize(10);

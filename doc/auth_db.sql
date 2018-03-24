@@ -63,7 +63,6 @@ CREATE TABLE `t_user_group` (
 CREATE TABLE `t_group_authority` (
   `group_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '组ID',
   `auth_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '权限ID',
-  `platform_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -85,7 +84,6 @@ CREATE TABLE `t_role` (
 CREATE TABLE `t_user_role` (
   `user_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '用户ID',
   `role_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '角色ID',
-  `platform_id`   varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -111,7 +109,6 @@ CREATE TABLE `t_authority` (
 CREATE TABLE `t_role_authority` (
   `role_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '角色ID',
   `auth_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '权限ID',
-  `platform_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -149,7 +146,7 @@ CREATE TABLE `t_user_organization` (
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`user_id`, `organization_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=1000;
-
+/*
 CREATE TABLE `t_custom_arch` (
   `custom_arch_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '定制结构ID',
   `custom_arch_name`   varchar(512)      NOT NULL DEFAULT '' COMMENT '定制结构名称',
@@ -182,7 +179,7 @@ CREATE TABLE `t_user_custom_arch` (
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (`user_id`, `custom_arch_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=1000;
-
+*/
 CREATE TABLE `t_session` (
   `id`     int(11)           NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `platform_id`   varchar(128)      NOT NULL DEFAULT '' COMMENT '平台ID',
@@ -212,6 +209,27 @@ CREATE TABLE `t_session` (
 
 ########################################################################################################################
 
+DELIMITER &&
+CREATE VIEW `v_user_authority` AS (SELECT
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
+                          FROM t_user a, t_authority b, t_platform c, t_user_group d, t_group_authority e, t_user f, t_group g
+                          WHERE a.user_id = d.user_id and d.group_id = e.group_id and e.auth_id= b.auth_id 
+                          and d.group_id = g.group_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id) UNION
+                          (SELECT
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
+                          FROM t_user a, t_authority b, t_platform c, t_user_role d, t_role_authority e, t_user f, t_role g
+                          WHERE a.user_id = d.user_id and d.role_id = e.role_id and e.auth_id= b.auth_id 
+                          and d.role_id = g.role_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id) UNION
+                          (SELECT
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
+                          FROM t_user a, t_authority b, t_platform c, t_user_organization d, t_organization_authority e, t_user f, t_organization g
+                          WHERE a.user_id = d.user_id and d.organization_id = e.organization_id and e.auth_id= b.auth_id 
+                          and d.organization_id = g.organization_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id)                          
+&&
+DELIMITER ;
 
 ########################################################################################################################
 
@@ -228,9 +246,9 @@ BEGIN
      SELECT auth_f_tree,auth_id INTO var_auth_f_tree,var_auth_id FROM t_authority WHERE auth_id = NEW.auth_f_id;
      SET NEW.auth_f_tree = CONCAT(var_auth_f_tree, "-", var_auth_id);
   END IF;
-  IF NEW.auth_level = 0 or NEW.auth_f_id = 0 THEN
-    SET NEW.auth_f_tree = "0";
-  END IF;
+  IF NEW.auth_level = 1 THEN
+    SET NEW.auth_f_tree = NEW.auth_f_id;
+  END IF;  
 END
 &&
 DELIMITER ;
@@ -248,8 +266,8 @@ BEGIN
      SELECT organization_f_tree,organization_id INTO var_org_f_tree,var_org_id FROM t_organization WHERE organization_id = NEW.organization_f_id;
      SET NEW.organization_f_tree = CONCAT(var_org_f_tree, "-", var_org_id);
   END IF;
-  IF NEW.organization_level = 0 or NEW.organization_f_id = 0 THEN
-    SET NEW.organization_f_tree = "0";
+  IF NEW.organization_level = 1 THEN
+    SET NEW.organization_f_tree = NEW.organization_f_id;
   END IF;
 END
 &&
@@ -268,8 +286,8 @@ BEGIN
      SELECT custom_arch_f_tree,custom_arch_id INTO var_cus_arch_f_tree,var_cus_arch_id FROM t_custom_arch WHERE custom_arch_id = NEW.custom_arch_f_id;
      SET NEW.custom_arch_f_tree = CONCAT(var_cus_arch_f_tree, "-", var_cus_arch_id);
   END IF;
-  IF NEW.custom_arch_level = 0 or NEW.custom_arch_f_id = 0 THEN
-    SET NEW.custom_arch_f_tree = "0";
+  IF NEW.custom_arch_level = 1 THEN
+    SET NEW.custom_arch_f_tree = NEW.custom_arch_f_id;
   END IF;
 END
 &&

@@ -5,10 +5,9 @@ import javax.validation.constraints.NotNull;
 public class GroupListCondition {
     private String groupId;
     private String groupName;
-    
-    private String platformId;
 
-    private String platformName;
+    @NotNull(message = "platform id can not be null")
+    private String platformId;
 
     private String createUserName;
     private String createUserId;
@@ -20,10 +19,6 @@ public class GroupListCondition {
 
     public void setPlatformId(String platformId) {
         this.platformId = platformId;
-    }
-
-    public void setPlatformName(String platformName) {
-        this.platformName = platformName;
     }
 
     public void setCreateUserName(String createUserName) {
@@ -40,10 +35,6 @@ public class GroupListCondition {
 
     public String getPlatformId() {
         return platformId;
-    }
-
-    public String getPlatformName() {
-        return platformName;
     }
 
     public String getGroupId() {

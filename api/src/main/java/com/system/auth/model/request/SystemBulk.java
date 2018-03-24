@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class SystemBulk {
-    @NotNull(message = "user id must not be null")
+    @NotNull(message = "system id list must not be null")
     private List<String> systemIds;
 
     public List<String> getSystemIds() {

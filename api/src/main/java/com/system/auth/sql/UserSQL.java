@@ -131,6 +131,9 @@ public class UserSQL {
         for (String item: users.getUserIds()) {
             strUserIds += ",'" + item + "'";
         }
-        return "delete from t_user where group_id in (" + strUserIds.substring(1) + ")";
+
+        final String cond = strUserIds.length() > 0? strUserIds.substring(1): "''";
+
+        return "delete from t_user where group_id in (" + cond + ")";
     }
 }

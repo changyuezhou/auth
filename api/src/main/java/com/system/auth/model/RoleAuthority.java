@@ -1,5 +1,7 @@
 package com.system.auth.model;
 
+import com.system.auth.model.request.RoleAuthorityKey;
+
 public class RoleAuthority extends RoleAuthorityKey {
     private String createUserId;
 

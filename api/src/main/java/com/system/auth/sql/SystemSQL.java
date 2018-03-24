@@ -86,6 +86,9 @@ public class SystemSQL {
         for (String item: systems.getSystemIds()) {
             strSystemIds += ",'" + item + "'";
         }
-        return "delete from t_system where group_id in (" + strSystemIds.substring(1) + ")";
+
+        final String cond = strSystemIds.length() > 0? strSystemIds.substring(1): "''";
+
+        return "delete from t_system where group_id in (" + cond + ")";
     }
 }

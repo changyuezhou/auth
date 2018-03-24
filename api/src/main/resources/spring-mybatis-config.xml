@@ -36,5 +36,15 @@
         <mapper class="com.system.auth.dao.PlatformMapper" />
         <mapper class="com.system.auth.dao.GroupMapper" />
         <mapper class="com.system.auth.dao.UserGroupMapper" />
+        <mapper class="com.system.auth.dao.AuthorityMapper" />
+        <mapper class="com.system.auth.dao.GroupAuthorityMapper" />
+        <mapper class="com.system.auth.dao.UserAuthorityMapper" />
+        <mapper class="com.system.auth.dao.RoleMapper" />
+        <mapper class="com.system.auth.dao.UserRoleMapper" />
+        <mapper class="com.system.auth.dao.RoleAuthorityMapper" />
+        <mapper class="com.system.auth.dao.OrganizationMapper" />
+        <mapper class="com.system.auth.dao.OrganizationAuthorityMapper" />
+        <mapper class="com.system.auth.dao.UserOrganizationMapper" />
+        <mapper class="com.system.auth.dao.SessionMapper" />
     </mappers>
 </configuration>

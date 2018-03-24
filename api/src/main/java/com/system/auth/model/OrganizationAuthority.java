@@ -1,5 +1,7 @@
 package com.system.auth.model;
 
+import com.system.auth.model.request.OrganizationAuthorityKey;
+
 public class OrganizationAuthority extends OrganizationAuthorityKey {
     private String createUserId;
 

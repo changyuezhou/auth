@@ -95,11 +95,13 @@ public class SystemController {
             throw new OperationException(OperationException.getUserInputException(), "system id must not be null");
         }
 
-        if (!IsSystemIdExists(system.getSystemId())) {
+        SystemView system_view = systemMapper.selectByPrimaryKey(system.getSystemId());
+
+        if (null == system_view) {
             throw new OperationException(OperationException.getUserInputException(), "system id: " + system.getSystemId() + " is not exists");
         }
 
-        if (null != system.getSystemName() && !CanUpdate(system.getSystemId(), system.getSystemName())) {
+        if (null != system.getSystemName() && !system_view.getSystemName().equalsIgnoreCase(system.getSystemName()) && IsSystemNameExists(system.getSystemName())) {
             throw new OperationException(OperationException.getServiceException(), "system name:" + system.getSystemName() + " is exists");
         }
 
@@ -216,29 +218,8 @@ public class SystemController {
         return result;
     }
 
-    public Boolean CanUpdate(String systemId, String systemName) {
-        System system = systemMapper.selectBySystemName(systemName);
-        if (null == system) {
-            return true;
-        }
-
-        if (systemId.equals(system.getSystemId())) {
-            return true;
-        }
-
-        return false;
-    }
-
     public Boolean IsSystemNameExists(String systemName) {
         if (null != systemMapper.selectBySystemName(systemName)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Boolean IsSystemIdExists(String systemId) {
-        if (null != systemMapper.selectByPrimaryKey(systemId)) {
             return true;
         }
 

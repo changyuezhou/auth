@@ -1,12 +1,16 @@
 package com.system.auth.model;
 
+import javax.validation.constraints.NotNull;
+
 public class Authority {
     private String authId;
 
+    @NotNull(message = "authName must not be null")
     private String authName;
 
     private String authFId;
 
+    @NotNull(message = "systemId must not be null")
     private String systemId;
 
     private Integer authLevel;

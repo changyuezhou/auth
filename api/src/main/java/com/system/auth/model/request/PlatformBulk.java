@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class PlatformBulk {
-    @NotNull(message = "platform id must not be null")
+    @NotNull(message = "platform id list must not be null")
     private List<String> platformIds;
 
     public List<String> getPlatformIds() {

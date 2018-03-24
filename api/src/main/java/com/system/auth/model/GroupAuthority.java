@@ -1,5 +1,7 @@
 package com.system.auth.model;
 
+import com.system.auth.model.request.GroupAuthorityKey;
+
 public class GroupAuthority extends GroupAuthorityKey {
     private String createUserId;
 

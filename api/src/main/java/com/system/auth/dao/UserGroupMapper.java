@@ -74,10 +74,7 @@ public interface UserGroupMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
     List<UserGroupView> selectBySelective(UserGroupListCondition condition);
-/*
-    @UpdateProvider(type=UserGroupSQL.class, method="updateByPrimaryKeySelective")
-    int updateByPrimaryKeySelective(UserGroup record);
-*/
+
     @Update({
         "update t_user_group",
         "set create_user_id = #{createUserId,jdbcType=VARCHAR},",

@@ -118,6 +118,8 @@ public class PlatformSQL {
         for (String item: platforms.getPlatformIds()) {
             strPlatformIds += ",'" + item + "'";
         }
-        return "delete from t_platform where group_id in (" + strPlatformIds.substring(1) + ")";
+        final String cond = strPlatformIds.length() > 0? strPlatformIds.substring(1): "''";
+
+        return "delete from t_platform where group_id in (" + cond + ")";
     }
 }

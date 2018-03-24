@@ -25,12 +25,21 @@ public class UserGroupSQL {
             if (null != condition.getGroupId()) {
                 WHERE("a.group_id = #{groupId, jdbcType=VARCHAR}");
             }
+
             if (null != condition.getGroupName()) {
                 condition.setGroupName("%" + condition.getGroupName() + "%");
                 WHERE("d.group_name like #{groupName, jdbcType=VARCHAR}");
             }
+
+            if (null != condition.getUserId()) {
+                WHERE("a.user_id = #{userId, jdbcType=VARCHAR}");
+            }
+            if (null != condition.getUserName()) {
+                final String condStr = "c.user_name like '%" + condition.getUserName() + "%'";
+                WHERE(condStr);
+            }
             if (null != condition.getPlatformId()) {
-                WHERE("a.platform_id = #{platformId, jdbcType=VARCHAR}");
+                WHERE("b.platform_id = #{platformId, jdbcType=VARCHAR}");
             }
 
             WHERE("a.create_user_id = e.user_id");
@@ -47,11 +56,11 @@ public class UserGroupSQL {
         String groupIds = "";
         if (null != user_groups.getGroupIds() && 0 < user_groups.getGroupIds().size()) {
             for (String item: user_groups.getGroupIds()) {
-                groupIds += "," + item;
+                groupIds += ",'" + item + "'";
             }
         }
 
-        final String condition_group = "group_id in (" + groupIds + ")";
+        final String condition_group = groupIds.length() > 0? "group_id in (" + groupIds.substring(1) + ")" : "";
         return new SQL() {{
             DELETE_FROM("t_user_group");
             WHERE("user_id = #{userId}");

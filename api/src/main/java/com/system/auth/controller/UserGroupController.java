@@ -96,8 +96,12 @@ public class UserGroupController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_groups), request, "", SystemLogging.getOperationStart());
 
+        if (!IsUserIdExists(user_groups.getUserId())) {
+            throw new OperationException(OperationException.getUserInputException(),"user id:" + user_groups.getUserId() + " is not exists");
+        }
+
         if (!IsGroupIdsExists(user_groups.getGroupIds())) {
-            throw new OperationException(OperationException.getUserInputException(), "user id:" + user_groups.getUserId() + " or group id:" + mapper.writeValueAsString(user_groups.getGroupIds()) + " is not exists");
+            throw new OperationException(OperationException.getUserInputException(), "group id:" + mapper.writeValueAsString(user_groups.getGroupIds()) + " is not exists");
         }
 
         UserGroupBulkInsert bulk = new UserGroupBulkInsert();
@@ -152,7 +156,11 @@ public class UserGroupController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public OperationMessage delete(@RequestBody UserGroupKey user_group, HttpServletRequest request) throws Exception {
+    public OperationMessage delete(@Validated @RequestBody UserGroupKey user_group, BindingResult check, HttpServletRequest request) throws Exception {
+        if (check.hasErrors()) {
+            throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_group), request, "", SystemLogging.getOperationStart());
 

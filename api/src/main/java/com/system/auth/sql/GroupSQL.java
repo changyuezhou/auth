@@ -76,8 +76,8 @@ public class GroupSQL {
                 WHERE("a.group_id = #{groupId, jdbcType=VARCHAR}");
             }
             if (null != condition.getGroupName()) {
-                condition.setGroupName("%" + condition.getGroupName() + "%");
-                WHERE("a.group_name like #{groupName, jdbcType=VARCHAR}");
+                final String groupNameCond  = "a.group_name like '%" + condition.getGroupName() + "%'";
+                WHERE(groupNameCond);
             }
             if (null != condition.getPlatformId()) {
                 WHERE("a.platform_id = #{platformId, jdbcType=VARCHAR}");
@@ -113,7 +113,9 @@ public class GroupSQL {
         for (String item: groups.getGroupIds()) {
             strGroupIds += ",'" + item + "'";
         }
-        return "select group_id from t_group where group_id in (" + strGroupIds.substring(1) + ")";
+        final String cond = strGroupIds.length() > 0? strGroupIds.substring(1): "''";
+
+        return "select group_id from t_group where group_id in (" + cond + ")";
     }
 
     public String deleteByGroupIds(GroupBulk groups) {
@@ -121,6 +123,8 @@ public class GroupSQL {
         for (String item: groups.getGroupIds()) {
             strGroupIds += ",'" + item + "'";
         }
-        return "delete from t_group where group_id in (" + strGroupIds.substring(1) + ")";
+        final String cond = strGroupIds.length() > 0? strGroupIds.substring(1): "''";
+
+        return "delete from t_group where group_id in (" + cond + ")";
     }
 }

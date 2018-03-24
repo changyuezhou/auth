@@ -90,11 +90,12 @@ public class UserController {
             throw new OperationException(OperationException.getUserInputException(), "user status can not be 0");
         }
 
-        if (!IsUserIdExists(user.getUserId())) {
+        UserView user_view = userMapper.selectByPrimaryKey(user.getUserId());
+        if (null == user_view) {
             throw new OperationException(OperationException.getUserInputException(), "user id: " + user.getUserId() + " is not exists");
         }
 
-        if (null != user.getUserName() && !CanUpdate(user.getUserId(), user.getUserName())) {
+        if (null != user.getUserName() && !user_view.getUserName().equalsIgnoreCase(user.getUserName()) && IsUserNameExists(user.getUserName())) {
             throw new OperationException(OperationException.getServiceException(), "user name:" + user.getUserName() + " is exists");
         }
 
@@ -213,27 +214,6 @@ public class UserController {
 
     public Boolean IsUserNameExists(String userName) {
         if (null != userMapper.selectByUserName(userName)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Boolean CanUpdate(String userId, String userName) {
-        UserView user = userMapper.selectByUserName(userName);
-        if (null == user) {
-            return true;
-        }
-
-        if (userId.equals(user.getUserId())) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public Boolean IsUserIdExists(String userId) {
-        if (null != userMapper.selectByPrimaryKey(userId)) {
             return true;
         }
 

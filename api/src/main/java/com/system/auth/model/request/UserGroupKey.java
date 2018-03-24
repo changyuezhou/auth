@@ -1,8 +1,12 @@
 package com.system.auth.model.request;
 
+import javax.validation.constraints.NotNull;
+
 public class UserGroupKey {
+    @NotNull(message = "user id must not be null")
     private String userId;
 
+    @NotNull(message = "group id must not be null")
     private String groupId;
 
     public String getUserId() {

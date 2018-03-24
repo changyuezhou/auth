@@ -1,15 +1,14 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.Role;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import com.system.auth.model.ext.RoleView;
+import com.system.auth.model.request.RoleBulk;
+import com.system.auth.model.request.RoleListCondition;
+import com.system.auth.sql.RoleSQL;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
+
+import java.util.List;
 
 public interface RoleMapper {
     @Delete({
@@ -17,6 +16,10 @@ public interface RoleMapper {
         "where role_id = #{roleId,jdbcType=VARCHAR}"
     })
     int deleteByPrimaryKey(String roleId);
+
+    @DeleteProvider(type = RoleSQL.class, method = "deleteByRoleIds")
+    int deleteByRoleIds(RoleBulk roles);
+
 
     @Insert({
         "insert into t_role (role_id, role_name, ",
@@ -30,27 +33,62 @@ public interface RoleMapper {
     })
     int insert(Role record);
 
-    @InsertProvider(type=RoleSqlProvider.class, method="insertSelective")
+    @InsertProvider(type=RoleSQL.class, method="insertSelective")
     int insertSelective(Role record);
 
     @Select({
         "select",
-        "role_id, role_name, platform_id, description, create_user_id, update_time, create_time",
-        "from t_role",
-        "where role_id = #{roleId,jdbcType=VARCHAR}"
+        "a.role_id, a.role_name, a.platform_id, b.platform_name, a.description, a.create_user_id, c.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_role a, t_platform b, t_user c",
+        "where role_id = #{roleId,jdbcType=VARCHAR}",
+            "and a.platform_id = b.platform_id and a.create_user_id = c.user_id"
     })
     @Results({
         @Result(column="role_id", property="roleId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
         @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    Role selectByPrimaryKey(String roleId);
+    RoleView selectByPrimaryKey(String roleId);
 
-    @UpdateProvider(type=RoleSqlProvider.class, method="updateByPrimaryKeySelective")
+    @SelectProvider(type = RoleSQL.class, method = "selectBySelective")
+    @Results({
+            @Result(column="role_id", property="roleId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<RoleView> selectBySelective(RoleListCondition condition);
+
+
+    @SelectProvider(type=RoleSQL.class, method = "selectByRoleIds")
+    List<String> selectByRoleIds(RoleBulk roles);
+
+    @SelectProvider(type = RoleSQL.class, method = "selectByPlatformIdAndRoleName")
+    @Results({
+            @Result(column="role_id", property="roleId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="role_name", property="roleName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    RoleView selectByPlatformIdAndRoleName(RoleListCondition condition);
+
+    @UpdateProvider(type=RoleSQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Role record);
 
     @Update({

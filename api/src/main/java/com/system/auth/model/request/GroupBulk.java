@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class GroupBulk {
-    @NotNull(message = "user id must not be null")
+    @NotNull(message = "group id must not be null")
     private List<String> groupIds;
 
     public List<String> getGroupIds() {

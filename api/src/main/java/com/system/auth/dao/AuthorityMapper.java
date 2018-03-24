@@ -1,22 +1,27 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.Authority;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import com.system.auth.model.ext.AuthorityView;
+import com.system.auth.model.request.AuthorityBulk;
+import com.system.auth.model.request.AuthorityListCondition;
+import com.system.auth.sql.AuthoritySQL;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
+import java.util.List;
+
 public interface AuthorityMapper {
+    /*
     @Delete({
         "delete from t_authority",
-        "where auth_id = #{authId,jdbcType=VARCHAR}"
+        "where auth_id = #{authId,jdbcType=VARCHAR} or auth_f_tree like #{authId,jdbcType=VARCHAR}"
     })
+    */
+    @DeleteProvider(type = AuthoritySQL.class, method = "deleteByAuthorityId")
     int deleteByPrimaryKey(String authId);
+
+    @DeleteProvider(type = AuthoritySQL.class, method = "deleteByAuthorityIds")
+    int deleteByAuthorityIds(AuthorityBulk auths);
 
     @Insert({
         "insert into t_authority (auth_id, auth_name, ",
@@ -32,31 +37,73 @@ public interface AuthorityMapper {
     })
     int insert(Authority record);
 
-    @InsertProvider(type=AuthoritySqlProvider.class, method="insertSelective")
+    @InsertProvider(type=AuthoritySQL.class, method="insertSelective")
     int insertSelective(Authority record);
 
     @Select({
         "select",
-        "auth_id, auth_name, auth_f_id, system_id, auth_level, auth_f_tree, description, ",
-        "create_user_id, update_time, create_time",
-        "from t_authority",
-        "where auth_id = #{authId,jdbcType=VARCHAR}"
+        "a.auth_id, a.auth_name, a.auth_f_id, a.system_id, c.system_name, a.auth_level, a.auth_f_tree, b.auth_name as auth_f_name, a.description, ",
+        "a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_authority a, t_authority b, t_system c, t_user d",
+        "where a.auth_id = #{authId,jdbcType=VARCHAR}",
+            "and (a.auth_f_id = b.auth_id or a.auth_f_id='')",
+            "and a.system_id = c.system_id",
+            "and a.create_user_id = d.user_id"
     })
     @Results({
         @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
         @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="auth_f_name", property="authFName", jdbcType=JdbcType.VARCHAR),
         @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
         @Result(column="auth_level", property="authLevel", jdbcType=JdbcType.INTEGER),
         @Result(column="auth_f_tree", property="authFTree", jdbcType=JdbcType.VARCHAR),
         @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
         @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
         @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
         @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
-    Authority selectByPrimaryKey(String authId);
+    AuthorityView selectByPrimaryKey(String authId);
 
-    @UpdateProvider(type=AuthoritySqlProvider.class, method="updateByPrimaryKeySelective")
+    @SelectProvider(type = AuthoritySQL.class, method = "selectBySelective")
+    @Results({
+            @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_f_name", property="authFName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_name", property="systemName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_level", property="authLevel", jdbcType=JdbcType.INTEGER),
+            @Result(column="auth_f_tree", property="authFTree", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_name", property="createUserName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<AuthorityView> selectBySelective(AuthorityListCondition condition);
+
+    @SelectProvider(type = AuthoritySQL.class, method = "selectBySystemIdAuthName")
+    @Results({
+            @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_level", property="authLevel", jdbcType=JdbcType.INTEGER),
+            @Result(column="auth_f_tree", property="authFTree", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    AuthorityView selectBySystemIdAuthName(AuthorityListCondition condition);
+
+    @SelectProvider(type= AuthoritySQL.class, method = "selectByAuthIds")
+    List<String> selectByAuthIds(AuthorityBulk auths);
+
+    @UpdateProvider(type=AuthoritySQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Authority record);
 
     @Update({
