@@ -65,7 +65,6 @@ public class GroupAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "group id:" + group_auth.getGroupId() + " or authority id:" + group_auth.getAuthId() + " is not exists");
         }
 
-        group_auth.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         group_auth.setCreateTime(java.lang.System.currentTimeMillis());
         group_auth.setUpdateTime(java.lang.System.currentTimeMillis());
         groupAuthorityMapper.insert(group_auth);

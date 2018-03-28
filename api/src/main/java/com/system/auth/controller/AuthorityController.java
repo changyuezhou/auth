@@ -17,10 +17,7 @@ import com.system.auth.model.request.AuthorityListCondition;
 import com.system.auth.model.response.AuthorityAddResponse;
 import com.system.auth.util.MybatisUtil;
 import com.system.auth.util.SystemLogging;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -67,6 +64,8 @@ public class AuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "system id:" + auth.getSystemId() + " authority name:" + auth.getAuthName() + " is exists");
         }
 
+        String authId = "A" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+
         if (null != auth.getAuthFId() && 0 < auth.getAuthFId().length()) {
             AuthorityView view = authorityMapper.selectByPrimaryKey(auth.getAuthFId());
             if (null == view) {
@@ -76,12 +75,10 @@ public class AuthorityController {
             auth.setAuthLevel(view.getAuthLevel() + 1);
         } else {
             auth.setAuthLevel(0);
+            auth.setAuthFId(authId);
         }
 
-        String authId = "A" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
-
         auth.setAuthId(authId);
-        auth.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         auth.setCreateTime(java.lang.System.currentTimeMillis());
         auth.setUpdateTime(java.lang.System.currentTimeMillis());
         authorityMapper.insertSelective(auth);
@@ -109,6 +106,10 @@ public class AuthorityController {
 
         if (null == auth.getAuthId()) {
             throw new OperationException(OperationException.getUserInputException(), "authority id must not be null");
+        }
+
+        if (null != auth.getAuthFId()) {
+            throw new OperationException(OperationException.getUserInputException(), "authority parent id can not be changed and you can delete this authority");
         }
 
         AuthorityView auth_view = authorityMapper.selectByPrimaryKey(auth.getAuthId());

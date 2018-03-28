@@ -1,10 +1,13 @@
 package com.system.auth.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 
 public class Authority {
     private String authId;
 
+    @ApiModelProperty(value="权限名称", example="系统管理", required=true)
     @NotNull(message = "authName must not be null")
     private String authName;
 

@@ -1,12 +1,12 @@
 package com.system.auth.api;
 
 import com.system.auth.bean.*;
-import com.system.auth.model.Group;
-import com.system.auth.model.Platform;
+import com.system.auth.model.*;
 import com.system.auth.model.System;
-import com.system.auth.model.User;
-import com.system.auth.model.ext.GroupView;
+import com.system.auth.model.ext.AuthorityView;
+import com.system.auth.model.ext.UserAuthorityView;
 import com.system.auth.model.request.*;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,15 +26,21 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"management.port=0"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class GroupAPITest {
+
+public class UserGroupAPITest {
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    private static Group new_group = new Group();
-    private static String name_prefix = "prefix_test_name";
+    private static UserGroup new_user_group = new UserGroup();
+
+    private static String groupId = "";
+    private static String groupName = "prefix_test_name";
+
+    private static String authId = "";
+    private static String authName = "prefix_test_name";
 
     private static String userId = "";
     private static String userName = "prefix_test_name";
@@ -94,7 +100,7 @@ public class GroupAPITest {
         new_platform.setSystemId(systemId);
         new_platform.setSecretKey("12345678");
         new_platform.setPlatformDomain("www");
-        new_platform.setPlatformName(name_prefix);
+        new_platform.setPlatformName(platformName);
         new_platform.setDescription("description");
         new_platform.setCreateUserId(userId);
 
@@ -109,11 +115,12 @@ public class GroupAPITest {
         platformId = entity.getBody().getData().getPlatformId();
     }
 
-    // add test
+    // add group test
     @Test
-    public void test21() throws Exception {
+    public void test04() throws Exception {
+        Group new_group = new Group();
         new_group.setPlatformId(platformId);
-        new_group.setGroupName(name_prefix);
+        new_group.setGroupName(groupName);
         new_group.setDescription("description");
         new_group.setCreateUserId(userId);
 
@@ -125,65 +132,79 @@ public class GroupAPITest {
         then(entity.getBody().getMsg()).isEqualTo("");
         then(entity.getBody().getData().getGroupName()).isEqualTo(new_group.getGroupName());
 
-        new_group.setGroupId(entity.getBody().getData().getGroupId());
-        new_group.setCreateTime(java.lang.System.currentTimeMillis());
-        new_group.setUpdateTime(java.lang.System.currentTimeMillis());
+        groupId = entity.getBody().getData().getGroupId();
     }
 
-    // query
+    // add authority test
     @Test
-    public void test22() throws Exception {
-        GroupKey platform_req = new GroupKey(new_group.getGroupId());
-        ResponseEntity<GroupQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/query", platform_req,  GroupQueryByPrimaryKeyResponseTest.class);
+    public void test05() throws Exception {
+        Authority new_authority = new Authority();
 
+        new_authority.setAuthFId("");
+        new_authority.setSystemId(systemId);
+        new_authority.setAuthLevel(0);
+        new_authority.setAuthName(authName);
+        new_authority.setDescription("description");
+        new_authority.setCreateUserId(userId);
+
+        ResponseEntity<AuthorityAddResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/authority/add", new_authority,  AuthorityAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().getAuthName()).isEqualTo(new_authority.getAuthName());
 
-        GroupView group_view = entity.getBody().getData();
-        then(group_view.getGroupId()).isEqualTo(new_group.getGroupId());
-        then(group_view.getGroupName()).isEqualTo(new_group.getGroupName());
-        then(group_view.getPlatformId()).isEqualTo(platformId);
-        then(group_view.getPlatformName()).isEqualTo(platformName);
-        then(group_view.getCreateUserId()).isEqualTo(userId);
-        then(group_view.getCreateUserName()).isEqualTo(userName);
-        then(group_view.getCreateTime()/time_diff_base).isEqualTo(new_group.getCreateTime()/time_diff_base);
-        then(group_view.getUpdateTime()/time_diff_base).isEqualTo(new_group.getUpdateTime()/time_diff_base);
-        then(group_view.getDescription()).isEqualTo(new_group.getDescription());
+        authId = entity.getBody().getData().getAuthId();
     }
 
-    // update
+    // add group authoriy test
     @Test
-    public void test23() throws Exception {
-        new_group.setGroupName(name_prefix + "修改测试");
-        new_group.setDescription("修改");
+    public void test06() throws Exception {
+        GroupAuthority new_group_auth = new GroupAuthority();
+
+        new_group_auth.setAuthId(authId);
+        new_group_auth.setGroupId(groupId);
+        new_group_auth.setCreateUserId(userId);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/update", new_group,  OperationMessage.class);
+                "http://localhost:" + this.port + "/group_authority/add", new_group_auth,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
+    }
 
-        new_group.setUpdateTime(java.lang.System.currentTimeMillis());
+    // add test
+    @Test
+    public void test21() throws Exception {
+        new_user_group.setUserId(userId);
+        new_user_group.setGroupId(groupId);
+        new_user_group.setCreateUserId(userId);
+
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_group/add", new_user_group,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
     }
 
     // list
     @Test
     public void test24() throws Exception {
-        GroupListCondition condition = new GroupListCondition();
-        condition.setGroupName(name_prefix);
-        condition.setGroupId(new_group.getGroupId());
+        UserAuthorityListCondition condition = new UserAuthorityListCondition();
+        condition.setAuthName(authName);
         condition.setPlatformId(platformId);
+        condition.setUserId(userId);
+        condition.setUserName(userName);
         condition.setCreateUserId(userId);
         condition.setCreateUserName(userName);
         condition.setPageSize(10);
-        condition.setPageNum(0);
+        condition.setPageNum(1);
 
-        ResponseEntity<GroupListByConditionResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/list", condition,  GroupListByConditionResponseTest.class);
+        ResponseEntity<UserAuthorityListConditionResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_authority/list", condition,  UserAuthorityListConditionResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -192,22 +213,59 @@ public class GroupAPITest {
 
         then(entity.getBody().getData().size()).isEqualTo(1);
 
-        GroupView platform_view = entity.getBody().getData().get(0);
-        then(platform_view.getPlatformId()).isEqualTo(platformId);
-        then(platform_view.getPlatformName()).isEqualTo(platformName);
-        then(platform_view.getGroupId()).isEqualTo(new_group.getGroupId());
-        then(platform_view.getGroupName()).isEqualTo(new_group.getGroupName());
-        then(platform_view.getCreateUserName()).isEqualTo(userName);
-        then(platform_view.getCreateUserId()).isEqualTo(userId);
-        then(platform_view.getCreateTime()/time_diff_base).isEqualTo(new_group.getCreateTime()/time_diff_base);
-        then(platform_view.getUpdateTime()/time_diff_base).isEqualTo(new_group.getUpdateTime()/time_diff_base);
-        then(platform_view.getDescription()).isEqualTo(new_group.getDescription());
+        UserAuthorityView authority_view = entity.getBody().getData().get(0);
+        then(authority_view.getPlatformId()).isEqualTo(platformId);
+        then(authority_view.getPlatformName()).isEqualTo(platformName);
+        then(authority_view.getAuthId()).isEqualTo(authId);
+        then(authority_view.getAuthName()).isEqualTo(authName);
+        then(authority_view.getCreateUserName()).isEqualTo(userName);
+        then(authority_view.getCreateUserId()).isEqualTo(userId);
     }
 
     // delete
     @Test
     public void test25() throws Exception {
-        GroupKey group_req = new GroupKey(new_group.getGroupId());
+        UserGroupKey user_group_req = new UserGroupKey();
+        user_group_req.setUserId(userId);
+        user_group_req.setGroupId(groupId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_group/delete", user_group_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete group authority
+    @Test
+    public void test93() throws Exception {
+        GroupAuthorityKey group_req = new GroupAuthorityKey();
+        group_req.setAuthId(authId);
+        group_req.setGroupId(groupId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/group_authority/delete", group_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete authority
+    @Test
+    public void test94() throws Exception {
+        AuthorityKey authority_req = new AuthorityKey(authId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/authority/delete", authority_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete
+    @Test
+    public void test95() throws Exception {
+        GroupKey group_req = new GroupKey(groupId);
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/group/delete", group_req,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -255,7 +313,7 @@ public class GroupAPITest {
     @Test
     public void test99() throws Exception {
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/user_group/not_found", "",  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());

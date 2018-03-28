@@ -46,9 +46,10 @@ public interface AuthorityMapper {
         "a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time",
         "from t_authority a, t_authority b, t_system c, t_user d",
         "where a.auth_id = #{authId,jdbcType=VARCHAR}",
-            "and (a.auth_f_id = b.auth_id or a.auth_f_id='')",
+            "and (a.auth_f_id = b.auth_id)",
             "and a.system_id = c.system_id",
-            "and a.create_user_id = d.user_id"
+            "and a.create_user_id = d.user_id",
+            " group by a.auth_id"
     })
     @Results({
         @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),

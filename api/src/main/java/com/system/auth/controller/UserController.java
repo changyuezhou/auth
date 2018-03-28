@@ -56,7 +56,9 @@ public class UserController {
         String userId = "U" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         user.setUserId(userId);
-        user.setCreateUserId(userId);
+        if (null == user.getCreateUserId() || 0 >= user.getCreateUserId().length()) {
+            user.setCreateUserId(userId);
+        }
         user.setCreateTime(System.currentTimeMillis());
         user.setUpdateTime(System.currentTimeMillis());
         userMapper.insertSelective(user);

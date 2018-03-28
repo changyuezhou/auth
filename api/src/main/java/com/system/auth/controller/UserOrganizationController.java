@@ -63,7 +63,6 @@ public class UserOrganizationController {
             throw new OperationException(OperationException.getUserInputException(), "user id:" + user_organization.getUserId() + " or organization id:" + user_organization.getOrganizationId() + " is not exists");
         }
 
-        user_organization.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         user_organization.setCreateTime(java.lang.System.currentTimeMillis());
         user_organization.setUpdateTime(java.lang.System.currentTimeMillis());
         userOrganizationMapper.insert(user_organization);

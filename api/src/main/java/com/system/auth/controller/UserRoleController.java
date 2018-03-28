@@ -59,7 +59,6 @@ public class UserRoleController {
             throw new OperationException(OperationException.getUserInputException(), "user id:" + user_role.getUserId() + " or role id:" + user_role.getRoleId() + " is not exists");
         }
 
-        user_role.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         user_role.setCreateTime(java.lang.System.currentTimeMillis());
         user_role.setUpdateTime(java.lang.System.currentTimeMillis());
         userRoleMapper.insert(user_role);

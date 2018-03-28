@@ -36,8 +36,9 @@ public class UserAPITest {
 
     private static int time_diff_base = 10000;
 
-    @BeforeClass
-    public static void setUp() {
+    // add test
+    @Test
+    public void test01() throws Exception {
         new_user.setUserId("");
         new_user.setUserName(name_prefix + "_测试");
         new_user.setDescription("description");
@@ -45,11 +46,7 @@ public class UserAPITest {
         new_user.setContactName("contact name");
         new_user.setMobileNumber("138000000000");
         new_user.setPassword("12345678901234567890");
-    }
 
-    // add test
-    @Test
-    public void test01() throws Exception {
         ResponseEntity<UserAddResponseTest> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/user/add", new_user,  UserAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);

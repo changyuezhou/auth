@@ -71,7 +71,6 @@ public class GroupController {
         String groupId = "G" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         group.setGroupId(groupId);
-        group.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         group.setCreateTime(java.lang.System.currentTimeMillis());
         group.setUpdateTime(java.lang.System.currentTimeMillis());
         groupMapper.insertSelective(group);

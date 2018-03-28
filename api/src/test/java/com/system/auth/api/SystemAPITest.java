@@ -2,9 +2,11 @@ package com.system.auth.api;
 
 import com.system.auth.bean.*;
 import com.system.auth.model.System;
+import com.system.auth.model.User;
 import com.system.auth.model.ext.SystemView;
 import com.system.auth.model.request.SystemKey;
 import com.system.auth.model.request.SystemListCondition;
+import com.system.auth.model.request.UserKey;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -33,23 +35,40 @@ public class SystemAPITest {
     private TestRestTemplate testRestTemplate;
 
     private static System new_system = new System();
-    private static String name_prefix = "prefix_test_name";
+    private static String name_prefix = "prefix_test_name_测试";
 
-    private static String userId = "U06EA2696AE3B4477B9AC6C28AB49A522";
-    private static String userName = "admin@system.com";
+    private static String userId = "";
+    private static String userName = "prefix_test_name_测试";
 
     private static int time_diff_base = 10000;
 
-    @BeforeClass
-    public static void setUp() {
-        new_system.setSystemId("");
-        new_system.setSystemName(name_prefix + "_测试");
-        new_system.setDescription("description");
+    // add user test
+    @Test
+    public void test01() throws Exception {
+        User user = new User();
+        user.setUserName(userName);
+        user.setDescription("description");
+        user.setStatus(1);
+        user.setContactName("contact name");
+        user.setMobileNumber("138000000000");
+        user.setPassword("12345678901234567890");
+        ResponseEntity<UserAddResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user/add", user,  UserAddResponseTest.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().getUserName()).isEqualTo(user.getUserName());
+
+        userId = entity.getBody().getData().getUserId();
     }
 
     // add test
     @Test
-    public void test01() throws Exception {
+    public void test22() throws Exception {
+        new_system.setSystemName(name_prefix);
+        new_system.setCreateUserId(userId);
+        new_system.setDescription("测试");
         ResponseEntity<SystemAddResponseTest> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/system/add", new_system,  SystemAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -61,12 +80,11 @@ public class SystemAPITest {
         new_system.setCreateTime(java.lang.System.currentTimeMillis());
         new_system.setUpdateTime(java.lang.System.currentTimeMillis());
         new_system.setSystemId(entity.getBody().getData().getSystemId());
-        new_system.setCreateUserId(userId);
     }
 
     // query
     @Test
-    public void test02() throws Exception {
+    public void test23() throws Exception {
         SystemKey system_req = new SystemKey(new_system.getSystemId());
         ResponseEntity<SystemQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/system/query", system_req,  SystemQueryByPrimaryKeyResponseTest.class);
@@ -88,7 +106,7 @@ public class SystemAPITest {
 
     // update
     @Test
-    public void test03() throws Exception {
+    public void test24() throws Exception {
         new_system.setSystemName(name_prefix + "修改测试");
         new_system.setDescription("修改");
 
@@ -104,7 +122,7 @@ public class SystemAPITest {
 
     // list
     @Test
-    public void test04() throws Exception {
+    public void test25() throws Exception {
         SystemListCondition condition = new SystemListCondition();
         condition.setSystemName(name_prefix);
         condition.setCreateUserId(userId);
@@ -134,7 +152,7 @@ public class SystemAPITest {
 
     // delete
     @Test
-    public void test05() throws Exception {
+    public void test26() throws Exception {
         SystemKey user_req = new SystemKey(new_system.getSystemId());
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/system/delete", user_req,  OperationMessage.class);
@@ -144,8 +162,21 @@ public class SystemAPITest {
         then(entity.getBody().getMsg()).isEqualTo("");
     }
 
+
+    // user delete
     @Test
-    public void test06() throws Exception {
+    public void test98() throws Exception {
+        UserKey user_req = new UserKey(userId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user/delete", user_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    @Test
+    public void test99() throws Exception {
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/system/not_found", "",  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);

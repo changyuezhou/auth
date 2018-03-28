@@ -65,7 +65,6 @@ public class SystemController {
         String systemId = "S" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         system.setSystemId(systemId);
-        system.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         system.setCreateTime(java.lang.System.currentTimeMillis());
         system.setUpdateTime(java.lang.System.currentTimeMillis());
         systemMapper.insertSelective(system);

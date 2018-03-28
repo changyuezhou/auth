@@ -64,7 +64,6 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "role id:" + role_auth.getRoleId() + " or authority id:" + role_auth.getAuthId() + " is not exists");
         }
 
-        role_auth.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         role_auth.setCreateTime(java.lang.System.currentTimeMillis());
         role_auth.setUpdateTime(java.lang.System.currentTimeMillis());
         roleAuthorityMapper.insert(role_auth);

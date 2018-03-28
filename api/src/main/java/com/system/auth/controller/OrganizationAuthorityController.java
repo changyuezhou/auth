@@ -64,7 +64,6 @@ public class OrganizationAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "organization id:" + organization_auth.getOrganizationId() + " or authority id:" + organization_auth.getAuthId() + " is not exists");
         }
 
-        organization_auth.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         organization_auth.setCreateTime(java.lang.System.currentTimeMillis());
         organization_auth.setUpdateTime(java.lang.System.currentTimeMillis());
         organizationAuthorityMapper.insert(organization_auth);

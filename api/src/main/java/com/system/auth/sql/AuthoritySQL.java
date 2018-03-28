@@ -83,13 +83,10 @@ public class AuthoritySQL {
                 SET("description = #{description,jdbcType=VARCHAR}");
             }
 
-            if (null != record.getCreateTime()) {
-                SET("create_time = #{createTime,jdbcType=BIGINT}");
+            if (null != record.getUpdateTime()) {
+                SET("update_time = #{updateTime, jdbcType=BIGINT}");
             }
 
-            if (null != record.getUpdateTime()) {
-                SET("update_time", "#{updateTime,jdbcType=BIGINT}");
-            }
             WHERE("auth_id = #{authId,jdbcType=VARCHAR}");
         }}.toString();
     }
@@ -102,15 +99,15 @@ public class AuthoritySQL {
                 WHERE("a.auth_id = #{authId, jdbcType=VARCHAR}");
             }
             if (null != condition.getAuthName()) {
-                condition.setAuthName("%" + condition.getAuthName() + "%");
-                WHERE("a.auth_name like #{authName, jdbcType=VARCHAR}");
+                final String strCond  = "a.auth_name like '%" + condition.getAuthName() + "%'";
+                WHERE(strCond);
             }
             if (null != condition.getAuthFId()) {
                 WHERE("a.auth_f_id = #{authFId, jdbcType=VARCHAR}");
             }
             if (null != condition.getAuthFName()) {
-                condition.setAuthFName("%" + condition.getAuthFName() + "%");
-                WHERE("b.auth_f_name like #{authFName, jdbcType=VARCHAR}");
+                final String strCond  = "b.auth_name like '%" + condition.getAuthFName() + "%'";
+                WHERE(strCond);
             }
             if (null != condition.getAuthLevel()) {
                 WHERE("a.auth_level = #{auth_level, jdbcType=VARCHAR}");
@@ -125,7 +122,7 @@ public class AuthoritySQL {
                 WHERE("a.system_id = #{systemId, jdbcType=VARCHAR}");
             }
 
-            WHERE("a.auth_f_id = b.auth_id or a.auth_f_id=''");
+            WHERE("a.auth_f_id = b.auth_id");
             WHERE("a.system_id = c.system_id");
             WHERE("a.create_user_id = d.user_id");
 

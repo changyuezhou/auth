@@ -71,7 +71,6 @@ public class RoleController {
         String roleId = "R" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         role.setRoleId(roleId);
-        role.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         role.setCreateTime(java.lang.System.currentTimeMillis());
         role.setUpdateTime(java.lang.System.currentTimeMillis());
         roleMapper.insertSelective(role);

@@ -63,7 +63,6 @@ public class UserGroupController {
             throw new OperationException(OperationException.getUserInputException(), "user id:" + user_group.getUserId() + " or group id:" + user_group.getGroupId() + " is not exists");
         }
 
-        user_group.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         user_group.setCreateTime(java.lang.System.currentTimeMillis());
         user_group.setUpdateTime(java.lang.System.currentTimeMillis());
         userGroupMapper.insert(user_group);

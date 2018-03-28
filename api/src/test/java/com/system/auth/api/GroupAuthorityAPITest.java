@@ -1,14 +1,9 @@
 package com.system.auth.api;
 
 import com.system.auth.bean.*;
-import com.system.auth.model.Platform;
+import com.system.auth.model.*;
 import com.system.auth.model.System;
-import com.system.auth.model.User;
-import com.system.auth.model.ext.PlatformView;
-import com.system.auth.model.request.PlatformKey;
-import com.system.auth.model.request.PlatformListCondition;
-import com.system.auth.model.request.SystemKey;
-import com.system.auth.model.request.UserKey;
+import com.system.auth.model.request.*;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -29,18 +24,27 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"management.port=0"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PlatformAPITest {
+
+public class GroupAuthorityAPITest {
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    private static Platform new_platform = new Platform();
-    private static String name_prefix = "prefix_test_name";
+    private static GroupAuthority new_group_auth = new GroupAuthority();
+
+    private static String groupId = "";
+    private static String groupName = "prefix_test_name";
+
+    private static String authId = "";
+    private static String authName = "prefix_test_name";
 
     private static String userId = "";
     private static String userName = "prefix_test_name";
+
+    private static String platformId = "";
+    private static String platformName = "prefix_test_name";
 
     private static String systemId = "";
     private static String systemName = "prefix_test_name";
@@ -86,14 +90,15 @@ public class PlatformAPITest {
         systemId = entity.getBody().getData().getSystemId();
     }
 
-    // add test
+    // add platform test
     @Test
-    public void test23() throws Exception {
-        new_platform.setPlatformId("");
+    public void test03() throws Exception {
+        Platform new_platform = new Platform();
+
         new_platform.setSystemId(systemId);
         new_platform.setSecretKey("12345678");
         new_platform.setPlatformDomain("www");
-        new_platform.setPlatformName(name_prefix);
+        new_platform.setPlatformName(platformName);
         new_platform.setDescription("description");
         new_platform.setCreateUserId(userId);
 
@@ -105,93 +110,109 @@ public class PlatformAPITest {
         then(entity.getBody().getMsg()).isEqualTo("");
         then(entity.getBody().getData().getPlatformName()).isEqualTo(new_platform.getPlatformName());
 
-        new_platform.setPlatformId(entity.getBody().getData().getPlatformId());
-        new_platform.setCreateTime(java.lang.System.currentTimeMillis());
-        new_platform.setUpdateTime(java.lang.System.currentTimeMillis());
+        platformId = entity.getBody().getData().getPlatformId();
     }
 
-    // query
+    // add group test
     @Test
-    public void test24() throws Exception {
-        PlatformKey platform_req = new PlatformKey(new_platform.getPlatformId());
-        ResponseEntity<PlatformQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/query", platform_req,  PlatformQueryByPrimaryKeyResponseTest.class);
+    public void test04() throws Exception {
+        Group new_group = new Group();
+        new_group.setPlatformId(platformId);
+        new_group.setGroupName(groupName);
+        new_group.setDescription("description");
+        new_group.setCreateUserId(userId);
 
+        ResponseEntity<GroupAddResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/group/add", new_group,  GroupAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().getGroupName()).isEqualTo(new_group.getGroupName());
 
-        PlatformView platform_view = entity.getBody().getData();
-        then(platform_view.getPlatformId()).isEqualTo(new_platform.getPlatformId());
-        then(platform_view.getPlatformName()).isEqualTo(new_platform.getPlatformName());
-        then(platform_view.getPlatformDomain()).isEqualTo(new_platform.getPlatformDomain());
-        then(platform_view.getSecretKey()).isEqualTo(new_platform.getSecretKey());
-        then(platform_view.getSystemId()).isEqualTo(new_platform.getSystemId());
-        then(platform_view.getSystemName()).isEqualTo(systemName);
-        then(platform_view.getCreateUserId()).isEqualTo(userId);
-        then(platform_view.getCreateUserName()).isEqualTo(userName);
-        then(platform_view.getCreateTime()/time_diff_base).isEqualTo(new_platform.getCreateTime()/time_diff_base);
-        then(platform_view.getUpdateTime()/time_diff_base).isEqualTo(new_platform.getUpdateTime()/time_diff_base);
-        then(platform_view.getDescription()).isEqualTo(new_platform.getDescription());
+        groupId = entity.getBody().getData().getGroupId();
     }
 
-    // update
+    // add authority test
     @Test
-    public void test25() throws Exception {
-        new_platform.setPlatformName(name_prefix + "修改测试");
-        new_platform.setDescription("修改");
+    public void test05() throws Exception {
+        Authority new_authority = new Authority();
+
+        new_authority.setAuthFId("");
+        new_authority.setSystemId(systemId);
+        new_authority.setAuthLevel(0);
+        new_authority.setAuthName(authName);
+        new_authority.setDescription("description");
+        new_authority.setCreateUserId(userId);
+
+        ResponseEntity<AuthorityAddResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/authority/add", new_authority,  AuthorityAddResponseTest.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().getAuthName()).isEqualTo(new_authority.getAuthName());
+
+        authId = entity.getBody().getData().getAuthId();
+    }
+
+    // add test
+    @Test
+    public void test21() throws Exception {
+        new_group_auth.setAuthId(authId);
+        new_group_auth.setGroupId(groupId);
+        new_group_auth.setCreateUserId(userId);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/update", new_platform,  OperationMessage.class);
+                "http://localhost:" + this.port + "/group_authority/add", new_group_auth,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
-
-        new_platform.setUpdateTime(java.lang.System.currentTimeMillis());
-    }
-
-    // list
-    @Test
-    public void test26() throws Exception {
-        PlatformListCondition condition = new PlatformListCondition();
-        condition.setSystemName(systemName);
-        condition.setPlatformName(name_prefix);
-        condition.setPlatformId(new_platform.getPlatformId());
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
-        condition.setPageSize(10);
-        condition.setPageNum(0);
-
-        ResponseEntity<PlatformListByConditionResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/list", condition,  PlatformListByConditionResponseTest.class);
-
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-
-        then(entity.getBody().getData().size()).isEqualTo(1);
-
-        PlatformView platform_view = entity.getBody().getData().get(0);
-        then(platform_view.getPlatformId()).isEqualTo(new_platform.getPlatformId());
-        then(platform_view.getPlatformName()).isEqualTo(new_platform.getPlatformName());
-        then(platform_view.getPlatformDomain()).isEqualTo(new_platform.getPlatformDomain());
-        then(platform_view.getSecretKey()).isEqualTo(new_platform.getSecretKey());
-        then(platform_view.getSystemId()).isEqualTo(systemId);
-        then(platform_view.getSystemName()).isEqualTo(systemName);
-        then(platform_view.getCreateUserName()).isEqualTo(userName);
-        then(platform_view.getCreateUserId()).isEqualTo(new_platform.getCreateUserId());
-        then(platform_view.getCreateTime()/time_diff_base).isEqualTo(new_platform.getCreateTime()/time_diff_base);
-        then(platform_view.getUpdateTime()/time_diff_base).isEqualTo(new_platform.getUpdateTime()/time_diff_base);
-        then(platform_view.getDescription()).isEqualTo(new_platform.getDescription());
     }
 
     // delete
     @Test
-    public void test27() throws Exception {
-        PlatformKey platform_req = new PlatformKey(new_platform.getPlatformId());
+    public void test25() throws Exception {
+        GroupAuthorityKey group_req = new GroupAuthorityKey();
+        group_req.setAuthId(authId);
+        group_req.setGroupId(groupId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/group_authority/delete", group_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete authority
+    @Test
+    public void test94() throws Exception {
+        AuthorityKey authority_req = new AuthorityKey(authId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/authority/delete", authority_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete
+    @Test
+    public void test95() throws Exception {
+        GroupKey group_req = new GroupKey(groupId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/group/delete", group_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete
+    @Test
+    public void test96() throws Exception {
+        PlatformKey platform_req = new PlatformKey(platformId);
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/platform/delete", platform_req,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -227,7 +248,7 @@ public class PlatformAPITest {
     @Test
     public void test99() throws Exception {
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/group_authority/not_found", "",  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());

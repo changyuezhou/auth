@@ -66,7 +66,6 @@ public class PlatformController {
         String platformId = "P" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         platform.setPlatformId(platformId);
-        platform.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         platform.setCreateTime(java.lang.System.currentTimeMillis());
         platform.setUpdateTime(java.lang.System.currentTimeMillis());
         platformMapper.insertSelective(platform);

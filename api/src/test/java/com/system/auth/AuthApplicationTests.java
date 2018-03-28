@@ -13,5 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AuthApplicationTests {
 	@Test
 	public void contextLoads() {
+		System.out.print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	}
 }

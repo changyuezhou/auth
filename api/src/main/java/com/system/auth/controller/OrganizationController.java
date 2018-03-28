@@ -81,7 +81,6 @@ public class OrganizationController {
         String authId = "O" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
 
         organization.setOrganizationId(authId);
-        organization.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
         organization.setCreateTime(java.lang.System.currentTimeMillis());
         organization.setUpdateTime(java.lang.System.currentTimeMillis());
         organizationMapper.insertSelective(organization);
