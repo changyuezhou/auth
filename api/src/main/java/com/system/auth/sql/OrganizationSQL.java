@@ -117,7 +117,7 @@ public class OrganizationSQL {
 
             WHERE("a.create_user_id = c.user_id");
             WHERE("a.platform_id = b.platform_id");
-            WHERE("a.organization_f_id = d.organization_id or a.organization_f_id = ''");
+            WHERE("a.organization_f_id = d.organization_id");
 
             ORDER_BY("a.update_time");
         }}.toString();

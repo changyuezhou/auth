@@ -1,12 +1,12 @@
 package com.system.auth.api;
 
 import com.system.auth.bean.*;
-import com.system.auth.model.*;
+import com.system.auth.model.Organization;
+import com.system.auth.model.Platform;
 import com.system.auth.model.System;
-import com.system.auth.model.ext.GroupAuthorityView;
-import com.system.auth.model.provider.GroupAuthorityBulkInsert;
+import com.system.auth.model.User;
+import com.system.auth.model.ext.OrganizationView;
 import com.system.auth.model.request.*;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.BDDAssertions.then;
 
 @RunWith(SpringRunner.class)
@@ -30,20 +27,15 @@ import static org.assertj.core.api.BDDAssertions.then;
 @TestPropertySource(properties = {"management.port=0"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
-public class GroupAuthorityAPITest {
+public class OrganizationAPITest {
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    private static GroupAuthority new_group_auth = new GroupAuthority();
-
-    private static String groupId = "";
-    private static String groupName = "prefix_test_name";
-
-    private static String authId = "";
-    private static String authName = "prefix_test_name";
+    private static Organization new_organization = new Organization();
+    private static String name_prefix = "prefix_test_name";
 
     private static String userId = "";
     private static String userName = "prefix_test_name";
@@ -103,7 +95,7 @@ public class GroupAuthorityAPITest {
         new_platform.setSystemId(systemId);
         new_platform.setSecretKey("12345678");
         new_platform.setPlatformDomain("www");
-        new_platform.setPlatformName(platformName);
+        new_platform.setPlatformName(name_prefix);
         new_platform.setDescription("description");
         new_platform.setCreateUserId(userId);
 
@@ -118,142 +110,81 @@ public class GroupAuthorityAPITest {
         platformId = entity.getBody().getData().getPlatformId();
     }
 
-    // add group test
-    @Test
-    public void test04() throws Exception {
-        Group new_group = new Group();
-        new_group.setPlatformId(platformId);
-        new_group.setGroupName(groupName);
-        new_group.setDescription("description");
-        new_group.setCreateUserId(userId);
-
-        ResponseEntity<GroupAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/add", new_group,  GroupAddResponseTest.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-        then(entity.getBody().getData().getGroupName()).isEqualTo(new_group.getGroupName());
-
-        groupId = entity.getBody().getData().getGroupId();
-    }
-
-    // add authority test
-    @Test
-    public void test05() throws Exception {
-        Authority new_authority = new Authority();
-
-        new_authority.setAuthFId("");
-        new_authority.setSystemId(systemId);
-        new_authority.setAuthLevel(0);
-        new_authority.setAuthName(authName);
-        new_authority.setDescription("description");
-        new_authority.setCreateUserId(userId);
-
-        ResponseEntity<AuthorityAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/add", new_authority,  AuthorityAddResponseTest.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-        then(entity.getBody().getData().getAuthName()).isEqualTo(new_authority.getAuthName());
-
-        authId = entity.getBody().getData().getAuthId();
-    }
-
     // add test
     @Test
     public void test21() throws Exception {
-        new_group_auth.setAuthId(authId);
-        new_group_auth.setGroupId(groupId);
-        new_group_auth.setCreateUserId(userId);
+        new_organization.setPlatformId(platformId);
+        new_organization.setOrganizationName(name_prefix);
+        new_organization.setDescription("description");
+        new_organization.setCreateUserId(userId);
 
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/add", new_group_auth,  OperationMessage.class);
+        ResponseEntity<OrganizationAddResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/organization/add", new_organization,  OrganizationAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().getOrganizationName()).isEqualTo(new_organization.getOrganizationName());
+
+        new_organization.setOrganizationId(entity.getBody().getData().getOrganizationId());
+        new_organization.setCreateTime(java.lang.System.currentTimeMillis());
+        new_organization.setUpdateTime(java.lang.System.currentTimeMillis());
     }
 
-    // list
+    // query
     @Test
     public void test22() throws Exception {
-        GroupAuthorityListCondition condition = new GroupAuthorityListCondition();
-        condition.setGroupName(groupName);
-        condition.setGroupId(new_group_auth.getGroupId());
-        condition.setPlatformId(platformId);
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
-        condition.setPageSize(10);
-        condition.setPageNum(0);
-
-        ResponseEntity<GroupAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/list", condition,  GroupAuthorityListResponseTest.class);
+        OrganizationKey organization_req = new OrganizationKey(new_organization.getOrganizationId());
+        ResponseEntity<OrganizationQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/organization/query", organization_req,  OrganizationQueryByPrimaryKeyResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
 
-        then(entity.getBody().getData().size()).isEqualTo(1);
-
-        GroupAuthorityView organization_authority_view = entity.getBody().getData().get(0);
-        then(organization_authority_view.getPlatformId()).isEqualTo(platformId);
-        then(organization_authority_view.getPlatformName()).isEqualTo(platformName);
-        then(organization_authority_view.getGroupId()).isEqualTo(new_group_auth.getGroupId());
-        then(organization_authority_view.getGroupName()).isEqualTo(groupName);
-        then(organization_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(organization_authority_view.getCreateUserId()).isEqualTo(userId);
+        OrganizationView organization_view = entity.getBody().getData();
+        then(organization_view.getOrganizationId()).isEqualTo(new_organization.getOrganizationId());
+        then(organization_view.getOrganizationName()).isEqualTo(new_organization.getOrganizationName());
+        then(organization_view.getPlatformId()).isEqualTo(platformId);
+        then(organization_view.getPlatformName()).isEqualTo(platformName);
+        then(organization_view.getCreateUserId()).isEqualTo(userId);
+        then(organization_view.getCreateUserName()).isEqualTo(userName);
+        then(organization_view.getCreateTime()/time_diff_base).isEqualTo(new_organization.getCreateTime()/time_diff_base);
+        then(organization_view.getUpdateTime()/time_diff_base).isEqualTo(new_organization.getUpdateTime()/time_diff_base);
+        then(organization_view.getDescription()).isEqualTo(new_organization.getDescription());
     }
 
-
-    // delete
+    // update
     @Test
     public void test23() throws Exception {
-        GroupAuthorityKey group_req = new GroupAuthorityKey();
-        group_req.setAuthId(authId);
-        group_req.setGroupId(groupId);
+        new_organization.setOrganizationName(name_prefix + "修改测试");
+        new_organization.setDescription("修改");
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/delete", group_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/organization/update", new_organization,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
-    }
 
-    // add bulk test
-    @Test
-    public void test26() throws Exception {
-        GroupAuthorityBulkInsert group_auths = new GroupAuthorityBulkInsert();
-        List<String> list = new ArrayList<String>();
-        list.add(authId);
-        group_auths.setAuthIds(list);
-        group_auths.setGroupId(groupId);
-        group_auths.setCreateUserId(userId);
-
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/bulk/add", group_auths,  OperationMessage.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
+        new_organization.setUpdateTime(java.lang.System.currentTimeMillis());
     }
 
     // list
     @Test
-    public void test27() throws Exception {
-        GroupAuthorityListCondition condition = new GroupAuthorityListCondition();
-        condition.setGroupName(groupName);
-        condition.setGroupId(new_group_auth.getGroupId());
+    public void test24() throws Exception {
+        OrganizationListCondition condition = new OrganizationListCondition();
+        condition.setOrganizationName(name_prefix);
+        condition.setOrganizationId(new_organization.getOrganizationId());
         condition.setPlatformId(platformId);
         condition.setCreateUserId(userId);
         condition.setCreateUserName(userName);
         condition.setPageSize(10);
         condition.setPageNum(0);
 
-        ResponseEntity<GroupAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/list", condition,  GroupAuthorityListResponseTest.class);
+        ResponseEntity<OrganizationListByConditionResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/organization/list", condition,  OrganizationListByConditionResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -262,50 +193,24 @@ public class GroupAuthorityAPITest {
 
         then(entity.getBody().getData().size()).isEqualTo(1);
 
-        GroupAuthorityView group_authority_view = entity.getBody().getData().get(0);
-        then(group_authority_view.getPlatformId()).isEqualTo(platformId);
-        then(group_authority_view.getPlatformName()).isEqualTo(platformName);
-        then(group_authority_view.getGroupId()).isEqualTo(new_group_auth.getGroupId());
-        then(group_authority_view.getGroupName()).isEqualTo(groupName);
-        then(group_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(group_authority_view.getCreateUserId()).isEqualTo(userId);
-    }
-
-    // bulk delete
-    @Test
-    public void test28() throws Exception {
-        GroupAuthorityBulk group_auths = new GroupAuthorityBulk();
-        List<String> list = new ArrayList<String>();
-        list.add(authId);
-        group_auths.setAuthIds(list);
-        group_auths.setGroupId(groupId);
-
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/bulk/delete", group_auths,  OperationMessage.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-    }
-
-    // delete authority
-    @Test
-    public void test94() throws Exception {
-        AuthorityKey authority_req = new AuthorityKey(authId);
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/delete", authority_req,  OperationMessage.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
+        OrganizationView organization_view = entity.getBody().getData().get(0);
+        then(organization_view.getPlatformId()).isEqualTo(platformId);
+        then(organization_view.getPlatformName()).isEqualTo(platformName);
+        then(organization_view.getOrganizationId()).isEqualTo(new_organization.getOrganizationId());
+        then(organization_view.getOrganizationName()).isEqualTo(new_organization.getOrganizationName());
+        then(organization_view.getCreateUserName()).isEqualTo(userName);
+        then(organization_view.getCreateUserId()).isEqualTo(userId);
+        then(organization_view.getCreateTime()/time_diff_base).isEqualTo(new_organization.getCreateTime()/time_diff_base);
+        then(organization_view.getUpdateTime()/time_diff_base).isEqualTo(new_organization.getUpdateTime()/time_diff_base);
+        then(organization_view.getDescription()).isEqualTo(new_organization.getDescription());
     }
 
     // delete
     @Test
-    public void test95() throws Exception {
-        GroupKey group_req = new GroupKey(groupId);
+    public void test25() throws Exception {
+        OrganizationKey organization_req = new OrganizationKey(new_organization.getOrganizationId());
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/delete", group_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/organization/delete", organization_req,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -351,10 +256,11 @@ public class GroupAuthorityAPITest {
     @Test
     public void test99() throws Exception {
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/organization/not_found", "",  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());
         then(entity.getBody().getMsg()).isEqualTo(OperationException.getExceptionMsg());
     }
+
 }

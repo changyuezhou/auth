@@ -75,7 +75,7 @@ public class OrganizationAuthorityController {
     }
 
     @ApiOperation(value="批量创建组织权限", notes="根据OrganizationAuthorityBulk对象批量创建组织权限")
-    @ApiImplicitParam(name = "organization_auths", value = "用户组织详细信息", required = true, dataType = "OrganizationAuthorityBulk")
+    @ApiImplicitParam(name = "organization_auths", value = "用户组织详细信息", required = true, dataType = "OrganizationAuthorityBulkInsert")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
             @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
@@ -84,7 +84,7 @@ public class OrganizationAuthorityController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/bulk/add", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public OperationMessage add(@Validated @RequestBody OrganizationAuthorityBulk organization_auths, BindingResult check, HttpServletRequest request) throws Exception {
+    public OperationMessage add(@Validated @RequestBody OrganizationAuthorityBulkInsert organization_auths, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -103,12 +103,7 @@ public class OrganizationAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "authority ids:" + mapper.writeValueAsString(organization_auths.getAuthIds()) + " is not exists");
         }
 
-        OrganizationAuthorityBulkInsert bulk = new OrganizationAuthorityBulkInsert();
-        bulk.setOrganizationId(organization_auths.getOrganizationId());
-        bulk.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
-        bulk.setAuthIds(organization_auths.getAuthIds());
-
-        organizationAuthorityMapper.insertByOrganizationAuthorityList(bulk);
+        organizationAuthorityMapper.insertByOrganizationAuthorityList(organization_auths);
 
         OperationMessage result = new OperationMessage(0, "");
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(organization_auths), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());

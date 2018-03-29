@@ -75,7 +75,7 @@ public class RoleAuthorityController {
     }
 
     @ApiOperation(value="批量创建角色权限", notes="根据RoleAuthorityBulk对象批量创建角色权限")
-    @ApiImplicitParam(name = "role_auths", value = "用户角色详细信息", required = true, dataType = "RoleAuthorityBulk")
+    @ApiImplicitParam(name = "role_auths", value = "用户角色详细信息", required = true, dataType = "RoleAuthorityBulkInsert")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
             @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
@@ -84,7 +84,7 @@ public class RoleAuthorityController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/bulk/add", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-    public OperationMessage add(@Validated @RequestBody RoleAuthorityBulk role_auths, BindingResult check, HttpServletRequest request) throws Exception {
+    public OperationMessage add(@Validated @RequestBody RoleAuthorityBulkInsert role_auths, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -103,12 +103,7 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "authority ids:" + mapper.writeValueAsString(role_auths.getAuthIds()) + " is not exists");
         }
 
-        RoleAuthorityBulkInsert bulk = new RoleAuthorityBulkInsert();
-        bulk.setRoleId(role_auths.getRoleId());
-        bulk.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
-        bulk.setAuthIds(role_auths.getAuthIds());
-
-        roleAuthorityMapper.insertByRoleAuthorityList(bulk);
+        roleAuthorityMapper.insertByRoleAuthorityList(role_auths);
 
         OperationMessage result = new OperationMessage(0, "");
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role_auths), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());

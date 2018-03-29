@@ -67,6 +67,8 @@ public class OrganizationController {
             throw new OperationException(OperationException.getUserInputException(), "platform id:" + organization.getPlatformId() + " organization name:" + organization.getOrganizationName() + " is exists");
         }
 
+        String organizationId = "O" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+
         if (null != organization.getOrganizationFId() && 0 < organization.getOrganizationFId().length()) {
             OrganizationView view = organizationMapper.selectByPrimaryKey(organization.getOrganizationFId());
             if (null == view) {
@@ -76,11 +78,10 @@ public class OrganizationController {
             organization.setOrganizationLevel(view.getOrganizationLevel() + 1);
         } else {
             organization.setOrganizationLevel(0);
+            organization.setOrganizationFId(organizationId);
         }
 
-        String authId = "O" + UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
-
-        organization.setOrganizationId(authId);
+        organization.setOrganizationId(organizationId);
         organization.setCreateTime(java.lang.System.currentTimeMillis());
         organization.setUpdateTime(java.lang.System.currentTimeMillis());
         organizationMapper.insertSelective(organization);
@@ -93,7 +94,7 @@ public class OrganizationController {
     }
 
     @ApiOperation(value="修改权限", notes="根据Organization对象修改权限")
-    @ApiImplicitParam(name = "auth", value = "权限详细信息", required = true, dataType = "Organization")
+    @ApiImplicitParam(name = "organization", value = "权限详细信息", required = true, dataType = "Organization")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
             @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),

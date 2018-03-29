@@ -190,7 +190,7 @@ public class UserGroupAPITest {
         then(entity.getBody().getMsg()).isEqualTo("");
     }
 
-    // list
+    // user authority list
     @Test
     public void test24() throws Exception {
         UserAuthorityListCondition condition = new UserAuthorityListCondition();
@@ -214,6 +214,8 @@ public class UserGroupAPITest {
         then(entity.getBody().getData().size()).isEqualTo(1);
 
         UserAuthorityView authority_view = entity.getBody().getData().get(0);
+        then(authority_view.getUserId()).isEqualTo(userId);
+        then(authority_view.getUserName()).isEqualTo(userName);
         then(authority_view.getPlatformId()).isEqualTo(platformId);
         then(authority_view.getPlatformName()).isEqualTo(platformName);
         then(authority_view.getAuthId()).isEqualTo(authId);

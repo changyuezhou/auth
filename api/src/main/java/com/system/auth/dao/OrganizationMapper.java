@@ -39,16 +39,19 @@ public interface OrganizationMapper {
 
     @Select({
         "select",
-        "a.organization_id, a.organization_name, a.organization_f_id, a.platform_id, b.platform_name, a.organization_level, ",
-        "a.organization_f_tree, a.description, a.create_user_id, a.update_time, a.create_time",
-        "from t_organization a, t_platform b",
+        "a.organization_id, a.organization_name, a.organization_f_id, c.organization_name as organization_f_name, a.platform_id, b.platform_name, a.organization_level, ",
+        "a.organization_f_tree, a.description, a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time",
+        "from t_organization a, t_platform b, t_organization c, t_user d",
         "where a.organization_id = #{organizationId,jdbcType=VARCHAR}",
-            "and a.platform_id = b.platform_id"
+            "and a.platform_id = b.platform_id",
+            "and a.organization_f_id = c.organization_id",
+            "and a.create_user_id = d.user_id"
     })
     @Results({
         @Result(column="organization_id", property="organizationId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="organization_name", property="organizationName", jdbcType=JdbcType.VARCHAR),
         @Result(column="organization_f_id", property="organizationFId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="organization_f_name", property="organizationFName", jdbcType=JdbcType.VARCHAR),
         @Result(column="platform_id", property="platformId", jdbcType=JdbcType.VARCHAR),
         @Result(column="platform_name", property="platformName", jdbcType=JdbcType.VARCHAR),
         @Result(column="organization_level", property="organizationLevel", jdbcType=JdbcType.INTEGER),

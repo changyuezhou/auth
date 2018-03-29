@@ -133,9 +133,9 @@ public class GroupAPITest {
     // query
     @Test
     public void test22() throws Exception {
-        GroupKey platform_req = new GroupKey(new_group.getGroupId());
+        GroupKey group_req = new GroupKey(new_group.getGroupId());
         ResponseEntity<GroupQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group/query", platform_req,  GroupQueryByPrimaryKeyResponseTest.class);
+                "http://localhost:" + this.port + "/group/query", group_req,  GroupQueryByPrimaryKeyResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -192,16 +192,16 @@ public class GroupAPITest {
 
         then(entity.getBody().getData().size()).isEqualTo(1);
 
-        GroupView platform_view = entity.getBody().getData().get(0);
-        then(platform_view.getPlatformId()).isEqualTo(platformId);
-        then(platform_view.getPlatformName()).isEqualTo(platformName);
-        then(platform_view.getGroupId()).isEqualTo(new_group.getGroupId());
-        then(platform_view.getGroupName()).isEqualTo(new_group.getGroupName());
-        then(platform_view.getCreateUserName()).isEqualTo(userName);
-        then(platform_view.getCreateUserId()).isEqualTo(userId);
-        then(platform_view.getCreateTime()/time_diff_base).isEqualTo(new_group.getCreateTime()/time_diff_base);
-        then(platform_view.getUpdateTime()/time_diff_base).isEqualTo(new_group.getUpdateTime()/time_diff_base);
-        then(platform_view.getDescription()).isEqualTo(new_group.getDescription());
+        GroupView group_view = entity.getBody().getData().get(0);
+        then(group_view.getPlatformId()).isEqualTo(platformId);
+        then(group_view.getPlatformName()).isEqualTo(platformName);
+        then(group_view.getGroupId()).isEqualTo(new_group.getGroupId());
+        then(group_view.getGroupName()).isEqualTo(new_group.getGroupName());
+        then(group_view.getCreateUserName()).isEqualTo(userName);
+        then(group_view.getCreateUserId()).isEqualTo(userId);
+        then(group_view.getCreateTime()/time_diff_base).isEqualTo(new_group.getCreateTime()/time_diff_base);
+        then(group_view.getUpdateTime()/time_diff_base).isEqualTo(new_group.getUpdateTime()/time_diff_base);
+        then(group_view.getDescription()).isEqualTo(new_group.getDescription());
     }
 
     // delete

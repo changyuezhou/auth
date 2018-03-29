@@ -16,7 +16,7 @@ public class OrganizationAuthoritySQL {
     }
 
     public String selectBySelective(OrganizationAuthorityListCondition condition) {
-        return new SQL() {{
+        final String sql = new SQL() {{
             SELECT("a.organization_id, b.organization_name, a.auth_id, c.auth_name, d.platform_id, d.platform_name, c.description, a.create_user_id, e.user_name as create_user_name, a.update_time, a.create_time");
             FROM("t_organization_authority a, t_organization b, t_authority c, t_platform d, t_user e");
             if (null != condition.getOrganizationId()) {
@@ -46,6 +46,10 @@ public class OrganizationAuthoritySQL {
             ORDER_BY("b.organization_name");
             ORDER_BY("a.update_time");
         }}.toString();
+
+        System.out.print(" ######################################################################:sql " + sql);
+
+        return sql;
     }
 
     public String deleteByOrganizationAuthorityIds(OrganizationAuthorityBulk organization_auths) {

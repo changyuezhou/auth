@@ -3,9 +3,14 @@ package com.system.auth.api;
 import com.system.auth.bean.*;
 import com.system.auth.model.*;
 import com.system.auth.model.System;
-import com.system.auth.model.ext.GroupAuthorityView;
-import com.system.auth.model.provider.GroupAuthorityBulkInsert;
+import com.system.auth.model.ext.AuthorityView;
+import com.system.auth.model.ext.UserAuthorityView;
+import com.system.auth.model.ext.UserView;
 import com.system.auth.model.request.*;
+import com.system.auth.model.response.AccessTokenResponse;
+import com.system.auth.model.response.ApplyAuthTokenResponse;
+import com.system.auth.model.response.AuthorizationCodeResponse;
+import com.system.auth.model.response.RefreshTokenResponse;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -20,8 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.security.MessageDigest;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
@@ -30,14 +34,18 @@ import static org.assertj.core.api.BDDAssertions.then;
 @TestPropertySource(properties = {"management.port=0"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
-public class GroupAuthorityAPITest {
+public class SessionAPITest {
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    private static GroupAuthority new_group_auth = new GroupAuthority();
+    private static String authToken = "";
+    private static String code = "";
+    private static String openId = "";
+    private static String accessToken = "";
+    private static String refreshToken = "";
 
     private static String groupId = "";
     private static String groupName = "prefix_test_name";
@@ -47,9 +55,11 @@ public class GroupAuthorityAPITest {
 
     private static String userId = "";
     private static String userName = "prefix_test_name";
+    private static String userPassword = "386ADA9F63B54EECB2B49663043CC744";
 
     private static String platformId = "";
     private static String platformName = "prefix_test_name";
+    private static String secret = "80CE9FC7CEC4490B91061A0FA7E045F1";
 
     private static String systemId = "";
     private static String systemName = "prefix_test_name";
@@ -65,7 +75,7 @@ public class GroupAuthorityAPITest {
         user.setStatus(1);
         user.setContactName("contact name");
         user.setMobileNumber("138000000000");
-        user.setPassword("12345678901234567890");
+        user.setPassword(userPassword);
         ResponseEntity<UserAddResponseTest> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/user/add", user,  UserAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -101,7 +111,7 @@ public class GroupAuthorityAPITest {
         Platform new_platform = new Platform();
 
         new_platform.setSystemId(systemId);
-        new_platform.setSecretKey("12345678");
+        new_platform.setSecretKey(secret);
         new_platform.setPlatformDomain("www");
         new_platform.setPlatformName(platformName);
         new_platform.setDescription("description");
@@ -161,9 +171,11 @@ public class GroupAuthorityAPITest {
         authId = entity.getBody().getData().getAuthId();
     }
 
-    // add test
+    // add group authoriy test
     @Test
-    public void test21() throws Exception {
+    public void test06() throws Exception {
+        GroupAuthority new_group_auth = new GroupAuthority();
+
         new_group_auth.setAuthId(authId);
         new_group_auth.setGroupId(groupId);
         new_group_auth.setCreateUserId(userId);
@@ -176,20 +188,38 @@ public class GroupAuthorityAPITest {
         then(entity.getBody().getMsg()).isEqualTo("");
     }
 
-    // list
+    // add user group test
     @Test
-    public void test22() throws Exception {
-        GroupAuthorityListCondition condition = new GroupAuthorityListCondition();
-        condition.setGroupName(groupName);
-        condition.setGroupId(new_group_auth.getGroupId());
+    public void test07() throws Exception {
+        UserGroup new_user_group = new UserGroup();
+
+        new_user_group.setUserId(userId);
+        new_user_group.setGroupId(groupId);
+        new_user_group.setCreateUserId(userId);
+
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_group/add", new_user_group,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // user authority list
+    @Test
+    public void test08() throws Exception {
+        UserAuthorityListCondition condition = new UserAuthorityListCondition();
+        condition.setAuthName(authName);
         condition.setPlatformId(platformId);
+        condition.setUserId(userId);
+        condition.setUserName(userName);
         condition.setCreateUserId(userId);
         condition.setCreateUserName(userName);
         condition.setPageSize(10);
-        condition.setPageNum(0);
+        condition.setPageNum(1);
 
-        ResponseEntity<GroupAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/list", condition,  GroupAuthorityListResponseTest.class);
+        ResponseEntity<UserAuthorityListConditionResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_authority/list", condition,  UserAuthorityListConditionResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -198,90 +228,208 @@ public class GroupAuthorityAPITest {
 
         then(entity.getBody().getData().size()).isEqualTo(1);
 
-        GroupAuthorityView organization_authority_view = entity.getBody().getData().get(0);
-        then(organization_authority_view.getPlatformId()).isEqualTo(platformId);
-        then(organization_authority_view.getPlatformName()).isEqualTo(platformName);
-        then(organization_authority_view.getGroupId()).isEqualTo(new_group_auth.getGroupId());
-        then(organization_authority_view.getGroupName()).isEqualTo(groupName);
-        then(organization_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(organization_authority_view.getCreateUserId()).isEqualTo(userId);
+        UserAuthorityView authority_view = entity.getBody().getData().get(0);
+        then(authority_view.getUserId()).isEqualTo(userId);
+        then(authority_view.getUserName()).isEqualTo(userName);
+        then(authority_view.getPlatformId()).isEqualTo(platformId);
+        then(authority_view.getPlatformName()).isEqualTo(platformName);
+        then(authority_view.getAuthId()).isEqualTo(authId);
+        then(authority_view.getAuthName()).isEqualTo(authName);
+        then(authority_view.getCreateUserName()).isEqualTo(userName);
+        then(authority_view.getCreateUserId()).isEqualTo(userId);
     }
 
+    // apply auth token
+    @Test
+    public void test21() throws Exception {
+        ApplyAuthToken applyAuthToken = new ApplyAuthToken();
+        applyAuthToken.setPlatformId(platformId);
 
-    // delete
+        String random = Integer.toString(new Long(java.lang.System.currentTimeMillis()).intValue());
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        String password = byteArrayToHexString(md5.digest((secret + random).getBytes("utf-8")));
+
+        applyAuthToken.setRandom(random);
+        applyAuthToken.setPassword(password);
+
+        ResponseEntity<ApplyAuthTokenResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/apply_auth_token", applyAuthToken,  ApplyAuthTokenResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+
+        ApplyAuthTokenResponse response = entity.getBody().getData();
+        then(response.getPlatformId()).isEqualTo(platformId);
+        then(response.getAuthToken().isEmpty()).isEqualTo(false);
+
+        authToken = response.getAuthToken();
+    }
+
+    // authorization_code
+    @Test
+    public void test22() throws Exception {
+        AuthorizationCode auth_code = new AuthorizationCode();
+
+        auth_code.setPlatformId(platformId);
+        auth_code.setAuthToken(authToken);
+        auth_code.setUserName(userName);
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        String password = byteArrayToHexString(md5.digest((auth_code.getAuthToken() + userPassword).getBytes("utf-8")));
+        auth_code.setPassword(password);
+
+        ResponseEntity<AuthorizationCodeResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/authorization_code", auth_code,  AuthorizationCodeResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+
+        AuthorizationCodeResponse response = entity.getBody().getData();
+        then(response.getPlatformId()).isEqualTo(platformId);
+        then(response.getAuthToken().isEmpty()).isEqualTo(false);
+        then(response.getCode().isEmpty()).isEqualTo(false);
+        then(response.getOpenId().isEmpty()).isEqualTo(false);
+
+        code = response.getCode();
+        openId = response.getOpenId();
+    }
+
+    // access_token_request
     @Test
     public void test23() throws Exception {
+        AccessTokenRequest accessTokenRequest = new AccessTokenRequest();
+        accessTokenRequest.setPlatformId(platformId);
+        accessTokenRequest.setCode(code);
+        accessTokenRequest.setOpenId(openId);
+
+        ResponseEntity<AccessTokenResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/access_token", accessTokenRequest,  AccessTokenResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+
+        AccessTokenResponse response = entity.getBody().getData();
+        then(response.getPlatformId()).isEqualTo(platformId);
+        then(response.getAccessToken().isEmpty()).isEqualTo(false);
+        then(response.getOpenId().isEmpty()).isEqualTo(false);
+        then(response.getUserId().isEmpty()).isEqualTo(false);
+        then(response.getUserName().isEmpty()).isEqualTo(false);
+        then(response.getRefreshToken().isEmpty()).isEqualTo(false);
+
+        then(response.getUserId()).isEqualTo(userId);
+        then(response.getUserName()).isEqualTo(userName);
+
+        accessToken = response.getAccessToken();
+        refreshToken = response.getRefreshToken();
+    }
+
+    // refresh_token
+    @Test
+    public void test24() throws Exception {
+        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest();
+        refreshTokenRequest.setOpenId(openId);
+        refreshTokenRequest.setPlatformId(platformId);
+        refreshTokenRequest.setRefreshToken(refreshToken);
+
+        ResponseEntity<RefreshTokenResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/refresh_token", refreshTokenRequest,  RefreshTokenResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+
+        RefreshTokenResponse response = entity.getBody().getData();
+        then(response.getPlatformId()).isEqualTo(platformId);
+        then(response.getAccessToken().isEmpty()).isEqualTo(false);
+        then(response.getOpenId().isEmpty()).isEqualTo(false);
+        then(response.getRefreshToken().isEmpty()).isEqualTo(false);
+
+        accessToken = response.getAccessToken();
+        refreshToken = response.getRefreshToken();
+    }
+
+    // user_info
+    @Test
+    public void test25() throws Exception {
+        UserSessionQuery userSessionQuery = new UserSessionQuery();
+        userSessionQuery.setAccessToken(accessToken);
+        userSessionQuery.setOpenId(openId);
+        userSessionQuery.setPlatformId(platformId);
+
+        ResponseEntity<UserQueryByPrimaryKeyResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/user_info", userSessionQuery,  UserQueryByPrimaryKeyResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+
+        UserView response = entity.getBody().getData();
+        then(response.getUserId().isEmpty()).isEqualTo(false);
+        then(response.getUserName().isEmpty()).isEqualTo(false);
+
+        then(response.getUserId()).isEqualTo(userId);
+        then(response.getUserName()).isEqualTo(userName);
+    }
+
+    // user_auth_list
+    @Test
+    public void test26() throws Exception {
+        UserSessionQuery userSessionQuery = new UserSessionQuery();
+        userSessionQuery.setAccessToken(accessToken);
+        userSessionQuery.setOpenId(openId);
+        userSessionQuery.setPlatformId(platformId);
+
+        ResponseEntity<UserAuthorityListNoPageResponseTest> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/auth/user_auth_list", userSessionQuery,  UserAuthorityListNoPageResponseTest.class);
+
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+        then(entity.getBody().getData().isEmpty()).isEqualTo(false);
+        then(entity.getBody().getData().size()).isEqualTo(1);
+
+        UserAuthorityView user_auth_view = entity.getBody().getData().get(0);
+        then(user_auth_view.getUserId()).isEqualTo(userId);
+        then(user_auth_view.getUserName()).isEqualTo(userName);
+        then(user_auth_view.getPlatformName()).isEqualTo(platformName);
+        then(user_auth_view.getPlatformId()).isEqualTo(platformId);
+        then(user_auth_view.getAuthId()).isEqualTo(authId);
+        then(user_auth_view.getAuthName()).isEqualTo(authName);
+        then(user_auth_view.getCreateUserId()).isEqualTo(userId);
+        then(user_auth_view.getCreateUserName()).isEqualTo(userName);
+    }
+
+    // delete user group
+    @Test
+    public void test92() throws Exception {
+        UserGroupKey user_group_req = new UserGroupKey();
+        user_group_req.setUserId(userId);
+        user_group_req.setGroupId(groupId);
+        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
+                "http://localhost:" + this.port + "/user_group/delete", user_group_req,  OperationMessage.class);
+        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        then(entity.hasBody()).isEqualTo(true);
+        then(entity.getBody().getCode()).isEqualTo(0);
+        then(entity.getBody().getMsg()).isEqualTo("");
+    }
+
+    // delete group authority
+    @Test
+    public void test93() throws Exception {
         GroupAuthorityKey group_req = new GroupAuthorityKey();
         group_req.setAuthId(authId);
         group_req.setGroupId(groupId);
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
                 "http://localhost:" + this.port + "/group_authority/delete", group_req,  OperationMessage.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-    }
-
-    // add bulk test
-    @Test
-    public void test26() throws Exception {
-        GroupAuthorityBulkInsert group_auths = new GroupAuthorityBulkInsert();
-        List<String> list = new ArrayList<String>();
-        list.add(authId);
-        group_auths.setAuthIds(list);
-        group_auths.setGroupId(groupId);
-        group_auths.setCreateUserId(userId);
-
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/bulk/add", group_auths,  OperationMessage.class);
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-    }
-
-    // list
-    @Test
-    public void test27() throws Exception {
-        GroupAuthorityListCondition condition = new GroupAuthorityListCondition();
-        condition.setGroupName(groupName);
-        condition.setGroupId(new_group_auth.getGroupId());
-        condition.setPlatformId(platformId);
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
-        condition.setPageSize(10);
-        condition.setPageNum(0);
-
-        ResponseEntity<GroupAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/list", condition,  GroupAuthorityListResponseTest.class);
-
-        then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        then(entity.hasBody()).isEqualTo(true);
-        then(entity.getBody().getCode()).isEqualTo(0);
-        then(entity.getBody().getMsg()).isEqualTo("");
-
-        then(entity.getBody().getData().size()).isEqualTo(1);
-
-        GroupAuthorityView group_authority_view = entity.getBody().getData().get(0);
-        then(group_authority_view.getPlatformId()).isEqualTo(platformId);
-        then(group_authority_view.getPlatformName()).isEqualTo(platformName);
-        then(group_authority_view.getGroupId()).isEqualTo(new_group_auth.getGroupId());
-        then(group_authority_view.getGroupName()).isEqualTo(groupName);
-        then(group_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(group_authority_view.getCreateUserId()).isEqualTo(userId);
-    }
-
-    // bulk delete
-    @Test
-    public void test28() throws Exception {
-        GroupAuthorityBulk group_auths = new GroupAuthorityBulk();
-        List<String> list = new ArrayList<String>();
-        list.add(authId);
-        group_auths.setAuthIds(list);
-        group_auths.setGroupId(groupId);
-
-        ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/bulk/delete", group_auths,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -351,10 +499,28 @@ public class GroupAuthorityAPITest {
     @Test
     public void test99() throws Exception {
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/group_authority/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/user_group/not_found", "",  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());
         then(entity.getBody().getMsg()).isEqualTo(OperationException.getExceptionMsg());
+    }
+
+    private String byteArrayToHexString(byte[] b) {
+        StringBuffer resultSb = new StringBuffer();
+        for (int i = 0; i < b.length; i++) {
+            resultSb.append(byteToHexString(b[i]));
+        }
+        return resultSb.toString();
+    }
+
+    private static String byteToHexString(byte b) {
+        final String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+
+        int n = b;
+        if (n < 0) n = 256 + n;
+        int d1 = n / 16;
+        int d2 = n % 16;
+        return hexDigits[d1] + hexDigits[d2];
     }
 }

@@ -41,7 +41,7 @@ public class RoleSQL {
 
     public String updateByPrimaryKeySelective(Role record) {
         return new SQL() {{
-            UPDATE("t_group");
+            UPDATE("t_role");
             if (null != record.getRoleName()) {
                 SET("role_name = #{roleName,jdbcType=VARCHAR}");
             }
