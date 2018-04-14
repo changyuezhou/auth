@@ -1,6 +1,6 @@
 <template>
   <div class="header" >
-    <h4 class="pull-left">云协同管理系统</h4>
+    <h4 class="pull-left">OAuth云管理系统</h4>
 <!--    <div class="logoImg pull-left"></div>-->
     <div class="pull-right quit" @click="quit">退出</div>
     <div class="pull-right name">{{userName}}</div>
