@@ -14,7 +14,7 @@ export default new Router({
     },
     {
       path: '/fwhConfig',
-      name: 'Index',
+      name: 'fwhConfig',
       component: Index
     }
   ]

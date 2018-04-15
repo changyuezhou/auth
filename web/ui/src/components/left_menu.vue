@@ -1,11 +1,11 @@
 <template>
     <div class="leftNavContainer">
         <template v-for="(item,index) in leftMenuList"> 
-            <div  :key="index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
+            <div  :key="item.auth_f_id + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
                 <span class="leftIcon" :style="{backgroundImage: 'url(' + item.icon + ')'}"></span> {{item.title}}
                 <span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
             </div>
-            <ul  :key="index" :ref="item.label" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
+            <ul  :key="item.auth_f_name + index" :ref="item.label" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
                 <router-link v-for="(v,i) in item.subMenu" :key="i" active-class="select" tag="li" :to="v.router">{{v.title}}</router-link>
             </ul>
         </template>
@@ -81,6 +81,7 @@ export default {
                   return
                 }
                 this.leftMenuList=this.formatLeftMenu(data.data.list)
+                console.log(this.leftMenuList)
                  //第一次进入默认进到第一级的第一个菜单
                 if(this.$route.path=='/'){
                     this.$router.push(this.leftMenuList[0].subMenu[0].router)
