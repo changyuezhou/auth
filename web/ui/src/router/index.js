@@ -16,6 +16,11 @@ export default new Router({
       path: '/fwhConfig',
       name: 'fwhConfig',
       component: Index
-    }
+    },
+    {
+      path: '/systemMng',
+      name: 'systemMng',
+      component: Index
+    }    
   ]
 })

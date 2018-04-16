@@ -12,13 +12,11 @@ Vue.use(store)
 import '@/common/style/reset.less'
 import utils from '@/common/utils.js'
 import apiList from '@/common/apiList'
-import left_menu from '@/appConfig/left_menu.js'
 
 Vue.config.productionTip = false
 
 Vue.prototype.utils = utils
 Vue.prototype.apis = apiList
-Vue.prototype.left_menu = left_menu
 
 //引入全局公用基础组件
 import headGuild from '@/components/basic/positionGuild.vue' //头部您的位置

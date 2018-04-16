@@ -2,11 +2,10 @@
     <div class="leftNavContainer">
         <template v-for="(item,index) in leftMenuList"> 
             <div  :key="item.auth_f_id + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
-                <span class="leftIcon" :style="{backgroundImage: 'url(' + item.icon + ')'}"></span> {{item.title}}
-                <span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
+                <span class="leftIcon" :style="{backgroundImage: 'url(' + require('@/assets/images/leftNav/icons/menu.png') + ')'}"></span>{{item.auth_name}}<span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
             </div>
-            <ul  :key="item.auth_f_name + index" :ref="item.label" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
-                <router-link v-for="(v,i) in item.subMenu" :key="i" active-class="select" tag="li" :to="v.router">{{v.title}}</router-link>
+            <ul  :key="item.auth_id + index" :ref="item.auth_name" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
+                <router-link v-for="(v,i) in item.children" :key="i" active-class="select" tag="li" :to="v.url">{{v.auth_name}}</router-link>
             </ul>
         </template>
     </div>
@@ -21,45 +20,11 @@ export default {
         }
     },
     methods: {
-        formatLeftMenu(array){
-            let f_auths = {},
-                s_auths = [],
-                finalData = []
-            //分离父子菜单
-            array.forEach((v,i)=>{
-                if(v.auth_level!=0&&!f_auths[v.auth_f_id]){
-                    f_auths[v.auth_f_id] = {subMenu:[]}
-                    Object.assign(f_auths[v.auth_f_id],v,this.left_menu.left_menu_config.f_auths[v.auth_f_id])
-                }
-                if(v.auth_level!=0){
-                    let tmpObj = {}
-                    Object.assign(tmpObj,v,this.left_menu.left_menu_config.s_auths[v.auth_id])
-                    s_auths.push(tmpObj)
-                }
-            })
-            //父子菜单按对应关系关联
-            s_auths.forEach((v,i)=>{
-                if(f_auths[v.auth_f_id]){
-                    f_auths[v.auth_f_id].subMenu.push(v)
-                }
-            })
-            //格式化最终数据
-            for(let key in f_auths){
-                let item = f_auths[key]
-                if(item.subMenu.length>0){
-                     item.subHeight=item.subMenu.length*40+"px"
-                    finalData[item.index] = item
-                }   
-            }
-            return finalData.filter((v,i)=>{
-                return v!=undefined
-            })
-        },
         getCurrentExpendByRoute(routeName){
             for(let i = 0;i<this.leftMenuList.length;i++){
                 let item = this.leftMenuList[i]
-                let tmpArr = item.subMenu.filter((value,index)=>{
-                    return ("/"+value.router)==routeName
+                let tmpArr = item.children.filter((value,index)=>{
+                    return ("/"+value.url)==routeName
                 })
                if(tmpArr.length!=0){
                    return i
@@ -80,14 +45,10 @@ export default {
 
                   return
                 }
-                this.leftMenuList=this.formatLeftMenu(data.data.list)
+                console.log(data)
+                this.leftMenuList = data.data.list
                 console.log(this.leftMenuList)
-                 //第一次进入默认进到第一级的第一个菜单
-                if(this.$route.path=='/'){
-                    this.$router.push(this.leftMenuList[0].subMenu[0].router)
-                }else{
-                    this.currentExpendMenu=this.getCurrentExpendByRoute(this.$route.path)
-                }
+                this.currentExpendMenu = -1
             })
             .catch((errMsg)=>{
                 this.$store.commit('show_global_alert',("获取菜单失败： "+errMsg))
