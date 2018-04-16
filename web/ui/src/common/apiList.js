@@ -51,8 +51,28 @@ export default {
     //删除系统
     deleteSystem(systemId) {
         return postFun('/system/delete', { systemId })
-    }
+    },
     /* =============================================================系统管理-end======================================================== */
+
+    /* =============================================================平台管理-start======================================================== */
+    //获取平台列表
+    getPlatformList(page_number = 1, page_size = 10) {
+        let data = { page_number, page_size }
+        return postFun('/platform/list', data)
+    },
+    //添加平台
+    addPlatform(data) {
+        return postFun('/platform/add', data)
+    },
+    //修改平台
+    updatePlatform(data) {
+        return postFun('/platform/update', data)
+    },
+    //删除平台
+    deletePlatform(platformId) {
+        return postFun('/platform/delete', { platformId })
+    }
+    /* =============================================================平台管理-end======================================================== */    
 }
 
 

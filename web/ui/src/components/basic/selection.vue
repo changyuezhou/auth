@@ -21,7 +21,7 @@
         default(){
             return [{
             label: 'test',
-            value: 0
+            value: ''
           }]
         }
       },
@@ -32,7 +32,7 @@
           }
       },
       defaultValue:{
-        type:[String,Number],
+        type:[String,String],
         default:""
       }
     },
