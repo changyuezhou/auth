@@ -95,4 +95,55 @@ import Mock from 'mockjs';
     }
 })
 
-export default { auth_list }
+const system_list = Mock.mock(
+  '/api/system/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取系统列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "systemId": "S0001",
+                    "systemName": "OAuth权限管理系统",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const system_add = Mock.mock(
+  '/api/system/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加系统",
+        "code": 0
+    }
+  }
+)
+
+const system_update = Mock.mock(
+  '/api/system/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改系统",
+        "code": 0
+    }
+  }
+)
+
+const system_delete = Mock.mock(
+  '/api/system/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除系统",
+        "code": 0
+    }
+  }
+)
+export default { auth_list, system_list, system_add, system_update, system_delete }

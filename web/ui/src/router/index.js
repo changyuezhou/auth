@@ -1,26 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HeadBar from '@/components/head_bar'
-import Index from '@/components/index'
+import SystemMng from '@/components/system/systemList'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/fwhConfig',
-      name: 'fwhConfig',
-      component: Index
+      path: '/'
     },
     {
       path: '/systemMng',
       name: 'systemMng',
-      component: Index
+      component: SystemMng
     }    
   ]
 })
