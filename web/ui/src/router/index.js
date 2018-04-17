@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SystemMng from '@/components/system/systemList'
 import PlatformMng from '@/components/platform/platformList'
+import AuthorityMng from '@/components/authority/authorityList'
 
 Vue.use(Router)
 
@@ -19,6 +20,11 @@ export default new Router({
       path: '/platformMng',
       name: 'platformMng',
       component: PlatformMng
-    }    
+    },
+    {
+      path: '/authorityMng',
+      name: 'authorityMng',
+      component: AuthorityMng
+    }      
   ]
 })

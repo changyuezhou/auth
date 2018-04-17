@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <head-guild :positions='["授权管理","平台管理"]'></head-guild>
-    <v-button @click="addPlatform" class="addBtn" type="primery" text="+ 添加平台"></v-button>
+    <head-guild :positions='["授权管理","权限管理"]'></head-guild>
+    <v-button @click="addAuthority" class="addBtn" type="primery" text="+ 添加权限"></v-button>
     <v-table :columns="tableColumns" :rows="tableRows">
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
@@ -12,25 +12,26 @@
     <v-pagenation :total="total" :display="display" :current="current" @pagechange="pagechange" @pageSizeChange="pageSizeChange">
     </v-pagenation>
   
-    <v-add-dialog :isShow="isShowAddDialog" :systemList ="systemList" @dialogSubmited="comfirmAdd" @on-modal-close="isShowAddDialog=false">
+    <v-add-dialog :isShow="isShowAddDialog" :systemList ="systemList" :authList ="authList" @dialogSubmited="comfirmAdd" @on-modal-close="isShowAddDialog=false">
     </v-add-dialog>
   
     <v-edit-dialog
               :isShow="isShowEditDialog"
               :systemList ="systemList"
+              :authList ="authList"
               :defaultData = "curRow"
               @on-modal-close="isShowEditDialog=false"
               @dialogSubmited="confirmUpdate">
       </v-edit-dialog> 
   
-    <v-alert :isShow="isShowDeletAlert" @on-alert-close="isShowDeletAlert=false" @on-confirm="confirmRemove" text="确认删除此平台吗？">
+    <v-alert :isShow="isShowDeletAlert" @on-alert-close="isShowDeletAlert=false" @on-confirm="confirmRemove" text="确认删除此权限吗？">
     </v-alert>
   </div>
 </template>
 
 <script>
-import vAddDialog from './platformAdd.vue'
-import vEditDialog from './platformUpdate.vue'
+import vAddDialog from './authorityAdd.vue'
+import vEditDialog from './authorityUpdate.vue'
 export default {
   components: {
     vAddDialog,
@@ -39,10 +40,10 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "平台ID", "id": "platformId" },
-        { "label": "平台名称", "id": "platformName" },
-        { "label": "密钥", "id": "secretKey" },
-        { "label": "域名", "id": "platformDomain" },
+        { "label": "权限ID", "id": "authId" },
+        { "label": "权限名称", "id": "authName" },
+        { "label": "父权限名称", "id": "authFName" },
+        { "label": "路径", "id": "url" },
         { "label": "系统名称", "id": "systemName" },
         { "label": "描述", "id": "description" },
         { "label": "创建者", "id": "createUserName" },
@@ -52,6 +53,7 @@ export default {
       ],
       tableRows: [],
       systemList:[],
+      authList: [],
       total: 0,
       display: 0,
       current: 1,
@@ -63,14 +65,14 @@ export default {
     }
   },
   methods: {
-    addPlatform() {//添加平台
+    addAuthority() {//添加平台
       this.isShowAddDialog = true
     },
     //确认添加
     comfirmAdd(data) {
       if (this.canSubmit) {
         this.canSubmit = false
-        this.apis.addPlatform(data)
+        this.apis.addAuthority(data)
           .then((res) => {
             this.isShowAddDialog = false
             this.getTableData()
@@ -92,7 +94,7 @@ export default {
     confirmUpdate(data) {
       if(this.canSubmit){
         this.canSubmit = false
-        this.apis.updatePlatform(data)
+        this.apis.updateAuthority(data)
           .then((res)=>{
             this.isShowEditDialog = false
             this.getTableData(this.current,this.display)
@@ -115,7 +117,7 @@ export default {
     //确认删除
     confirmRemove() {
       this.isShowDeletAlert = false
-      this.apis.deletePlatform(this.curRow.platformId)
+      this.apis.deleteAuthority(this.curRow.authId)
         .then((res) => {
           this.$store.dispatch('showToast',"删除成功")
           this.getTableData(this.current, this.display)
@@ -135,7 +137,7 @@ export default {
 
     //获取列表数据
     getTableData(pageNum = 1, pageSize = 10) {
-      this.apis.getPlatformList(pageNum, pageSize)
+      this.apis.getAuthorityList(pageNum, pageSize)
         .then((data) => {
           if(data.data.total_number==0){
             this.$store.commit('show_global_alert',"没有数据")
@@ -160,6 +162,9 @@ export default {
     this.apis.getSystemList().then((data)=>{
       this.systemList=data.data.list
     })
+    this.apis.getAuthorityList().then((data)=>{
+      this.authList=data.data.list
+    })    
   }
 }
 </script>

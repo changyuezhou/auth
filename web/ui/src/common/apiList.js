@@ -71,8 +71,28 @@ export default {
     //删除平台
     deletePlatform(platformId) {
         return postFun('/platform/delete', { platformId })
-    }
+    },
     /* =============================================================平台管理-end======================================================== */    
+
+/* =============================================================权限管理-start======================================================== */
+    //获取权限列表
+    getAuthorityList(page_number = 1, page_size = 10) {
+        let data = { page_number, page_size }
+        return postFun('/authority/list', data)
+    },
+    //添加权限
+    addAuthority(data) {
+        return postFun('/authority/add', data)
+    },
+    //修改权限
+    updateAuthority(data) {
+        return postFun('/authority/update', data)
+    },
+    //删除权限
+    deleteAuthority(authorityId) {
+        return postFun('/authority/delete', { authorityId })
+    }
+    /* =============================================================权限管理-end======================================================== */        
 }
 
 

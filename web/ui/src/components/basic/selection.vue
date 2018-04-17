@@ -6,7 +6,7 @@
       </div>
       <div class="selection-list" v-if="isDrop" :style="{'top':boxHeight}">
         <ul>
-          <li v-for="(item, index) in selections" :key="item" @click.stop="chooseSelection(index)">{{ item.label }}</li>
+          <li v-for="(item, index) in selections" :key="index" @click.stop="chooseSelection(index)">{{ item.label }}</li>
         </ul>
       </div>
     </div>
@@ -21,7 +21,7 @@
         default(){
             return [{
             label: 'test',
-            value: ''
+            value: 0
           }]
         }
       },
@@ -32,7 +32,7 @@
           }
       },
       defaultValue:{
-        type:[String,String],
+        type:[String,Number],
         default:""
       }
     },

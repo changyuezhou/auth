@@ -202,4 +202,62 @@ const platform_delete = Mock.mock(
     }
   }
 )
-export default { auth_list, system_list, system_add, system_update, system_delete, platform_list, platform_add, platform_update, platform_delete }
+
+const authority_list = Mock.mock(
+  '/api/authority/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取权限列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "authId": "A386ADA9F63B54EECB2B49663043CC744",
+                    "authName": "授权管理",
+                    "authFId": "",
+                    "authFName": "",
+                    "authLevel": 0,
+                    "url": "/qqqqqqq",
+                    "systemId": "S20F26F15C04D4727A9FAE7D3C322771E",
+                    "systemName": "OAuth权限管理系统",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const authority_add = Mock.mock(
+  '/api/authority/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加权限",
+        "code": 0
+    }
+  }
+)
+
+const authority_update = Mock.mock(
+  '/api/authority/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改权限",
+        "code": 0
+    }
+  }
+)
+
+const authority_delete = Mock.mock(
+  '/api/authority/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除权限",
+        "code": 0
+    }
+  }
+)
+export default { auth_list, system_list, system_add, system_update, system_delete, platform_list, platform_add, platform_update, platform_delete, authority_list, authority_add, authority_update, authority_delete }
