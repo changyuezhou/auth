@@ -260,4 +260,175 @@ const authority_delete = Mock.mock(
     }
   }
 )
-export default { auth_list, system_list, system_add, system_update, system_delete, platform_list, platform_add, platform_update, platform_delete, authority_list, authority_add, authority_update, authority_delete }
+
+const group_list = Mock.mock(
+  '/api/group/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取组列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "groupId": "G386ADA9F63B54EECB2B49663043CC744",
+                    "groupName": "默认组",
+                    "platformId": "P386ADA9F63B54EECB2B49663043CC744",
+                    "platformName": "走向智能广告投放系统",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const group_add = Mock.mock(
+  '/api/group/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加组",
+        "code": 0
+    }
+  }
+)
+
+const group_update = Mock.mock(
+  '/api/group/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改组",
+        "code": 0
+    }
+  }
+)
+
+const group_delete = Mock.mock(
+  '/api/group/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除组",
+        "code": 0
+    }
+  }
+)
+
+const role_list = Mock.mock(
+  '/api/role/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取角色列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "roleId": "R386ADA9F63B54EECB2B49663043CC744",
+                    "roleName": "管理员",
+                    "platformId": "P386ADA9F63B54EECB2B49663043CC744",
+                    "platformName": "走向智能广告投放系统",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const role_add = Mock.mock(
+  '/api/role/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加角色",
+        "code": 0
+    }
+  }
+)
+
+const role_update = Mock.mock(
+  '/api/role/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改角色",
+        "code": 0
+    }
+  }
+)
+
+const role_delete = Mock.mock(
+  '/api/role/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除角色",
+        "code": 0
+    }
+  }
+)
+
+const organization_list = Mock.mock(
+  '/api/organization/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取组织列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "organizationId": "O386ADA9F63B54EECB2B49663043CC744",
+                    "organizationName": "总裁办",
+                    "organizationFId": "",
+                    "organizationFName": "",
+                    "organizationLevel": 0,
+                    "platformId": "P386ADA9F63B54EECB2B49663043CC744",
+                    "platformName": "走向智能广告投放系统",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const organization_add = Mock.mock(
+  '/api/organization/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加组织",
+        "code": 0
+    }
+  }
+)
+
+const organization_update = Mock.mock(
+  '/api/organization/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改组织",
+        "code": 0
+    }
+  }
+)
+
+const organization_delete = Mock.mock(
+  '/api/organization/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除组织",
+        "code": 0
+    }
+  }
+)
+
+export default { auth_list, system_list, system_add, system_update, system_delete, 
+    platform_list, platform_add, platform_update, platform_delete, 
+    authority_list, authority_add, authority_update, authority_delete,
+    group_list, group_add, group_update, group_delete,
+    role_list, role_add, role_update, role_delete,
+    organization_list, organization_add, organization_update, organization_delete }

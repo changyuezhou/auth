@@ -4,86 +4,50 @@
             :isShow="isShow"  
             @on-dialog-close="modalClose" 
             :hasHead="true">
-            <header>编辑权限</header>
+            <header>添加组织</header>
             <div class="formArea">
                 <transition name="warnFade">
                     <p class="warnTip" v-show="isShowWarnTip">提示：{{warnText}}</p>
                 </transition>
-                <div class="line clearfix">
-                    <label for="authId" class="pull-left"><sup>* </sup>权限ID：</label>
-                    <input 
-                        class="inputCom readonly"
-                        :style="{'width':'320px'}" 
-                        readonly="readonly"
-                        v-model="formValue.authId.value">
-                </div>
 
                 <div class="line clearfix">
-                    <label for="authName" class="pull-left"><sup>* </sup>权限名称：</label>
-                    <input
+                    <label for="organizationName" class="pull-left"><sup>* </sup>组织名称：</label>
+                    <input 
                         class="inputCom"
-                        :style="{'width':'320px'}"
-                        placeholder="请输入权限名称"
-                        v-model="formValue.authName.value"
-                        @focus="utils.toggleInputActive($event)"  
-                        @blur="utils.toggleInputActive($event)">     
-                </div>
-
-                <div class="line clearfix">
-                    <label for="url" class="pull-left"><sup>* </sup>路径：</label>
-                    <input
-                        class="inputCom"
-                        :style="{'width':'320px'}"
-                        placeholder="请输入路径"
-                        v-model="formValue.url.value"
-                        @focus="utils.toggleInputActive($event)"  
-                        @blur="utils.toggleInputActive($event)">     
-                </div>
-
-                <div class="line clearfix">
-                    <label for="authFId" class="pull-left"><sup>* </sup>父权限ID：</label>
-                    <input 
-                        class="inputCom readonly"
                         :style="{'width':'320px'}" 
-                        readonly="readonly"
-                        v-model="formValue.authFId.value">
+                        placeholder="请输入组织名称"
+                        v-model="formValue.organizationName.value"
+                        @focus="utils.toggleInputActive($event)"  
+                        @blur="utils.toggleInputActive($event)">
                 </div>
-                <div class="line clearfix">
-                    <label for="systemId" class="pull-left"><sup>* </sup>系统ID：</label>
-                    <input 
-                        class="inputCom readonly"
-                        :style="{'width':'320px'}" 
-                        readonly="readonly"
-                        v-model="formValue.systemId.value">
-                </div>                                
 
-                <!--div class="line clearfix">
-                   <label for="authFId" class="pull-left"><sup>* </sup>父权限：</label>
-                   <v-selection
+                <div class="line clearfix">
+                   <label for="organizationFId" class="pull-left"><sup></sup>父组织：</label>
+                   <v-selection 
                         :vStyle="inputStyle"
                         :selections="selectionsAuth"
-                        :defaultValue="this.formValue.authFId.value"
+                        :defaultValue="this.formValue.organizationFId.value"
                         @on-change="modalAuthFSelectionChange">
                     </v-selection>
                 </div>
 
                 <div class="line clearfix">
-                   <label for="systemId" class="pull-left"><sup>* </sup>所属系统：</label>
+                   <label for="platformId" class="pull-left"><sup>* </sup>所属平台：</label>
                    <v-selection 
                         :vStyle="inputStyle"
                         :selections="selections"
-                        :defaultValue="this.formValue.systemId.value"
+                        :defaultValue="this.formValue.platformId.value"
                         @on-change="modalSelectionChange">
                     </v-selection>
-                </div-->
+                </div>                           
 
                 <div class="line clearfix">
-                    <label for="description" class="pull-left"><sup>* </sup>备注：</label>
-                    <input  
-                        class="inputCom" 
-                        :style="{'width':'180px'}"
+                    <label for="description" class="pull-left"><sup></sup>备注：</label>
+                    <input 
+                        class="inputCom"
+                        :style="{'width':'320px'}" 
                         placeholder="请输入备注信息" 
-                        v-model.number="formValue.description.value"
+                        v-model="formValue.description.value"
                         @focus="utils.toggleInputActive($event)"  
                         @blur="utils.toggleInputActive($event)">     
                 </div>
@@ -91,7 +55,7 @@
             <div class="btnBox clearfix">
                 <v-button class="btn" type="primery" text="确认提交" @click.stop="checkForm"></v-button>
                 <v-button class="btn" text="取消" :isBigBtn="true" @click.stop="modalClose"></v-button>
-            </div>  
+            </div>    
         </v-dialog>
     </div>
 </template>
@@ -103,31 +67,18 @@
                 type:Boolean,
                 default:false
             },
-            systemList:{
+            platformList:{
                 type:Array,
                 default(){
                     return []
                 }
             },
-            authList:{
+            organizationList:{
                 type:Array,
                 default(){
                     return []
                 }
-            },            
-            defaultData:{
-                type:Object,
-                default(){
-                    return {
-                        authId:'',
-                        authName:'',
-                        url:'',
-                        authFId:'',
-                        systemId:'',
-                        description:''
-                    }
-                }
-            }
+            } 
         },
         data(){
             return {
@@ -136,63 +87,56 @@
                 warnText:"",
                 isShowWarnTip:false,
                 formValue:{
-                    authId:{value:"",label:"权限ID"},
-                    authName:{value:"",label:"权限名称"},
-                    url:{value:"",label:"路径"},
-                    authFId:{value:"",label:"父权限ID"},
-                    systemId:{value:"",label:"系统ID"},
+                    organizationName:{value:"",label:"组织名称"},
+                    organizationFId:{value:"",label:"父组织"},
+                    platformId:{value:"",label:"所属平台"},
                     description:{value:"",label:"备注信息"}
                 },
                 inputStyle:{
                     width:"222px"
-                }                
+                }
             }
         },
         computed:{
             submitValue(){
                 return  {
-                    authId:this.formValue.authId.value,
-                    authName:this.formValue.authName.value,
-                    url:this.formValue.url.value,
-                    authFId:this.formValue.authFId.value,
-                    systemId:this.formValue.systemId.value,
+                    organizationName:this.formValue.organizationName.value,
+                    organizationFId:this.formValue.organizationFId.value,
+                    platformId:this.formValue.platformId.value,
                     description:this.formValue.description.value
                 }
-            }
-            /*,
+            },
             selections(){
                 let tmpArr=[{label:"=请选择=",value:""}]
-                this.systemList.forEach((v,i)=>{
-                    tmpArr.push({label:v.systemName,value:v.systemId})
+                this.platformList.forEach((v,i)=>{
+                    tmpArr.push({label:v.platformName,value:v.platformId})
                 })
                 return tmpArr
             },
             selectionsAuth(){
                 let tmpArr=[{label:"=请选择=",value:""}]
-                this.authList.forEach((v,i)=>{
-                    tmpArr.push({label:v.authName,value:v.authId})
+                this.organizationList.forEach((v,i)=>{
+                    tmpArr.push({label:v.organizationName,value:v.organizationId})
                 })
                 return tmpArr
-            }
-            */
+            }            
         },
         watch:{
             isShow(cur,old){
-                if(cur){
-                     for(let key in this.formValue){
-                       this.formValue[key].value=this.defaultData[key]
-                    }
-                }else{
+                if(!cur){
                     this.resetForm()
+                } else{
+                    if(this.platformList.length==0){
+                        this.showWarnTip("获取平台列表失败请刷新页面重试")
+                    }
+
+                    if(this.organizationList.length==0){
+                        this.showWarnTip("获取组织列表失败请刷新页面重试")
+                    }
                 }
             }
         },
         methods:{
-            setDefaultValue(){
-                for(let key in this.formValue){
-                    this.formValue[key]["value"] = this.defaultData[key]
-                }
-            },        
             modalClose(){
                 this.$emit("on-modal-close")    
             },
@@ -207,9 +151,8 @@
                     this.timeOut=setTimeout(()=>{this.isShowWarnTip=false},5000)
                 }   
             },
-            /*
             modalSelectionChange(data){
-                this.formValue.systemId.value=data.value
+                this.formValue.platformId.value=data.value
                 if(!data.value){
                     this.characterTip = false
                     return
@@ -218,35 +161,22 @@
                 this.characterTip = true 
             },
             modalAuthFSelectionChange(data){
-                this.formValue.authFId.value=data.value
+                this.formValue.organizationFId.value=data.value
                 if(!data.value){
                     this.characterTip = false
                     return
                 }  
                 this.characterTipText = data.label
                 this.characterTip = true 
-            },
-            */
+            },            
             checkForm(){
                 //判空
                 for(let key in this.formValue){
-                    if(!this.formValue[key].value && key != "description" && key != "authFId"){
+                    if(!this.formValue[key].value && key != "description" && key != "organizationFId"){
                         let text = this.formValue[key].label+"不能为空"
                         this.showWarnTip(text)
                         return
                     }
-                }
-                //判断是否修改过
-                let hasUpdated = false
-                for(let key in this.submitValue){
-                    if(this.defaultData[key]&&(this.submitValue[key]!=this.defaultData[key])){
-                        hasUpdated = true
-                        break;
-                    }
-                }
-                if(!hasUpdated){
-                    this.showWarnTip('没有任何修改')
-                    return
                 }
                 //验证通过后的操作
                 this.$emit("dialogSubmited",this.submitValue)

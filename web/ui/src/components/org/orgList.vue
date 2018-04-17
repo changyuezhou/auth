@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <head-guild :positions='["授权管理","权限管理"]'></head-guild>
-    <v-button @click="addAuthority" class="addBtn" type="primery" text="+ 添加权限"></v-button>
+    <head-guild :positions='["授权管理","组织管理"]'></head-guild>
+    <v-button @click="addOrganization" class="addBtn" type="primery" text="+ 添加组织"></v-button>
     <v-table :columns="tableColumns" :rows="tableRows">
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
@@ -12,26 +12,26 @@
     <v-pagenation :total="total" :display="display" :current="current" @pagechange="pagechange" @pageSizeChange="pageSizeChange">
     </v-pagenation>
   
-    <v-add-dialog :isShow="isShowAddDialog" :systemList ="systemList" :authList ="authList" @dialogSubmited="comfirmAdd" @on-modal-close="isShowAddDialog=false">
+    <v-add-dialog :isShow="isShowAddDialog" :platformList ="platformList" :organizationList ="organizationList" @dialogSubmited="comfirmAdd" @on-modal-close="isShowAddDialog=false">
     </v-add-dialog>
   
     <v-edit-dialog
               :isShow="isShowEditDialog"
-              :systemList ="systemList"
-              :authList ="authList"
+              :platformList ="platformList"
+              :organizationList ="organizationList"
               :defaultData = "curRow"
               @on-modal-close="isShowEditDialog=false"
               @dialogSubmited="confirmUpdate">
       </v-edit-dialog> 
   
-    <v-alert :isShow="isShowDeletAlert" @on-alert-close="isShowDeletAlert=false" @on-confirm="confirmRemove" text="确认删除此权限吗？">
+    <v-alert :isShow="isShowDeletAlert" @on-alert-close="isShowDeletAlert=false" @on-confirm="confirmRemove" text="确认删除此组织吗？">
     </v-alert>
   </div>
 </template>
 
 <script>
-import vAddDialog from './authorityAdd.vue'
-import vEditDialog from './authorityUpdate.vue'
+import vAddDialog from './orgAdd.vue'
+import vEditDialog from './orgUpdate.vue'
 export default {
   components: {
     vAddDialog,
@@ -40,11 +40,10 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "权限ID", "id": "authId" },
-        { "label": "权限名称", "id": "authName" },
-        { "label": "父权限名称", "id": "authFName" },
-        { "label": "路径", "id": "url" },
-        { "label": "系统名称", "id": "systemName" },
+        { "label": "组织ID", "id": "organizationId" },
+        { "label": "组织名称", "id": "organizationName" },
+        { "label": "父组织名称", "id": "organizationFName" },
+        { "label": "平台名称", "id": "platformName" },
         { "label": "描述", "id": "description" },
         { "label": "创建者", "id": "createUserName" },
         { "label": "更新时间", "id": "updateTime" },
@@ -52,8 +51,8 @@ export default {
         { "label": "操作", "id": "operation" }
       ],
       tableRows: [],
-      systemList:[],
-      authList: [],
+      platformList:[],
+      organizationList: [],
       total: 0,
       display: 0,
       current: 1,
@@ -65,14 +64,14 @@ export default {
     }
   },
   methods: {
-    addAuthority() {//添加权限
+    addOrganization() {//添加组织
       this.isShowAddDialog = true
     },
     //确认添加
     comfirmAdd(data) {
       if (this.canSubmit) {
         this.canSubmit = false
-        this.apis.addAuthority(data)
+        this.apis.addOrganization(data)
           .then((res) => {
             this.isShowAddDialog = false
             this.getTableData()
@@ -86,7 +85,7 @@ export default {
       } else { return }
     },
 
-    edit(data) {//编辑权限
+    edit(data) {//编辑组织
       this.curRow = data
       this.isShowEditDialog = true
     },
@@ -94,7 +93,7 @@ export default {
     confirmUpdate(data) {
       if(this.canSubmit){
         this.canSubmit = false
-        this.apis.updateAuthority(data)
+        this.apis.updateOrganization(data)
           .then((res)=>{
             this.isShowEditDialog = false
             this.getTableData(this.current,this.display)
@@ -110,14 +109,14 @@ export default {
       }
     },
 
-    remove(data) {//删除权限
+    remove(data) {//删除组织
       this.curRow = data
       this.isShowDeletAlert = true
     },
     //确认删除
     confirmRemove() {
       this.isShowDeletAlert = false
-      this.apis.deleteAuthority(this.curRow.authId)
+      this.apis.deleteOrganization(this.curRow.organizationId)
         .then((res) => {
           this.$store.dispatch('showToast',"删除成功")
           this.getTableData(this.current, this.display)
@@ -137,7 +136,7 @@ export default {
 
     //获取列表数据
     getTableData(pageNum = 1, pageSize = 10) {
-      this.apis.getAuthorityList(pageNum, pageSize)
+      this.apis.getOrganizationList(pageNum, pageSize)
         .then((data) => {
           if(data.data.total_number==0){
             this.$store.commit('show_global_alert',"没有数据")
@@ -159,11 +158,11 @@ export default {
   },
   mounted() {
     this.getTableData()
-    this.apis.getSystemList().then((data)=>{
-      this.systemList=data.data.list
+    this.apis.getPlatformList().then((data)=>{
+      this.platformList=data.data.list
     })
-    this.apis.getAuthorityList().then((data)=>{
-      this.authList=data.data.list
+    this.apis.getOrganizationList().then((data)=>{
+      this.organizationList=data.data.list
     })    
   }
 }
