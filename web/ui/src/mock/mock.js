@@ -64,17 +64,17 @@ import Mock from 'mockjs';
                     },
                     {
                         "auth_f_id": "1",
-                        "auth_name": "账号管理",
+                        "auth_name": "用户管理",
                         "auth_level": 1,
                         "auth_f_name": "授权管理",
                         "auth_id": "12",
-                        "url": "/accountMng"
+                        "url": "/userMng"
                     }            
                 ]
             },
             {
                 "auth_f_id": "",
-                "auth_name": "配置管理",
+                "auth_name": "系统配置",
                 "auth_level": 0,
                 "auth_f_name": "",
                 "auth_id": "2",
@@ -315,6 +315,95 @@ const group_delete = Mock.mock(
   }
 )
 
+const group_update_auth = Mock.mock(
+  '/api/group/update_auth','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改组权限",
+        "code": 0
+    }
+  }
+)
+
+const group_auth_list = Mock.mock(
+ '/api/group/auth_list','post', (req, res) => {
+    return  {
+        "msg": "测试文字,获取组所有权限列表",
+        "code": 0,
+        "data": {
+            "list":[
+            {
+                "auth_f_id": "",
+                "auth_name": "授权管理",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "1",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "系统管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "6",
+                        "url": "/systemMng"
+                    },
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "权限管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "7",
+                        "url": "/authorityMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "平台管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "8",
+                        "url": "/platformMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "组管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "9",
+                        "url": "/groupMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "角色管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "10",
+                        "url": "/roleMng"
+                    }          
+                ]
+            },
+            {
+                "auth_f_id": "",
+                "auth_name": "系统配置",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "2",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "2",
+                        "auth_name": "修改密码",
+                        "auth_level": 1,
+                        "auth_f_name": "配置管理",
+                        "auth_id": "20",
+                        "url": "/changePassword"
+                    }            
+                ]
+            }
+        ]
+        }
+    }
+})
+
 const role_list = Mock.mock(
   '/api/role/list','post', (req, res) => {
     return  {
@@ -368,6 +457,95 @@ const role_delete = Mock.mock(
     }
   }
 )
+
+const role_update_auth = Mock.mock(
+  '/api/role/update_auth','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改角色权限",
+        "code": 0
+    }
+  }
+)
+
+ const role_auth_list = Mock.mock(
+ '/api/role/auth_list','post', (req, res) => {
+    return  {
+        "msg": "测试文字,获取角色所有权限列表",
+        "code": 0,
+        "data": {
+            "list":[
+            {
+                "auth_f_id": "",
+                "auth_name": "授权管理",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "1",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "系统管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "6",
+                        "url": "/systemMng"
+                    },
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "权限管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "7",
+                        "url": "/authorityMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "平台管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "8",
+                        "url": "/platformMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "组管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "9",
+                        "url": "/groupMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "角色管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "10",
+                        "url": "/roleMng"
+                    }          
+                ]
+            },
+            {
+                "auth_f_id": "",
+                "auth_name": "系统配置",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "2",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "2",
+                        "auth_name": "修改密码",
+                        "auth_level": 1,
+                        "auth_f_name": "配置管理",
+                        "auth_id": "20",
+                        "url": "/changePassword"
+                    }            
+                ]
+            }
+        ]
+        }
+    }
+})
 
 const organization_list = Mock.mock(
   '/api/organization/list','post', (req, res) => {
@@ -426,9 +604,175 @@ const organization_delete = Mock.mock(
   }
 )
 
+const organization_update_auth = Mock.mock(
+  '/api/organization/update_auth','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改组织权限",
+        "code": 0
+    }
+  }
+)
+
+ const organization_auth_list = Mock.mock(
+ '/api/organization/auth_list','post', (req, res) => {
+    return  {
+        "msg": "测试文字,获取组织所有权限列表",
+        "code": 0,
+        "data": {
+            "list":[
+            {
+                "auth_f_id": "",
+                "auth_name": "授权管理",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "1",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "系统管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "6",
+                        "url": "/systemMng"
+                    },
+                    {
+                        "auth_f_id": "",
+                        "auth_name": "权限管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "7",
+                        "url": "/authorityMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "平台管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "8",
+                        "url": "/platformMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "组管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "9",
+                        "url": "/groupMng"
+                    },
+                    {
+                        "auth_f_id": "1",
+                        "auth_name": "角色管理",
+                        "auth_level": 1,
+                        "auth_f_name": "授权管理",
+                        "auth_id": "10",
+                        "url": "/roleMng"
+                    }          
+                ]
+            },
+            {
+                "auth_f_id": "",
+                "auth_name": "系统配置",
+                "auth_level": 0,
+                "auth_f_name": "",
+                "auth_id": "2",
+                "url": "",
+                "children":[
+                    {
+                        "auth_f_id": "2",
+                        "auth_name": "修改密码",
+                        "auth_level": 1,
+                        "auth_f_name": "配置管理",
+                        "auth_id": "20",
+                        "url": "/changePassword"
+                    }            
+                ]
+            }
+        ]
+        }
+    }
+})
+
+const user_list = Mock.mock(
+  '/api/user/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统，获取用户列表",
+        "code": 0,
+        "data": {
+            "page_size": 10,
+            "page_number": 1,
+            "total_number": 1,
+            "list":[
+                {
+                    "userId": "U386ADA9F63B54EECB2B49663043CC744",
+                    "userName": "test@system.com",
+                    "mobileNumber": "13800000000",
+                    "contackName": "张帅",
+                    "description": "备注信息",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }
+    }
+  }
+)
+
+const user_add = Mock.mock(
+  '/api/user/add','post', (req, res) => {
+    return  {
+        "msg": "测试系统,添加用户",
+        "code": 0
+    }
+  }
+)
+
+const user_update = Mock.mock(
+  '/api/user/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,修改用户",
+        "code": 0
+    }
+  }
+)
+
+const user_delete = Mock.mock(
+  '/api/user/delete','post', (req, res) => {
+    return  {
+        "msg": "测试系统,删除用户",
+        "code": 0
+    }
+  }
+)
+
+const user_query_by_name = Mock.mock(
+  '/api/user/query_by_name','post', (req, res) => {
+    return  {
+        "msg": "测试系统,查询用户",
+        "code": 0,
+        "data": {
+            "userName": "测试用户",
+            "userId": "U386ADA9F63B54EECB2B49663043CC744"
+        }
+    }
+  }
+)
+
+const user_update_password = Mock.mock(
+  '/api/user/update_password','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改用户密码",
+        "code": 0
+    }
+  }
+)
+
 export default { auth_list, system_list, system_add, system_update, system_delete, 
     platform_list, platform_add, platform_update, platform_delete, 
     authority_list, authority_add, authority_update, authority_delete,
     group_list, group_add, group_update, group_delete,
     role_list, role_add, role_update, role_delete,
-    organization_list, organization_add, organization_update, organization_delete }
+    organization_list, organization_add, organization_update, organization_delete,
+    user_list, user_add, user_update, user_delete, user_query_by_name }

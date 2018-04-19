@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "系统ID", "id": "systemId" },
+        // { "label": "系统ID", "id": "systemId" },
         { "label": "系统名称", "id": "systemName" },
         { "label": "描述", "id": "description" },
         { "label": "创建者", "id": "createUserName" },

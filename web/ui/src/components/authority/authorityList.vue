@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "权限ID", "id": "authId" },
+        // { "label": "权限ID", "id": "authId" },
         { "label": "权限名称", "id": "authName" },
         { "label": "父权限名称", "id": "authFName" },
         { "label": "路径", "id": "url" },

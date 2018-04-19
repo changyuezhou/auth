@@ -6,6 +6,7 @@
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
         <a href="javascript:;" class="removeBtn" @click="remove(props.data)">删除</a>
+        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.roleId, type:2, desc:'角色权限' } }">权限管理</router-link>
       </template>
     </v-table>
   
@@ -39,7 +40,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "角色ID", "id": "roleId" },
+        // { "label": "角色ID", "id": "roleId" },
         { "label": "角色名称", "id": "roleName" },
         { "label": "平台名称", "id": "platformName" },
         { "label": "描述", "id": "description" },

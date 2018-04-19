@@ -112,6 +112,16 @@ export default {
     deleteGroup(groupId) {
         return postFun('/group/delete', { groupId })
     },
+    //获取组权限列表
+    getGroupAuthorityList(groupId) {
+        let data = { groupId }
+        return postFun('/group/auth_list', data)
+    },
+    //更改组权限列表
+    updateGroupAuthority(groupId, auth_list) {
+        let data = { groupId, auth_list }
+        return postFun('/group/update_auth', data)
+    },       
     /* =============================================================组管理-end======================================================== */
 
 /* =============================================================角色管理-start======================================================== */
@@ -132,6 +142,16 @@ export default {
     deleteRole(roleId) {
         return postFun('/role/delete', { roleId })
     },
+    //获取角色权限列表
+    getRoleAuthorityList(roleId) {
+        let data = { roleId }
+        return postFun('/role/auth_list', data)
+    },
+    //更改角色权限列表
+    updateRoleAuthority(roleId, auth_list) {
+        let data = { roleId, auth_list }
+        return postFun('/role/update_auth', data)
+    },        
     /* =============================================================角色管理-end======================================================== */
 
     /* =============================================================组织管理-start======================================================== */
@@ -151,8 +171,48 @@ export default {
     //删除组织
     deleteOrganization(organizationId) {
         return postFun('/organization/delete', { organizationId })
-    }
-    /* =============================================================角色管理-end======================================================== */                  
+    },
+    //获取组织权限列表
+    getOrganizationAuthorityList(organizationId) {
+        let data = { organizationId }
+        return postFun('/organization/auth_list', data)
+    },
+    //更改组织权限列表
+    updateOrganizationAuthority(organizationId, auth_list) {
+        let data = { organizationId, auth_list }
+        return postFun('/organization/update_auth', data)
+    },       
+    /* =============================================================组织管理-end======================================================== */
+
+/* =============================================================用户管理-start======================================================== */
+    //获取用户列表
+    getUserList(page_number = 1, page_size = 10) {
+        let data = { page_number, page_size }
+        return postFun('/user/list', data)
+    },
+    //添加用户
+    addUser(data) {
+        return postFun('/user/add', data)
+    },
+    //修改用户
+    updateUser(data) {
+        return postFun('/user/update', data)
+    },
+    //删除用户
+    deleteUser(userId) {
+        return postFun('/user/delete', { userId })
+    },
+    //删除用户
+    getUserByName(userName) {
+        return postFun('/user/query_by_name', { userName })
+    },
+    //更改用户密码
+    updatePassword(userId, oldPwd, newPwd) {
+        let data = { userId, oldPwd, newPwd }
+        return postFun('/user/update_password', data)
+    }    
+    /* =============================================================用户管理-end======================================================== */
+
 }
 
 

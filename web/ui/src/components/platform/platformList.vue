@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "平台ID", "id": "platformId" },
+        // { "label": "平台ID", "id": "platformId" },
         { "label": "平台名称", "id": "platformName" },
         { "label": "密钥", "id": "secretKey" },
         { "label": "域名", "id": "platformDomain" },

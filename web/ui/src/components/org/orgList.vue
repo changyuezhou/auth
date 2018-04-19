@@ -6,6 +6,7 @@
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
         <a href="javascript:;" class="removeBtn" @click="remove(props.data)">删除</a>
+        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.organizationId, type:3, desc:'组织权限' } }">权限管理</router-link>
       </template>
     </v-table>
   
@@ -40,7 +41,7 @@ export default {
   data() {
     return {
       tableColumns: [
-        { "label": "组织ID", "id": "organizationId" },
+        // { "label": "组织ID", "id": "organizationId" },
         { "label": "组织名称", "id": "organizationName" },
         { "label": "父组织名称", "id": "organizationFName" },
         { "label": "平台名称", "id": "platformName" },

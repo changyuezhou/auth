@@ -6,6 +6,9 @@ import AuthorityMng from '@/components/authority/authorityList'
 import GroupMng from '@/components/group/groupList'
 import RoleMng from '@/components/role/roleList'
 import OrgMng from '@/components/org/orgList'
+import UserMng from '@/components/user/userList'
+import GrantMng from '@/components/grant/grant'
+import ChangePassword from '@/components/user/updatePwd'
 
 Vue.use(Router)
 
@@ -43,6 +46,21 @@ export default new Router({
       path: '/orgMng',
       name: 'orgMng',
       component: OrgMng
-    }     
+    },
+    {
+      path: '/userMng',
+      name: 'userMng',
+      component: UserMng
+    },
+    {
+      path: '/grantMng',
+      name: 'grantMng',
+      component: GrantMng
+    },
+    {
+      path: '/changePassword',
+      name: 'changePassword',
+      component: ChangePassword
+    }      
   ]
 })
