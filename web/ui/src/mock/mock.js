@@ -769,6 +769,102 @@ const user_update_password = Mock.mock(
   }
 )
 
+const user_group = Mock.mock(
+  '/api/user_group/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统,用户组",
+        "code": 0,
+        "data": {
+            "list":[
+                {
+                    "userId": "U386ADA9F63B54EECB2B49663043CC744",
+                    "userName": "test@system.com",
+                    "groupId": "G386ADA9F63B54EECB2B49663043CC744",
+                    "groupName": "默认组",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }        
+    }
+  }
+)
+
+const user_role = Mock.mock(
+  '/api/user_role/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统,用户角色",
+        "code": 0,
+        "data": {
+            "list":[
+                {
+                    "userId": "U386ADA9F63B54EECB2B49663043CC744",
+                    "userName": "test@system.com",
+                    "roleId": "R000000000000000000000001",
+                    "roleName": "管理员",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }        
+    }
+  }
+)
+
+const user_organization = Mock.mock(
+  '/api/user_organization/list','post', (req, res) => {
+    return  {
+        "msg": "测试系统,用户组织",
+        "code": 0,
+        "data": {
+            "list":[
+                {
+                    "userId": "U386ADA9F63B54EECB2B49663043CC744",
+                    "userName": "test@system.com",
+                    "organizationId": "O000000000000000000000001",
+                    "organizationName": "总裁办",
+                    "createUserId": "U001",
+                    "createUserName": "管理员",
+                    "updateTime": 1569889900,
+                    "createTime": 1569889900
+                }
+            ]
+        }        
+    }
+  }
+)
+
+const update_user_group = Mock.mock(
+  '/api/user_group/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改用户组",
+        "code": 0
+    }
+  }
+)
+
+const update_user_role = Mock.mock(
+  '/api/user_role/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改用户角色",
+        "code": 0
+    }
+  }
+)
+
+const update_user_organization = Mock.mock(
+  '/api/user_organization/update','post', (req, res) => {
+    return  {
+        "msg": "测试系统,更改用户组织",
+        "code": 0
+    }
+  }
+)
+
 export default { auth_list, system_list, system_add, system_update, system_delete, 
     platform_list, platform_add, platform_update, platform_delete, 
     authority_list, authority_add, authority_update, authority_delete,

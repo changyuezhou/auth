@@ -210,7 +210,31 @@ export default {
     updatePassword(userId, oldPwd, newPwd) {
         let data = { userId, oldPwd, newPwd }
         return postFun('/user/update_password', data)
-    }    
+    },
+    //更改用户角色
+    updateUserRole(userId, roleIds) {
+        let data = { userId, roleIds }
+        return postFun('/user_role/update', data)
+    },
+    //更改用户组
+    updateUserGroup(userId, groupIds) {
+        let data = { userId, groupIds }
+        return postFun('/user_group/update', data)
+    },
+    //更改用户组织
+    updateUserOrganization(userId, organizationIds) {
+        let data = { userId, organizationIds }
+        return postFun('/user_organization/update', data)
+    },
+    getUserGroup(userId) {
+        return postFun('/user_group/list', { userId })
+    },
+    getUserRole(userId) {
+        return postFun('/user_role/list', { userId })
+    },
+    getUserOrganization(userId) {
+        return postFun('/user_organization/list', { userId })
+    }      
     /* =============================================================用户管理-end======================================================== */
 
 }

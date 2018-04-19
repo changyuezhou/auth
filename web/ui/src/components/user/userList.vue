@@ -6,6 +6,9 @@
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
         <a href="javascript:;" class="removeBtn" @click="remove(props.data)">删除</a>
+        <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:1, desc:'组管理' } }">组</router-link>
+        <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:2, desc:'角色管理' } }">角色</router-link>
+        <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:3, desc:'组织管理' } }">组织</router-link>
       </template>
     </v-table>
   

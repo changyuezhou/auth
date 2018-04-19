@@ -7,6 +7,7 @@ import GroupMng from '@/components/group/groupList'
 import RoleMng from '@/components/role/roleList'
 import OrgMng from '@/components/org/orgList'
 import UserMng from '@/components/user/userList'
+import UserGrantMng from '@/components/user/userGrant'
 import GrantMng from '@/components/grant/grant'
 import ChangePassword from '@/components/user/updatePwd'
 
@@ -61,6 +62,11 @@ export default new Router({
       path: '/changePassword',
       name: 'changePassword',
       component: ChangePassword
-    }      
+    },
+    {
+      path: '/userGrantMng',
+      name: 'userGrantMng',
+      component: UserGrantMng
+    }     
   ]
 })
