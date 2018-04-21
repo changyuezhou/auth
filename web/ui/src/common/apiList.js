@@ -6,7 +6,7 @@ import store from '@/store/index.js'
 Vue.use(VueAxios, axios)
 
 //axios配置
-axios.defaults.baseURL = "/api"
+axios.defaults.baseURL = "http://192.168.56.101:8081/api"
     //axios响应拦截器 
 axios.interceptors.response.use((res) => {
     //如果返回302重定向
