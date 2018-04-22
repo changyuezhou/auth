@@ -15,6 +15,8 @@ import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.Cookie;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
 import java.util.concurrent.TimeUnit;
 
 public class Auth {
@@ -24,6 +26,7 @@ public class Auth {
     private static String accessTokenName = "access_token";
     private static String authHost = "127.0.0.1";
     private static String authPort = "8081";
+    private static String signURL = "http://192.168.56.101:8081/sign";
     private static Integer MAX_RECORDS = 1000;
     private static Integer EXPIRED_TIME = 600;  // seconds
 
@@ -86,33 +89,53 @@ public class Auth {
     public static UserInfo getUserInfo(HttpServletRequest request) {
         UserInfo userInfo = new UserInfo();
 
-        userInfo.setCode(302);
-        userInfo.setMsg("");
-
-        String openId = getCookieValue(openIdName, request.getCookies());
-        if (0 >= openId.length()) {
-            return userInfo;
-        }
-
-        String accessToken = getCookieValue(accessTokenName, request.getCookies());
-        if (0 >= accessToken.length()) {
-            return userInfo;
-        }
+        String redirectBack = "";
 
         try {
+            redirectBack = URLEncoder.encode(request.getLocalName() + ":" + Integer.toString(request.getLocalPort()), "UTF-8");
+            
+            String openId = getCookieValue(openIdName, request.getCookies());
+            String accessToken = getCookieValue(accessTokenName, request.getCookies());
+
             User user = cache.get(openId + "_" + accessToken);
             userInfo.setCode(0);
             userInfo.setMsg("");
             userInfo.setData(user);
             return userInfo;
         } catch (Exception e) {
-            e.printStackTrace();
+            String authToken = getAuthToken();
+            String redirectURL = signURL + "?auth_token=" + authToken + "&redirect_back=" + redirectBack;
+            userInfo.setCode(302);
+            userInfo.setMsg(redirectURL);
         }
 
         return userInfo;
     }
 
-    private static String getCookieValue(String itemName, Cookie[] cookies) {
+    private static String getAuthToken() {
+        String random = Integer.toString(new Long(System.currentTimeMillis()).intValue());
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+
+            String password = byteArrayToHexString(md5.digest((secretKey + random).getBytes("utf-8")));
+
+            String response = PostRequest("/api/auth/apply_auth_token", "{\"platformId\" : \"" + platformId + "\",\"random\":\"" + random + "\", \"password\":\"" + password + "\"}");
+            if (0 > response.length()) {
+                return "";
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            ApplyAuthTokenInfo authTokenResponse = mapper.readValue(response, ApplyAuthTokenInfo.class);
+
+            return authTokenResponse.getData().getAuthToken();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    private static String getCookieValue(String itemName, Cookie[] cookies) throws Exception {
         for (int i = 0; i < cookies.length; ++i) {
             Cookie item = cookies[i];
 
@@ -121,7 +144,7 @@ public class Auth {
             }
         }
 
-        return "";
+        throw new CustomizeException();
     }
 
     private static User getUserInfoByToken(String key) {
@@ -171,5 +194,23 @@ public class Auth {
         }
 
         return "";
+    }
+
+    private static String byteArrayToHexString(byte[] b) {
+        StringBuffer resultSb = new StringBuffer();
+        for (int i = 0; i < b.length; i++) {
+            resultSb.append(byteToHexString(b[i]));
+        }
+        return resultSb.toString();
+    }
+
+    private static String byteToHexString(byte b) {
+        final String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+
+        int n = b;
+        if (n < 0) n = 256 + n;
+        int d1 = n / 16;
+        int d2 = n % 16;
+        return hexDigits[d1] + hexDigits[d2];
     }
 }

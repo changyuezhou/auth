@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-//import mockdata from "@/mock/mock"
+import mockdata from "@/mock/mock"
 
 import store from '@/store' //vuex
 Vue.use(store)

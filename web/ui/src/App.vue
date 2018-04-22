@@ -19,6 +19,7 @@
     <v-toast :isShow="$store.state.global_toast.show" :text="$store.state.global_toast.text"></v-toast>
     <!-- loading -->
     <!-- loading></loading -->
+    <div id="sign"></div>
   </div>
 </template>
 
