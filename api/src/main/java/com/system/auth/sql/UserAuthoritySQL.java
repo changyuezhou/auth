@@ -49,6 +49,8 @@ public class UserAuthoritySQL {
 
             WHERE("a.user_id = c.user_id");
             WHERE("a.create_user_id = b.user_id");
+
+            GROUP_BY("user_id");
         }}.toString();
     }
 }

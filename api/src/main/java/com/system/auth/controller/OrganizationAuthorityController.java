@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "/organization_authority")
+@RequestMapping(value = "/api/organization_authority")
 public class OrganizationAuthorityController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

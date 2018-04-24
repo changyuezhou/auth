@@ -3,12 +3,16 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
+import com.system.auth.bean.ResponseMessage;
 import com.system.auth.dao.UserAuthorityMapper;
 import com.system.auth.model.ext.UserAuthorityView;
 import com.system.auth.model.request.UserAuthorityListCondition;
+import com.system.auth.model.response.AuthorityAddResponse;
 import com.system.auth.util.MybatisUtil;
 import com.system.auth.util.SystemLogging;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "/user_authority")
+@RequestMapping(value = "/api/user_authority")
 
 public class UserAuthorityController {
     @Autowired
@@ -49,6 +53,15 @@ public class UserAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<UserAuthorityView> result = new QueryListMessage<UserAuthorityView>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
+        condition.setUserId(user_info.getData().getUserId());
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, "", SystemLogging.getOperationStart());
 
@@ -65,4 +78,37 @@ public class UserAuthorityController {
         return result;
     }
 
+    @ApiOperation(value="查询用户权限列表", notes="根据条件查询用户权限列表信息")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/platform_authority", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public QueryListMessage<UserAuthorityView> platform_authority(@Validated @RequestBody UserAuthorityListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
+        if (check.hasErrors()) {
+            throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        if (condition.getPlatformId() == null) {
+            throw new OperationException(OperationException.getUserInputException(), "platform id must not null");
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, "", SystemLogging.getOperationStart());
+
+        PageHelper.startPage(condition.getPageNum(), condition.getPageSize());
+        List<UserAuthorityView> user_auth_list = userAuthorityGroupMapper.selectBySelective(condition);
+        PageInfo<UserAuthorityView> user_auth_list_info = new PageInfo<UserAuthorityView>(user_auth_list);
+        QueryListMessage<UserAuthorityView> result = new QueryListMessage<UserAuthorityView>(0, "", user_auth_list);
+        result.setPageNum(condition.getPageNum());
+        result.setPageSize(condition.getPageSize());
+        result.setTotalNum(user_auth_list_info.getTotal());
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());
+
+        return result;
+    }
 }

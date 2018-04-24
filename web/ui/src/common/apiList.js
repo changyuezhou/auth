@@ -11,7 +11,7 @@ axios.defaults.baseURL = "/api"
 axios.interceptors.response.use((res) => {
     //如果返回302重定向
     if (res.data.code == 302) {
-        location.href = res.data.redirect_url
+        location.href = res.data.msg
         return
     }
     //如果范围状态是unauthorized 将返回信息设置为未授权
@@ -29,7 +29,10 @@ axios.interceptors.response.use((res) => {
 export default {
     /* =============================================================获取左侧菜单-start======================================================== */
     getLeftMenuList(){
-        return postFun("/user/auth_list")
+        let pageNum = 1
+        let pageSize = 1000
+        let data = { pageNum, pageSize }
+        return postFun("/user_authority/list", data)
     },
     /* =============================================================获取左侧菜单-end======================================================== */
     

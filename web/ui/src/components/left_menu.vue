@@ -19,7 +19,8 @@ export default {
     data() {
         return {
             leftMenuList:[],
-            currentExpendMenu:0
+            currentExpendMenu:0,
+            isShow: false
         }
     },
     methods: {
@@ -43,12 +44,12 @@ export default {
                   return
                 }
 
-                if (null == data.data || null == data.data.list) {
+                if (null == data.data) {
                   this.$store.commit('show_global_alert',("获取菜单失败：data or list字段为空"))
 
                   return
                 }
-                this.leftMenuList = data.data.list
+                this.leftMenuList = data.data
                 this.currentExpendMenu = -1
             })
             .catch((errMsg)=>{
@@ -58,7 +59,10 @@ export default {
 
     },
     created(){
-        this.getLeftMenuList()
+        this.isShow=this.utils.getUrlParam('isShow',false)
+        if (!this.isShow) {
+            this.getLeftMenuList()
+        }
     }
 }
 </script>

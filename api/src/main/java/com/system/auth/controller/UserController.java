@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/api/user")
 public class UserController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

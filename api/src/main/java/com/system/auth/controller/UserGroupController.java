@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "/user_group")
+@RequestMapping(value = "/api/user_group")
 public class UserGroupController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

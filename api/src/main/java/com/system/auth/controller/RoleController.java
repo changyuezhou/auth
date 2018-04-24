@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/role")
+@RequestMapping(value = "/api/role")
 public class RoleController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

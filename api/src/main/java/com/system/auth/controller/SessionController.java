@@ -1,10 +1,7 @@
 package com.system.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.system.auth.bean.OperationException;
-import com.system.auth.bean.QueryListMessage;
-import com.system.auth.bean.QueryListNoPageMessage;
-import com.system.auth.bean.ResponseMessage;
+import com.system.auth.bean.*;
 import com.system.auth.dao.PlatformMapper;
 import com.system.auth.dao.SessionMapper;
 import com.system.auth.dao.UserAuthorityMapper;
@@ -33,14 +30,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/auth")
+@RequestMapping(value = "/api/auth")
 
 public class SessionController {
     @Autowired
@@ -53,6 +53,14 @@ public class SessionController {
     @Value("${session.refresh_token.expire: 84600}")
     private Integer refreshTokenExpire;
 
+    /*
+    @Value("${session.auth_service.platform_id: 'P386ADA9F63B54EECB2B49663043CC888'}")
+    private String authPlatformId;
+
+    @Value("${session.auth_service.secret_key: '04c252af8382129078a19566b8bab5ea'}")
+    private String authSecretKey;
+    */
+
     @ApiOperation(value = "平台申请AuthToken", notes = "根据ApplyAuthToken对象申请Token")
     @ApiImplicitParam(name = "applyAuthToken", value = "平台信息", required = true, dataType = "ApplyAuthToken")
     @ApiResponses(value = {
@@ -63,7 +71,7 @@ public class SessionController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/apply_auth_token", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseMessage<ApplyAuthTokenResponse> add(@Validated @RequestBody ApplyAuthToken applyAuthToken, BindingResult check, HttpServletRequest request) throws Exception {
+    public ResponseMessage<ApplyAuthTokenResponse> apply_auth_token(@Validated @RequestBody ApplyAuthToken applyAuthToken, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -114,7 +122,7 @@ public class SessionController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/authorization_code", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseMessage<AuthorizationCodeResponse> add(@Validated @RequestBody AuthorizationCode auth_code, BindingResult check, HttpServletRequest request) throws Exception {
+    public ResponseMessage<AuthorizationCodeResponse> authorization_code(@Validated @RequestBody AuthorizationCode auth_code, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -136,7 +144,7 @@ public class SessionController {
         }
 
         MessageDigest md5 = MessageDigest.getInstance("MD5");
-        String password = byteArrayToHexString(md5.digest((auth_code.getAuthToken() + userView.getPassword()).getBytes("utf-8")));
+        String password = byteArrayToHexString(md5.digest((userView.getPassword() + auth_code.getAuthToken()).getBytes("utf-8")));
         if (!password.equalsIgnoreCase(auth_code.getPassword())) {
             throw new OperationException(OperationException.getUserInputException(), "user name:" + auth_code.getUserName() + " password is not correct");
         }
@@ -178,7 +186,7 @@ public class SessionController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/access_token", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseMessage<AccessTokenResponse> add(@Validated @RequestBody AccessTokenRequest access_token_request, BindingResult check, HttpServletRequest request) throws Exception {
+    public ResponseMessage<AccessTokenResponse> access_token(@Validated @RequestBody AccessTokenRequest access_token_request, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -232,6 +240,105 @@ public class SessionController {
         return result;
     }
 
+    @ApiOperation(value = "获取AccessToken", notes = "根据AccessTokenRequest对象获取AccessToken")
+    @ApiImplicitParam(name = "access_token_request", value = "认证信息", required = true, dataType = "AccessTokenRequest")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 301, message = "请求重定向"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/access_token", method = RequestMethod.GET)
+    public RedirectView get_access_token(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        SystemLogging.Logging(SystemLogging.getINFO(), request.getRequestURI(), request, "", SystemLogging.getOperationStart());
+
+        String openId = request.getParameter("openId");
+        String code = request.getParameter("code");
+        String platformId = request.getParameter("platformId");
+        String oriURL = request.getParameter("oriURL");
+
+        if (null == openId || null == code || null == platformId || null == oriURL) {
+            throw new OperationException(OperationException.getUserInputException(), "openId or code or platformId or origin url is invalid");
+        }
+
+        AccessTokenRequest access_token_request = new AccessTokenRequest();
+        access_token_request.setOpenId(openId);
+        access_token_request.setCode(code);
+        access_token_request.setPlatformId(platformId);
+
+        String openIdName = request.getParameter("openIdName");
+        if (null == openIdName) {
+            openIdName = "open_id";
+        }
+        String accessTokenName = request.getParameter("accessTokenName");
+        if (null == accessTokenName) {
+            accessTokenName = "access_token";
+        }
+        String userNameAlias = request.getParameter("userNameAlias");
+        if (null == userNameAlias) {
+            userNameAlias = "user_name";
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(access_token_request), request, "", SystemLogging.getOperationStart());
+
+        if (null == sessionMapper.ValidCodeOpenId(access_token_request)) {
+            throw new OperationException(OperationException.getUserInputException(), "open id:" + access_token_request.getOpenId() + " code:" + access_token_request.getCode() + " is invalid");
+        }
+
+        UserView user_view = sessionMapper.selectUserByOpenIdPlatformId(access_token_request);
+        if (null == user_view) {
+            throw new OperationException(OperationException.getUserInputException(), "open id:" + access_token_request.getOpenId() + " code:" + access_token_request.getCode() + " has no user information");
+        }
+
+        Session userSession = new Session();
+        userSession.setPlatformId(access_token_request.getPlatformId());
+        userSession.setOpenId(access_token_request.getOpenId());
+        userSession.setCode(access_token_request.getCode());
+
+        String access_token = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+        userSession.setAccessToken(access_token);
+        userSession.setAccessTokenCreateTime(new Long((java.lang.System.currentTimeMillis() / 1000)).intValue());
+        Integer access_token_expire = new Long(java.lang.System.currentTimeMillis() / 1000).intValue() + tokenExpire;
+        userSession.setAccessTokenExpire(access_token_expire);
+
+        String refresh_token = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+        userSession.setRefreshToken(refresh_token);
+        userSession.setRefreshTokenCreateTime(new Long((java.lang.System.currentTimeMillis() / 1000)).intValue());
+        Integer refresh_token_expire = new Long(java.lang.System.currentTimeMillis() / 1000).intValue() + refreshTokenExpire;
+        userSession.setRefreshTokenExpire(refresh_token_expire);
+
+        sessionMapper.updateAccessTokenRefreshTokenByCode(userSession);
+
+        sessionMapper.UsedCode(access_token_request.getCode());
+
+        Cookie open_id_cookie = new Cookie(openIdName, access_token_request.getOpenId());
+        open_id_cookie.setMaxAge(tokenExpire);  // (s)
+        open_id_cookie.setPath("/");
+        open_id_cookie.setDomain(request.getRemoteHost());
+        response.addCookie(open_id_cookie);
+
+        Cookie access_token_cookie = new Cookie(accessTokenName, access_token);
+        access_token_cookie.setMaxAge(tokenExpire);  // (s)
+        access_token_cookie.setPath("/");
+        access_token_cookie.setDomain(request.getRemoteHost());
+        response.addCookie(access_token_cookie);
+
+        Cookie user_name_cookie = new Cookie(userNameAlias, user_view.getUserName());
+        user_name_cookie.setMaxAge(tokenExpire);  // (s)
+        user_name_cookie.setPath("/");
+        user_name_cookie.setDomain(request.getRemoteHost());
+        response.addCookie(user_name_cookie);
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(access_token_request), request, oriURL, SystemLogging.getSUCCESS());
+
+        return new RedirectView(oriURL);
+
+        //response.setHeader("Location", oriURL);
+    }
+
     @ApiOperation(value = "RefreshTokenRequest", notes = "根据RefreshTokenRequest对象获取RefreshToken")
     @ApiImplicitParam(name = "refresh_token_request", value = "认证信息", required = true, dataType = "RefreshTokenRequest")
     @ApiResponses(value = {
@@ -242,7 +349,7 @@ public class SessionController {
             @ApiResponse(code = 500, message = "服务器不能完成请求")}
     )
     @RequestMapping(value = "/refresh_token", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseMessage<RefreshTokenResponse> add(@Validated @RequestBody RefreshTokenRequest refresh_token_request, BindingResult check, HttpServletRequest request) throws Exception {
+    public ResponseMessage<RefreshTokenResponse> refresh_token(@Validated @RequestBody RefreshTokenRequest refresh_token_request, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
@@ -286,6 +393,68 @@ public class SessionController {
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(refresh_token_request), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());
 
         return result;
+    }
+
+    @ApiOperation(value = "申请Code", notes = "根据AuthToken对象申请Code")
+    @ApiImplicitParam(name = "auth_code", value = "认证信息", required = true, dataType = "AuthorizationCode")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/sign_in", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public OperationMessage sign_in(@Validated @RequestBody AuthorizationCode auth_code, BindingResult check, HttpServletRequest request) throws Exception {
+        if (check.hasErrors()) {
+            throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(auth_code), request, "", SystemLogging.getOperationStart());
+
+        if (null == sessionMapper.ValidAuthToken(auth_code)) {
+            throw new OperationException(OperationException.getUserInputException(), "auth token is invalid");
+        }
+
+        UserAuthorityMapper userAuthorityMapper = session.getMapper(UserAuthorityMapper.class);
+        UserAuthorityListCondition condition = new UserAuthorityListCondition();
+        condition.setUserName(auth_code.getUserName());
+        condition.setPlatformId(auth_code.getPlatformId());
+        UserViewPassword userView = userAuthorityMapper.selectUserByPlatformIdUserName(condition);
+        if (null == userView) {
+            throw new OperationException(OperationException.getUserInputException(), "user name:" + auth_code.getUserName() + " is not exists in platform id:" + auth_code.getPlatformId());
+        }
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        String password = byteArrayToHexString(md5.digest((userView.getPassword() + auth_code.getAuthToken()).getBytes("utf-8")));
+        if (!password.equalsIgnoreCase(auth_code.getPassword())) {
+            throw new OperationException(OperationException.getUserInputException(), "user name:" + auth_code.getUserName() + " password is not correct");
+        }
+
+        String openId = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+        String code = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
+
+        Session userSession = new Session();
+        userSession.setAuthToken(auth_code.getAuthToken());
+        userSession.setOpenId(openId);
+        userSession.setUserId(userView.getUserId());
+        userSession.setCode(code);
+        userSession.setCodeCreateTime(new Long((java.lang.System.currentTimeMillis() / 1000)).intValue());
+        userSession.setCodeExpire(new Long(java.lang.System.currentTimeMillis() / 1000).intValue() + tokenExpire);
+
+        sessionMapper.updateCodeByAuthToken(userSession);
+
+        sessionMapper.UsedAuthToken(auth_code.getAuthToken());
+
+        OperationMessage response = new OperationMessage();
+        response.setCode(302);
+        String redirectBack = request.getParameter("redirectBack") + "&openId=" + openId + "&code=" + code + "&platformId=" + auth_code.getPlatformId();
+        response.setMsg(redirectBack);
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(auth_code), request, mapper.writeValueAsString(response), SystemLogging.getSUCCESS());
+
+        return response;
     }
 
     @ApiOperation(value = "获取用户信息", notes = "根据UserSessionQuery对象获取用户信息")

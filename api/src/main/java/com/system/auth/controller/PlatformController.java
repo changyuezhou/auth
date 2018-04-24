@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/platform")
+@RequestMapping(value = "/api/platform")
 public class PlatformController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

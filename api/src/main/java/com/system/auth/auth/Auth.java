@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -24,9 +24,11 @@ public class Auth {
     private static String secretKey = "";
     private static String openIdName = "open_id";
     private static String accessTokenName = "access_token";
+    private static String userNameAlias = "user_name";
     private static String authHost = "127.0.0.1";
     private static String authPort = "8081";
-    private static String signURL = "http://192.168.56.101:8081/sign";
+    private static String signPath = "sign.html";
+    private static String getAccessTokenPath = "/api/auth/access_token";
     private static Integer MAX_RECORDS = 1000;
     private static Integer EXPIRED_TIME = 600;  // seconds
 
@@ -57,43 +59,55 @@ public class Auth {
         this.accessTokenName = accessTokenName;
     }
 
-    public void initialAuth(String platformId, String secretKey, String authHost, String authPort, Integer MAX_RECORDS, Integer EXPIRED_TIME, String openIdName, String accessTokenName) {
-        this.platformId = platformId;
-        this.secretKey = secretKey;
+    // #################################################################################################################
 
-        if (0 < authHost.length()) {
-            this.authHost = authPort;
+    public static void initialAuth(String platformIdParam, String secretKeyParam, String authHostParam, String authPortParam, String getAccessTokenPathParam, Integer MAX_RECORDS_PARAM, Integer EXPIRED_TIME_PARAM, String openIdNameParam, String accessTokenNameParam, String userNameAliasParam) {
+        platformId = platformIdParam;
+        secretKey = secretKeyParam;
+
+        if (0 < authHostParam.length()) {
+            authHost = authHostParam;
         }
 
-        if (0 < authPort.length()) {
-            this.authPort = authPort;
+        if (0 < authPortParam.length()) {
+            authPort = authPortParam;
         }
 
-        if (0 < MAX_RECORDS) {
-            this.MAX_RECORDS = MAX_RECORDS;
+        if (0 < getAccessTokenPathParam.length()) {
+            getAccessTokenPath = getAccessTokenPathParam;
         }
 
-        if (0 < EXPIRED_TIME) {
-            this.EXPIRED_TIME = EXPIRED_TIME;
+        if (0 < userNameAliasParam.length()) {
+            userNameAlias = userNameAliasParam;
         }
 
-        if (0 < openIdName.length()) {
-            this.openIdName = openIdName;
+        if (0 < MAX_RECORDS_PARAM) {
+            MAX_RECORDS = MAX_RECORDS_PARAM;
         }
 
-        if (0 < accessTokenName.length()) {
-            this.accessTokenName = accessTokenName;
+        if (0 < EXPIRED_TIME_PARAM) {
+            EXPIRED_TIME = EXPIRED_TIME_PARAM;
+        }
+
+        if (0 < openIdNameParam.length()) {
+            openIdName = openIdNameParam;
+        }
+
+        if (0 < accessTokenNameParam.length()) {
+            accessTokenName = accessTokenNameParam;
         }
     }
 
     public static UserInfo getUserInfo(HttpServletRequest request) {
         UserInfo userInfo = new UserInfo();
 
-        String redirectBack = "";
+        String redirectBack = "http://" + authHost + ":" + authPort + "/" + getAccessTokenPath + "?openIdName=" + openIdName + "&accessTokenName=" + accessTokenName + "&userNameAlias=" + userNameAlias;
+        String oriURL = request.getHeader("referer");
 
         try {
-            redirectBack = URLEncoder.encode(request.getLocalName() + ":" + Integer.toString(request.getLocalPort()), "UTF-8");
-            
+            redirectBack += "&oriURL=" + URLEncoder.encode(oriURL, "UTF-8");
+            redirectBack = URLEncoder.encode(redirectBack, "UTF-8");
+
             String openId = getCookieValue(openIdName, request.getCookies());
             String accessToken = getCookieValue(accessTokenName, request.getCookies());
 
@@ -103,14 +117,18 @@ public class Auth {
             userInfo.setData(user);
             return userInfo;
         } catch (Exception e) {
+            e.printStackTrace();
+
             String authToken = getAuthToken();
-            String redirectURL = signURL + "?auth_token=" + authToken + "&redirect_back=" + redirectBack;
+            String redirectURL = "http://" + authHost + ":" + authPort + "/" + signPath + "?isShow=true&authToken=" + authToken + "&platformId=" + platformId + "&redirectBack=" + redirectBack;
             userInfo.setCode(302);
             userInfo.setMsg(redirectURL);
         }
 
         return userInfo;
     }
+
+    // #################################################################################################################
 
     private static String getAuthToken() {
         String random = Integer.toString(new Long(System.currentTimeMillis()).intValue());
@@ -144,10 +162,12 @@ public class Auth {
             }
         }
 
+        System.out.print(" ########################## cookie:" + itemName + " not found .......");
+
         throw new CustomizeException();
     }
 
-    private static User getUserInfoByToken(String key) {
+    private static User getUserInfoByToken(String key) throws Exception {
         String[] keys = key.split("_");
         if (2 != keys.length) {
             return null;
@@ -160,10 +180,10 @@ public class Auth {
         return getUserInfoByOpenIdAccessToken(openId, accessToken);
     }
 
-    private static User getUserInfoByOpenIdAccessToken(String openId, String accessToken) {
+    private static User getUserInfoByOpenIdAccessToken(String openId, String accessToken) throws Exception {
         String response = PostRequest("/api/auth/user_info", "{\"platformId\" : \"" + platformId + "\",\"openId\":\"" + openId + "\", \"accessToken\":\"" + accessToken + "\"}");
         if (0 > response.length()) {
-            return null;
+            throw new CustomizeException();
         }
 
         try {
@@ -172,15 +192,13 @@ public class Auth {
 
             return userInfoResponse.getData();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
-
-        return null;
     }
 
     private static String PostRequest(String path, String data) {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost(authHost + ":" + authPort + "/" + path);
+        HttpPost post = new HttpPost("http://" + authHost + ":" + authPort + "/" + path);
         post.addHeader("content-type", "application/json");
 
         try {

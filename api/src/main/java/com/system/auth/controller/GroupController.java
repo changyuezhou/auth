@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/group")
+@RequestMapping(value = "/api/group")
 public class GroupController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

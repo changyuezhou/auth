@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "/group_authority")
+@RequestMapping(value = "/api/group_authority")
 
 public class GroupAuthorityController {
     @Autowired

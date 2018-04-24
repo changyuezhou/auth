@@ -14,7 +14,7 @@
                                     <p v-if="isWrong" class="warnTip">{{warnText}}</p>
                                 </transition>
                                 <form action="/login" method="post">
-                                    <input type="text" placeholder="请输入账号" autocomplete="off" v-model="user_name" name="username" @focus="onFocus" @blur="onBlur">
+                                    <input type="text" placeholder="请输入账号" autocomplete="off" v-model="userName" name="username" @focus="onFocus" @blur="onBlur">
                                     <input type="password" class="lastInput" placeholder="请输入密码" autocomplete="off" v-model="password" name="password" @focus="onFocus" @blur="onBlur">
                                     <label class="isAutoLog" :class="{'checked':isRmbUser}" @click="toggleIsAutoLog">
                                 <span>
@@ -44,12 +44,11 @@ export default {
             isShow: false,
             patten: /[\u4e00-\u9fa5]/,
             logoImg: require('../../assets/images/logo.png'),
-            user_name: "",
+            userName: "",
             password: "",
-            platform_id:"",
-            auth_token:"",
-            RedirectBack:"",
-            cbAddr:"",
+            platformId:"",
+            authToken:"",
+            redirectBack:"",
             isRmbUser: false,
             isWrong: false,
             warnText: "",
@@ -58,7 +57,7 @@ export default {
     },
     computed:{
         postUrl(){
-            return location.origin+'/interface/authorization_code?RedirectBack='+this.RedirectBack+"&cbAddr="+this.cbAddr
+            return location.origin+'/api/auth/sign_in?redirectBack='+this.redirectBack
         }
     },
     methods: {
@@ -66,9 +65,9 @@ export default {
             if(level === 1){
                 return this.utils.md5(psw)
             }else if(level === 2){
-                return this.utils.md5(psw+this.auth_token)
+                return this.utils.md5(psw+this.authToken)
             }else if(level === 3){
-                return this.utils.md5(this.utils.md5(psw)+this.auth_token)
+                return this.utils.md5(this.utils.md5(psw)+this.authToken)
             }
                   
         },
@@ -99,23 +98,23 @@ export default {
             }
             if (this.isRmbUser) {
                 this.utils.setCookie("rmbUser", "true", 7)
-                this.utils.setCookie("userName", this.user_name, 7)
+                this.utils.setCookie("userName", this.userName, 7)
                 this.utils.setCookie("password", cookiePsw, 7)
             } else {
                 this.utils.setCookie("rmbUser", "false", (-1))
-                this.utils.setCookie("userName", this.user_name, (-1))
+                this.utils.setCookie("userName", this.userName, (-1))
                 this.utils.setCookie("password", cookiePsw, (-1))
             }
             this.showLoading = true        
             this.axios.post(this.postUrl,{
-                "user_name":this.user_name,
-                "platform_id":this.platform_id,
+                "userName":this.userName,
+                "platformId":this.platformId,
                 "password":fetchPsw,
-                "auth_token":this.auth_token
+                "authToken":this.authToken
             }).then((res)=>{
                 this.showLoading = false
                 if(res.data.code==302){
-                    location.href = res.data.redirect_url
+                    location.href = res.data.msg
                 }else{
                     this.warnTipAnime(res.data.msg)
                 }
@@ -134,17 +133,17 @@ export default {
         isAutoLogin() {
             if (this.utils.getCookie("rmbUser") == "true") {
                 this.isRmbUser = true;
-                this.user_name = this.utils.getCookie("userName")
+                this.userName = this.utils.getCookie("userName")
                 this.password =  decodeURIComponent(this.utils.getCookie("password")) 
             }
         },
 
         checkForm() {
-            if (!this.user_name || !this.password) {
+            if (!this.userName || !this.password) {
                 this.warnTipAnime("用户名和密码不能为空")
                 return false
             }
-            if (this.patten.test(this.user_name) || this.patten.test(this.password)) {
+            if (this.patten.test(this.userName) || this.patten.test(this.password)) {
                 this.warnTipAnime("用户名和密码不能为中文字符")
                 return false
             }
@@ -171,10 +170,9 @@ export default {
     },
     created() {
         this.isAutoLogin()
-        this['platform_id']=this.utils.getUrlParam('platform_id')
-        this['auth_token']=this.utils.getUrlParam('auth_token')
-        this.RedirectBack =this.utils.getUrlParam('RedirectBack',false)
-        this.cbAddr =this.utils.getUrlParam('cbAddr',false)
+        this['platformId']=this.utils.getUrlParam('platformId')
+        this['authToken']=this.utils.getUrlParam('authToken')
+        this.redirectBack =this.utils.getUrlParam('redirectBack',false)
         this.isShow=this.utils.getUrlParam('isShow',false)
     }
 }

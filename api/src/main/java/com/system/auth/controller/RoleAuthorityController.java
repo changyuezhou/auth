@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "/role_authority")
+@RequestMapping(value = "/api/role_authority")
 public class RoleAuthorityController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();

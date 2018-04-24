@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -32,7 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/authority")
+@RequestMapping(value = "/api/authority")
 public class AuthorityController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();
@@ -51,6 +53,12 @@ public class AuthorityController {
     public ResponseMessage<AuthorityAddResponse> add(@Validated @RequestBody Authority auth, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<AuthorityAddResponse> result = new ResponseMessage<AuthorityAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -81,6 +89,7 @@ public class AuthorityController {
         auth.setAuthId(authId);
         auth.setCreateTime(java.lang.System.currentTimeMillis());
         auth.setUpdateTime(java.lang.System.currentTimeMillis());
+        auth.setCreateUserId(user_info.getData().getUserId());
         authorityMapper.insertSelective(auth);
 
         AuthorityAddResponse group_response = new AuthorityAddResponse(auth.getAuthId(), auth.getAuthName());

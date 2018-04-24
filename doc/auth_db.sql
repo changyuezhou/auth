@@ -66,7 +66,7 @@ CREATE TABLE `t_group_authority` (
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`group_id`, `auth_id`, `platform_id`)
+  PRIMARY KEY (`group_id`, `auth_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=2000;
 
 CREATE TABLE `t_role` (
@@ -87,13 +87,14 @@ CREATE TABLE `t_user_role` (
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`user_id`, `role_id`, `platform_id`)
+  PRIMARY KEY (`user_id`, `role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=1000;
 
 
 CREATE TABLE `t_authority` (
   `auth_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '权限ID',
   `auth_name`   varchar(512)      NOT NULL DEFAULT '' COMMENT '权限名称',
+  `url`   varchar(512)      NOT NULL DEFAULT '' COMMENT '访问路径',
   `auth_f_id`   varchar(128)      NOT NULL DEFAULT '' COMMENT '权限父ID',
   `system_id`     varchar(128)      NOT NULL DEFAULT '' COMMENT '系统ID',
   `auth_level`     int(11)      NOT NULL DEFAULT 0 COMMENT '权限层级',
@@ -112,7 +113,7 @@ CREATE TABLE `t_role_authority` (
   `create_user_id` varchar(128)      NOT NULL DEFAULT '' COMMENT '创建者ID',
   `update_time` bigint NOT NULL DEFAULT 0 COMMENT '更新时间',
   `create_time` bigint NOT NULL DEFAULT 0 COMMENT '创建时间',
-  PRIMARY KEY (`role_id`, `auth_id`, `platform_id`)
+  PRIMARY KEY (`role_id`, `auth_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 MAX_ROWS=400000 AVG_ROW_LENGTH=2000;
 
 CREATE TABLE `t_organization` (

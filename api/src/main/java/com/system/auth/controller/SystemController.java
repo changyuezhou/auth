@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/system")
+@RequestMapping(value = "/api/system")
 public class SystemController {
     @Autowired
     SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();
