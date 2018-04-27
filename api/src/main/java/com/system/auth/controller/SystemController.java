@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -55,6 +57,13 @@ public class SystemController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<SystemAddResponse> result = new ResponseMessage<SystemAddResponse>(302, user_info.getMsg(),  null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(system), request, "", SystemLogging.getOperationStart());
 
@@ -67,6 +76,7 @@ public class SystemController {
         system.setSystemId(systemId);
         system.setCreateTime(java.lang.System.currentTimeMillis());
         system.setUpdateTime(java.lang.System.currentTimeMillis());
+        system.setCreateUserId(user_info.getData().getUserId());
         systemMapper.insertSelective(system);
 
         SystemAddResponse user_response = new SystemAddResponse(system.getSystemId(), system.getSystemName());
@@ -89,6 +99,13 @@ public class SystemController {
     public OperationMessage update(@RequestBody System system, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(system), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == system.getSystemId()) {
             throw new OperationException(OperationException.getUserInputException(), "system id must not be null");
@@ -125,6 +142,13 @@ public class SystemController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(system), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == system.getSystemId()) {
             throw new OperationException(OperationException.getUserInputException(), "system id must not be null");
         }
@@ -149,6 +173,13 @@ public class SystemController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(systems), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == systems.getSystemIds()) {
             throw new OperationException(OperationException.getUserInputException(), "system id list must not be null");
         }
@@ -172,6 +203,13 @@ public class SystemController {
     public ResponseMessage<SystemView> query(@Validated @RequestBody SystemKey system, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<SystemView> result = new ResponseMessage<SystemView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -199,6 +237,13 @@ public class SystemController {
     public QueryListMessage<SystemView> list(@Validated @RequestBody SystemListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<SystemView> result = new QueryListMessage<SystemView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

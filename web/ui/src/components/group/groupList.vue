@@ -2,11 +2,18 @@
   <div class="container">
     <head-guild :positions='["授权管理","权限管理"]'></head-guild>
     <v-button @click="addGroup" class="addBtn" type="primery" text="+ 添加组"></v-button>
+       <label for="platformId" class="pull-left"><sup></sup>平台：</label>
+       <v-selection 
+            :vStyle="inputStyle"
+            :selections="selections"
+            :defaultValue="this.platformList.value"
+            @on-change="modalSelectionChange">
+        </v-selection>     
     <v-table :columns="tableColumns" :rows="tableRows">
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
         <a href="javascript:;" class="removeBtn" @click="remove(props.data)">删除</a>
-        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.groupId, type:1, desc:'组权限' } }">权限管理</router-link>
+        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.groupId, platformId:props.data.platformId, type:1, desc:'组权限' } }">权限管理</router-link>
       </template>
     </v-table>
   
@@ -61,10 +68,41 @@ export default {
       canSubmit: true,
     }
   },
+  computed:{
+      selections(){
+          let tmpArr=[{label:"=请选择=",value:""}]
+          this.platformList.forEach((v,i)=>{
+              tmpArr.push({label:v.platformName,value:v.platformId})
+          })
+          return tmpArr
+      }            
+  },   
   methods: {
     addGroup() {//添加组
       this.isShowAddDialog = true
     },
+    modalSelectionChange(data){
+        if(!data.value){
+            this.characterTip = false
+            this.getTableData()
+            return
+        }
+        this.characterTipText = data.label
+        this.characterTip = true
+
+        let pageNum = 1, pageSize = 10
+        let value = data.value
+        this.apis.getGroupByPlatformId(value, pageNum, pageSize)
+        .then((data) => {
+            this.tableRows = data.data.map((v, i) => {
+            v.number = i + 1
+            return v
+          })
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
+        })
+    },    
     //确认添加
     comfirmAdd(data) {
       if (this.canSubmit) {
@@ -136,17 +174,17 @@ export default {
     getTableData(pageNum = 1, pageSize = 10) {
       this.apis.getGroupList(pageNum, pageSize)
         .then((data) => {
-          if(data.data.total_number==0){
+          if(data.totalNum==0){
             this.$store.commit('show_global_alert',"没有数据")
             return
           }
-          this.tableRows = data.data.list.map((v, i) => {
+          this.tableRows = data.data.map((v, i) => {
             v.number = i + 1
             return v
           })
-          this.total = data.data.total_number
-          this.current = data.data.page_number
-          this.display = data.data.page_size
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
         })
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("错误： " + errMsg))
@@ -156,8 +194,8 @@ export default {
   },
   mounted() {
     this.getTableData()
-    this.apis.getPlatformList().then((data)=>{
-      this.platformList=data.data.list
+    this.apis.getPlatformList(1, 10000).then((data)=>{
+      this.platformList=data.data
     })
   }
 }

@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.*;
 import com.system.auth.model.request.UserBulk;
 import com.system.auth.model.request.UserKey;
@@ -46,6 +48,13 @@ public class UserController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<UserAddResponse> result = new ResponseMessage<UserAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
 
@@ -61,6 +70,7 @@ public class UserController {
         }
         user.setCreateTime(System.currentTimeMillis());
         user.setUpdateTime(System.currentTimeMillis());
+        user.setCreateUserId(user_info.getData().getUserId());
         userMapper.insertSelective(user);
 
         UserAddResponse user_response = new UserAddResponse(user.getUserId(), user.getUserName());
@@ -83,6 +93,13 @@ public class UserController {
     public OperationMessage update(@RequestBody User user, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == user.getUserId()) {
             throw new OperationException(OperationException.getUserInputException(), "user id must not be null");
@@ -122,6 +139,13 @@ public class UserController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == user.getUserId()) {
             throw new OperationException(OperationException.getUserInputException(), "user id must not be null");
         }
@@ -145,6 +169,13 @@ public class UserController {
     public OperationMessage delete(@RequestBody UserBulk users, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(users), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == users.getUserIds()) {
             throw new OperationException(OperationException.getUserInputException(), "user id list must not be null");
@@ -171,6 +202,13 @@ public class UserController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<UserView> result = new ResponseMessage<UserView>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
 
@@ -184,6 +222,41 @@ public class UserController {
         return new ResponseMessage<UserView>(0, "", result);
     }
 
+    @ApiOperation(value="查询用户", notes="根据用户名称查询用户详细信息")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/query_by_name", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public ResponseMessage<UserView> query_by_name(@RequestBody UserListCondition condition, HttpServletRequest request) throws Exception {
+        if (null == condition || null == condition.getUserName()) {
+            throw new OperationException(OperationException.getUserInputException(), "plz input user name ...");
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<UserView> result = new ResponseMessage<UserView>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, "", SystemLogging.getOperationStart());
+
+        UserView result = userMapper.selectByUserName(condition.getUserName());
+        if (null == result) {
+            throw new OperationException(OperationException.getRecordIsNotExists(), OperationException.getNoRecordsMsg());
+        }
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());
+
+        return new ResponseMessage<UserView>(0, "", result);
+    }
+
+
     @ApiOperation(value="查询用户列表", notes="根据条件查询用户列表信息")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求服务器已处理"),
@@ -196,6 +269,13 @@ public class UserController {
     public QueryListMessage<UserView> list(@Validated @RequestBody UserListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<UserView> result = new QueryListMessage<UserView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

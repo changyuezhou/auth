@@ -6,7 +6,6 @@ public class GroupListCondition {
     private String groupId;
     private String groupName;
 
-    @NotNull(message = "platform id can not be null")
     private String platformId;
 
     private String createUserName;

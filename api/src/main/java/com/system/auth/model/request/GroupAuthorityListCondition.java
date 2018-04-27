@@ -6,7 +6,6 @@ public class GroupAuthorityListCondition {
     private String groupId;
     private String groupName;
 
-    @NotNull(message = "platform id must not be null")
     private String platformId;
 
     private String authId;

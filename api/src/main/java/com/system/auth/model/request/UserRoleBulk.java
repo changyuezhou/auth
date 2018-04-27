@@ -7,6 +7,26 @@ public class UserRoleBulk {
     @NotNull(message = "role id must not be null")
     private String userId;
 
+    private Long updateTime;
+
+    private Long createTime;
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+
     private List<String> roleIds;
 
     public String getUserId() {

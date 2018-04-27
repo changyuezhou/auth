@@ -6,7 +6,6 @@ public class OrganizationAuthorityListCondition {
     private String organizationId;
     private String organizationName;
 
-    @NotNull(message = "platform id must not be null")
     private String platformId;
 
     private String authId;

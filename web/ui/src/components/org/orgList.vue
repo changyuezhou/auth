@@ -2,11 +2,18 @@
   <div class="container">
     <head-guild :positions='["授权管理","组织管理"]'></head-guild>
     <v-button @click="addOrganization" class="addBtn" type="primery" text="+ 添加组织"></v-button>
+       <label for="platformId" class="pull-left"><sup></sup>平台：</label>
+       <v-selection 
+            :vStyle="inputStyle"
+            :selections="selections"
+            :defaultValue="this.platformList.value"
+            @on-change="modalSelectionChange">
+        </v-selection>     
     <v-table :columns="tableColumns" :rows="tableRows">
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
         <a href="javascript:;" class="removeBtn" @click="remove(props.data)">删除</a>
-        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.organizationId, type:3, desc:'组织权限' } }">权限管理</router-link>
+        <router-link class="resetBtn" :to="{ path:'/grantMng', query:{ id:props.data.organizationId, platformId:props.data.platformId, type:3, desc:'组织权限' } }">权限管理</router-link>
       </template>
     </v-table>
   
@@ -64,10 +71,41 @@ export default {
       canSubmit: true,
     }
   },
+  computed:{
+      selections(){
+          let tmpArr=[{label:"=请选择=",value:""}]
+          this.platformList.forEach((v,i)=>{
+              tmpArr.push({label:v.platformName,value:v.platformId})
+          })
+          return tmpArr
+      }            
+  },    
   methods: {
     addOrganization() {//添加组织
       this.isShowAddDialog = true
     },
+    modalSelectionChange(data){
+        if(!data.value){
+            this.characterTip = false
+            this.getTableData()
+            return
+        }
+        this.characterTipText = data.label
+        this.characterTip = true
+
+        let pageNum = 1, pageSize = 10
+        let value = data.value
+        this.apis.getOrganizationByPlatformId(value, pageNum, pageSize)
+        .then((data) => {
+            this.tableRows = data.data.map((v, i) => {
+            v.number = i + 1
+            return v
+          })
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
+        })
+    },    
     //确认添加
     comfirmAdd(data) {
       if (this.canSubmit) {
@@ -83,6 +121,9 @@ export default {
             this.$store.commit('show_global_alert',("添加失败： "+errMsg))
             this.canSubmit = true
           })
+        this.apis.getOrganizationList(1, 10000).then((data)=>{
+          this.organizationList=data.data
+        })          
       } else { return }
     },
 
@@ -125,6 +166,10 @@ export default {
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("删除失败： " + errMsg))
         })
+
+      this.apis.getOrganizationList(1, 10000).then((data)=>{
+        this.organizationList=data.data
+      })        
     },
 
     pagechange(pageNum) {
@@ -139,17 +184,17 @@ export default {
     getTableData(pageNum = 1, pageSize = 10) {
       this.apis.getOrganizationList(pageNum, pageSize)
         .then((data) => {
-          if(data.data.total_number==0){
+          if(data.totalNum==0){
             this.$store.commit('show_global_alert',"没有数据")
             return
           }
-          this.tableRows = data.data.list.map((v, i) => {
+          this.tableRows = data.data.map((v, i) => {
             v.number = i + 1
             return v
           })
-          this.total = data.data.total_number
-          this.current = data.data.page_number
-          this.display = data.data.page_size
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
         })
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("错误： " + errMsg))
@@ -159,11 +204,11 @@ export default {
   },
   mounted() {
     this.getTableData()
-    this.apis.getPlatformList().then((data)=>{
-      this.platformList=data.data.list
+    this.apis.getPlatformList(1, 10000).then((data)=>{
+      this.platformList=data.data
     })
-    this.apis.getOrganizationList().then((data)=>{
-      this.organizationList=data.data.list
+    this.apis.getOrganizationList(1, 10000).then((data)=>{
+      this.organizationList=data.data
     })    
   }
 }

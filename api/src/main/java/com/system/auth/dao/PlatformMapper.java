@@ -1,9 +1,12 @@
 package com.system.auth.dao;
 
 import com.system.auth.model.Platform;
+import com.system.auth.model.ext.AuthorityView;
 import com.system.auth.model.ext.PlatformView;
+import com.system.auth.model.request.AuthorityListCondition;
 import com.system.auth.model.request.PlatformBulk;
 import com.system.auth.model.request.PlatformListCondition;
+import com.system.auth.sql.AuthoritySQL;
 import com.system.auth.sql.PlatformSQL;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -98,6 +101,23 @@ public interface PlatformMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
     List<PlatformView> selectBySelective(PlatformListCondition condition);
+
+    @SelectProvider(type = PlatformSQL.class, method = "selectAuthListByCondition")
+    @Results({
+            @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
+            @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="url", property="url", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_f_name", property="authFName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="auth_level", property="authLevel", jdbcType=JdbcType.INTEGER),
+            @Result(column="auth_f_tree", property="authFTree", jdbcType=JdbcType.VARCHAR),
+            @Result(column="description", property="description", jdbcType=JdbcType.VARCHAR),
+            @Result(column="create_user_id", property="createUserId", jdbcType=JdbcType.VARCHAR),
+            @Result(column="update_time", property="updateTime", jdbcType=JdbcType.BIGINT),
+            @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
+    })
+    List<AuthorityView> selectAuthListByCondition(PlatformListCondition condition);
 
     @UpdateProvider(type=PlatformSQL.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Platform record);

@@ -10,7 +10,6 @@ public class AuthorityListCondition {
     private String authFId;
     private String authFName;
 
-    @NotNull(message = "system id must not be null")
     private String systemId;
 
     private String createUserId;

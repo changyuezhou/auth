@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -56,6 +58,13 @@ public class OrganizationController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<OrganizationAddResponse> result = new ResponseMessage<OrganizationAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(organization), request, "", SystemLogging.getOperationStart());
 
@@ -84,6 +93,7 @@ public class OrganizationController {
         organization.setOrganizationId(organizationId);
         organization.setCreateTime(java.lang.System.currentTimeMillis());
         organization.setUpdateTime(java.lang.System.currentTimeMillis());
+        organization.setCreateUserId(user_info.getData().getUserId());
         organizationMapper.insertSelective(organization);
 
         OrganizationAddResponse group_response = new OrganizationAddResponse(organization.getOrganizationId(), organization.getOrganizationName());
@@ -106,6 +116,13 @@ public class OrganizationController {
     public OperationMessage update(@RequestBody Organization organization, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(organization), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == organization.getOrganizationId()) {
             throw new OperationException(OperationException.getUserInputException(), "organization id must not be null");
@@ -151,6 +168,13 @@ public class OrganizationController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(organization), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == organization.getOrganizationId()) {
             throw new OperationException(OperationException.getUserInputException(), "organization id must not be null");
         }
@@ -175,6 +199,13 @@ public class OrganizationController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(organizations), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == organizations.getOrganizationIds()) {
             throw new OperationException(OperationException.getUserInputException(), "organization id list must not be null");
         }
@@ -198,6 +229,13 @@ public class OrganizationController {
     public ResponseMessage<OrganizationView> query(@Validated @RequestBody OrganizationKey organization, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<OrganizationView> result = new ResponseMessage<OrganizationView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -225,6 +263,13 @@ public class OrganizationController {
     public QueryListMessage<OrganizationView> list(@Validated @RequestBody OrganizationListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<OrganizationView> result = new QueryListMessage<OrganizationView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

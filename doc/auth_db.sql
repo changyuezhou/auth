@@ -212,23 +212,23 @@ CREATE TABLE `t_session` (
 
 DELIMITER &&
 CREATE VIEW `v_user_authority` AS (SELECT
-                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, b.url, b.auth_level, b.auth_f_id, h.auth_name as auth_f_name,  c.platform_id, c.platform_name,
                                d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
-                          FROM t_user a, t_authority b, t_platform c, t_user_group d, t_group_authority e, t_user f, t_group g
+                          FROM t_user a, t_authority b, t_platform c, t_user_group d, t_group_authority e, t_user f, t_group g, t_authority h
                           WHERE a.user_id = d.user_id and d.group_id = e.group_id and e.auth_id= b.auth_id 
-                          and d.group_id = g.group_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id) UNION
+                          and d.group_id = g.group_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id and b.auth_f_id=h.auth_id) UNION
                           (SELECT
-                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, b.url, b.auth_level, b.auth_f_id, h.auth_name as auth_f_name, c.platform_id, c.platform_name,
                                d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
-                          FROM t_user a, t_authority b, t_platform c, t_user_role d, t_role_authority e, t_user f, t_role g
+                          FROM t_user a, t_authority b, t_platform c, t_user_role d, t_role_authority e, t_user f, t_role g, t_authority h
                           WHERE a.user_id = d.user_id and d.role_id = e.role_id and e.auth_id= b.auth_id 
-                          and d.role_id = g.role_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id) UNION
+                          and d.role_id = g.role_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id and b.auth_f_id=h.auth_id) UNION
                           (SELECT
-                               a.user_id, a.user_name, b.auth_id, b.auth_name, c.platform_id, c.platform_name,
+                               a.user_id, a.user_name, b.auth_id, b.auth_name, b.url, b.auth_level, b.auth_f_id, h.auth_name as auth_f_name, c.platform_id, c.platform_name,
                                d.create_user_id, f.user_name as create_user_name, d.update_time, d.create_time
-                          FROM t_user a, t_authority b, t_platform c, t_user_organization d, t_organization_authority e, t_user f, t_organization g
+                          FROM t_user a, t_authority b, t_platform c, t_user_organization d, t_organization_authority e, t_user f, t_organization g, t_authority h
                           WHERE a.user_id = d.user_id and d.organization_id = e.organization_id and e.auth_id= b.auth_id 
-                          and d.organization_id = g.organization_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id)                          
+                          and d.organization_id = g.organization_id and c.platform_id = g.platform_id and d.create_user_id=f.user_id and b.auth_f_id=h.auth_id)       
 &&
 DELIMITER ;
 

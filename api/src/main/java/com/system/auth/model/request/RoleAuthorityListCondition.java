@@ -6,7 +6,6 @@ public class RoleAuthorityListCondition {
     private String roleId;
     private String roleName;
 
-    @NotNull(message = "platform id must not be null")
     private String platformId;
 
     private String authId;

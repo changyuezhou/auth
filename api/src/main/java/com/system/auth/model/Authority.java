@@ -13,6 +13,8 @@ public class Authority {
 
     private String authFId;
 
+    private String url;
+
     @NotNull(message = "systemId must not be null")
     private String systemId;
 
@@ -27,6 +29,14 @@ public class Authority {
     private Long updateTime;
 
     private Long createTime;
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 
     public String getAuthId() {
         return authId;

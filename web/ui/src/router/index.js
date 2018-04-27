@@ -10,6 +10,7 @@ import UserMng from '@/components/user/userList'
 import UserGrantMng from '@/components/user/userGrant'
 import GrantMng from '@/components/grant/grant'
 import ChangePassword from '@/components/user/updatePwd'
+import UserAuthList from '@/components/user/userAuthList'
 
 Vue.use(Router)
 
@@ -68,6 +69,11 @@ export default new Router({
       path: '/userGrantMng',
       name: 'userGrantMng',
       component: UserGrantMng
-    }     
+    },
+    {
+      path: '/userAuthList',
+      name: 'userAuthList',
+      component: UserAuthList      
+    }    
   ]
 })

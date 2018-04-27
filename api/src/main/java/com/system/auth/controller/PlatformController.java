@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -10,6 +12,9 @@ import com.system.auth.bean.ResponseMessage;
 import com.system.auth.dao.PlatformMapper;
 import com.system.auth.dao.SystemMapper;
 import com.system.auth.model.Platform;
+import com.system.auth.model.ext.AuthorityView;
+import com.system.auth.model.ext.UserAuthorityView;
+import com.system.auth.model.ext.UserMenuAuthorityView;
 import com.system.auth.model.request.PlatformBulk;
 import com.system.auth.model.request.PlatformKey;
 import com.system.auth.model.ext.PlatformView;
@@ -31,8 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/platform")
@@ -56,6 +60,13 @@ public class PlatformController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<PlatformAddResponse> result = new ResponseMessage<PlatformAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(platform), request, "", SystemLogging.getOperationStart());
 
@@ -68,6 +79,7 @@ public class PlatformController {
         platform.setPlatformId(platformId);
         platform.setCreateTime(java.lang.System.currentTimeMillis());
         platform.setUpdateTime(java.lang.System.currentTimeMillis());
+        platform.setCreateUserId(user_info.getData().getUserId());
         platformMapper.insertSelective(platform);
 
         PlatformAddResponse platform_response = new PlatformAddResponse(platform.getPlatformId(), platform.getPlatformName());
@@ -90,6 +102,13 @@ public class PlatformController {
     public OperationMessage update(@RequestBody Platform platform, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(platform), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == platform.getPlatformId()) {
             throw new OperationException(OperationException.getUserInputException(), "platform id must not be null");
@@ -130,6 +149,13 @@ public class PlatformController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(platform), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == platform.getPlatformId()) {
             throw new OperationException(OperationException.getUserInputException(), "platform id must not be null");
         }
@@ -154,6 +180,13 @@ public class PlatformController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(platforms), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == platforms.getPlatformIds()) {
             throw new OperationException(OperationException.getUserInputException(), "platform id list must not be null");
         }
@@ -177,6 +210,13 @@ public class PlatformController {
     public ResponseMessage<PlatformView> query(@Validated @RequestBody PlatformKey platform, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<PlatformView> result = new ResponseMessage<PlatformView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -206,6 +246,13 @@ public class PlatformController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<PlatformView> result = new QueryListMessage<PlatformView>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, "", SystemLogging.getOperationStart());
 
@@ -220,6 +267,44 @@ public class PlatformController {
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, mapper.writeValueAsString(result), SystemLogging.getSUCCESS());
 
         return result;
+    }
+
+    @ApiOperation(value="查询平台权限列表", notes="根据平台ID查询平台权限信息")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/auth_list", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public ResponseMessage<List<UserMenuAuthorityView>> auth_list(@RequestBody PlatformListCondition condition, HttpServletRequest request) throws Exception {
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<List<UserMenuAuthorityView>> result = new ResponseMessage<List<UserMenuAuthorityView>>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, "", SystemLogging.getOperationStart());
+
+        List<AuthorityView> platform_auth_list = platformMapper.selectAuthListByCondition(condition);
+
+        HashMap<String, UserMenuAuthorityView> menu_list = formatMenu(platform_auth_list);
+
+        List<UserMenuAuthorityView> list = new ArrayList<UserMenuAuthorityView>();
+        Set entrySet = menu_list.entrySet();
+        Iterator it = entrySet.iterator();
+        while(it.hasNext()){
+            Map.Entry me = (Map.Entry)it.next();
+            UserMenuAuthorityView item = (UserMenuAuthorityView)me.getValue();
+            list.add(item);
+        }
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(condition), request, mapper.writeValueAsString(list), SystemLogging.getSUCCESS());
+
+        return new ResponseMessage<List<UserMenuAuthorityView>>(0, "", list);
     }
 
     public Boolean IsPlatformNameExists(String platformName) {
@@ -251,5 +336,46 @@ public class PlatformController {
         }
 
         return false;
+    }
+
+    public HashMap<String, UserMenuAuthorityView> formatMenu(List<AuthorityView> platform_auth_list) {
+        HashMap<String, UserMenuAuthorityView> menu_list = new HashMap<String, UserMenuAuthorityView>();
+
+        for (AuthorityView item: platform_auth_list) {
+            System.out.print(" ******************************** auth name:" + item.getAuthName() + " auth_f_id:" + item.getAuthFId() + " auth_f_name:" + item.getAuthFName() + " url:" + item.getUrl());
+            UserMenuAuthorityView menu_item = new UserMenuAuthorityView();
+            menu_item.setAuthFId(item.getAuthFId());
+            menu_item.setAuthFName(item.getAuthFName());
+            menu_item.setAuthId(item.getAuthId());
+            menu_item.setAuthName(item.getAuthName());
+            menu_item.setUrl(item.getUrl());
+
+            if (0 == item.getAuthLevel()) {
+                if (null  == menu_list.get(menu_item.getAuthId())) {
+                    menu_list.put(menu_item.getAuthId(), menu_item);
+                }
+            } else if (1 == item.getAuthLevel()) {
+                UserMenuAuthorityView parent = menu_list.get(item.getAuthFId());
+                if (null == parent) {
+                    parent = new UserMenuAuthorityView();
+                    parent.setAuthId(item.getAuthFId());
+                    parent.setAuthName(item.getAuthFName());
+                    parent.setAuthFId(item.getAuthFId());
+                    parent.setAuthFName(item.getAuthFName());
+
+                    menu_list.put(parent.getAuthId(), parent);
+                }
+
+                if (null == parent.getChildren()) {
+                    parent.setChildren(new ArrayList<UserMenuAuthorityView>());
+                }
+
+                if (!parent.getChildren().add(menu_item)) {
+                    throw new OperationException(OperationException.getUserInputException(), "add menu:" + item.getAuthName() + " failed");
+                }
+            }
+        }
+
+        return menu_list;
     }
 }

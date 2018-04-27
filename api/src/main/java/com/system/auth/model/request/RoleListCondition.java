@@ -6,7 +6,6 @@ public class RoleListCondition {
     private String roleId;
     private String roleName;
 
-    @NotNull(message = "platform id can not be null")
     private String platformId;
 
     private String createUserName;

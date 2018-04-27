@@ -30,7 +30,7 @@ public class Auth {
     private static String signPath = "sign.html";
     private static String getAccessTokenPath = "/api/auth/access_token";
     private static Integer MAX_RECORDS = 1000;
-    private static Integer EXPIRED_TIME = 600;  // seconds
+    private static Integer EXPIRED_TIME = 84600;  // seconds
 
     private static LoadingCache<String, User> cache =
             CacheBuilder.newBuilder()
@@ -57,6 +57,10 @@ public class Auth {
 
     public void setAccessTokenName(String accessTokenName) {
         this.accessTokenName = accessTokenName;
+    }
+
+    public static String getPlatformId() {
+        return platformId;
     }
 
     // #################################################################################################################
@@ -112,12 +116,13 @@ public class Auth {
             String accessToken = getCookieValue(accessTokenName, request.getCookies());
 
             User user = cache.get(openId + "_" + accessToken);
+            cache.refresh(openId + "_" + accessToken);
             userInfo.setCode(0);
             userInfo.setMsg("");
             userInfo.setData(user);
             return userInfo;
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
 
             String authToken = getAuthToken();
             String redirectURL = "http://" + authHost + ":" + authPort + "/" + signPath + "?isShow=true&authToken=" + authToken + "&platformId=" + platformId + "&redirectBack=" + redirectBack;

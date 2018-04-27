@@ -124,7 +124,7 @@ export default {
                     this.warnTipAnime(err)
                 }else{
                     console.log(err)
-                    this.warnTipAnime("网络错误")
+                    this.warnTipAnime("")
                 }
             }) 
         },

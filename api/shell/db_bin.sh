@@ -52,7 +52,7 @@ function InitialAuthority() {
     ####################################################################################################################
     AUTH_ID=`MD5 ${USER_ID}111`
 
-    SQL="insert into t_authority(auth_id, auth_name, url, auth_f_id, auth_level, system_id,  description, create_user_id, update_time, create_time) value('${AUTH_ID}', '授权管理', '', '', 0, '${SYSTEM_ID}', '', '${USER_ID}', ${TIMESTAMP}, ${TIMESTAMP})"
+    SQL="insert into t_authority(auth_id, auth_name, url, auth_f_id, auth_level, system_id,  description, create_user_id, update_time, create_time) value('${AUTH_ID}', '授权管理', '', '${AUTH_ID}', 0, '${SYSTEM_ID}', '', '${USER_ID}', ${TIMESTAMP}, ${TIMESTAMP})"
 
     value=`echo ${SQL} | ${MYSQL} --skip-column-names`
 
@@ -125,7 +125,7 @@ function InitialAuthority() {
     ####################################################################################################################
     AUTH_ID=`MD5 ${AUTH_ID}`
 
-    SQL="insert into t_authority(auth_id, auth_name, url, auth_f_id, auth_level, system_id,  description, create_user_id, update_time, create_time) value('${AUTH_ID}', '系统配置', '', '', 0, '${SYSTEM_ID}', '', '${USER_ID}', ${TIMESTAMP}, ${TIMESTAMP})"
+    SQL="insert into t_authority(auth_id, auth_name, url, auth_f_id, auth_level, system_id,  description, create_user_id, update_time, create_time) value('${AUTH_ID}', '系统配置', '', '${AUTH_ID}', 0, '${SYSTEM_ID}', '', '${USER_ID}', ${TIMESTAMP}, ${TIMESTAMP})"
 
     value=`echo ${SQL} | ${MYSQL} --skip-column-names`
 

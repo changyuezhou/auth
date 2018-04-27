@@ -1,6 +1,7 @@
 package com.system.auth.sql;
 
 import com.system.auth.model.Platform;
+import com.system.auth.model.request.AuthorityListCondition;
 import com.system.auth.model.request.PlatformBulk;
 import com.system.auth.model.request.PlatformListCondition;
 import org.apache.ibatis.jdbc.SQL;
@@ -110,6 +111,18 @@ public class PlatformSQL {
             WHERE("a.create_user_id = c.user_id");
 
             ORDER_BY("a.update_time");
+        }}.toString();
+    }
+
+    public String selectAuthListByCondition(PlatformListCondition condition) {
+        return new SQL() {{
+            SELECT("a.auth_id, a.auth_name, a.url, a.auth_f_id, d.auth_name as auth_f_name, a.system_id, a.auth_level, a.auth_f_tree, a.description, a.create_user_id, a.update_time, a.create_time");
+            FROM("t_authority a, t_platform b, t_system c, t_authority d");
+            if (null != condition.getPlatformId()) {
+                WHERE("b.platform_id = #{platformId, jdbcType=VARCHAR}");
+            }
+
+            WHERE("a.system_id = c.system_id and b.system_id = c.system_id and d.auth_id=a.auth_f_id");
         }}.toString();
     }
 

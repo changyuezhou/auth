@@ -24,12 +24,12 @@ public interface AuthorityMapper {
     int deleteByAuthorityIds(AuthorityBulk auths);
 
     @Insert({
-        "insert into t_authority (auth_id, auth_name, ",
+        "insert into t_authority (auth_id, auth_name, url, ",
         "auth_f_id, system_id, ",
         "auth_level, auth_f_tree, ",
         "description, create_user_id, ",
         "update_time, create_time)",
-        "values (#{authId,jdbcType=VARCHAR}, #{authName,jdbcType=VARCHAR}, ",
+        "values (#{authId,jdbcType=VARCHAR}, #{authName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, ",
         "#{authFId,jdbcType=VARCHAR}, #{systemId,jdbcType=VARCHAR}, ",
         "#{authLevel,jdbcType=INTEGER}, #{authFTree,jdbcType=VARCHAR}, ",
         "#{description,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, ",
@@ -42,7 +42,7 @@ public interface AuthorityMapper {
 
     @Select({
         "select",
-        "a.auth_id, a.auth_name, a.auth_f_id, a.system_id, c.system_name, a.auth_level, a.auth_f_tree, b.auth_name as auth_f_name, a.description, ",
+        "a.auth_id, a.auth_name, a.url, a.auth_f_id, a.system_id, c.system_name, a.auth_level, a.auth_f_tree, b.auth_name as auth_f_name, a.description, ",
         "a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time",
         "from t_authority a, t_authority b, t_system c, t_user d",
         "where a.auth_id = #{authId,jdbcType=VARCHAR}",
@@ -54,6 +54,7 @@ public interface AuthorityMapper {
     @Results({
         @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+        @Result(column="url", property="url", jdbcType=JdbcType.VARCHAR),
         @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
         @Result(column="auth_f_name", property="authFName", jdbcType=JdbcType.VARCHAR),
         @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
@@ -72,6 +73,7 @@ public interface AuthorityMapper {
     @Results({
             @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
             @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="url", property="url", jdbcType=JdbcType.VARCHAR),
             @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
             @Result(column="auth_f_name", property="authFName", jdbcType=JdbcType.VARCHAR),
             @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
@@ -90,6 +92,7 @@ public interface AuthorityMapper {
     @Results({
             @Result(column="auth_id", property="authId", jdbcType=JdbcType.VARCHAR, id=true),
             @Result(column="auth_name", property="authName", jdbcType=JdbcType.VARCHAR),
+            @Result(column="url", property="url", jdbcType=JdbcType.VARCHAR),
             @Result(column="auth_f_id", property="authFId", jdbcType=JdbcType.VARCHAR),
             @Result(column="system_id", property="systemId", jdbcType=JdbcType.VARCHAR),
             @Result(column="auth_level", property="authLevel", jdbcType=JdbcType.INTEGER),
@@ -110,6 +113,7 @@ public interface AuthorityMapper {
     @Update({
         "update t_authority",
         "set auth_name = #{authName,jdbcType=VARCHAR},",
+            "url = #{url,jdbcType=VARCHAR},",
           "auth_f_id = #{authFId,jdbcType=VARCHAR},",
           "system_id = #{systemId,jdbcType=VARCHAR},",
           "auth_level = #{authLevel,jdbcType=INTEGER},",

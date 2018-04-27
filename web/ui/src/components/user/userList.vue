@@ -9,6 +9,7 @@
         <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:1, desc:'组管理' } }">组</router-link>
         <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:2, desc:'角色管理' } }">角色</router-link>
         <router-link class="resetBtn" :to="{ path:'/userGrantMng', query:{ userId:props.data.userId, type:3, desc:'组织管理' } }">组织</router-link>
+        <router-link class="resetBtn" :to="{ path:'/userAuthList', query:{ userId:props.data.userId, type:4, desc:'用户权限' } }">权限</router-link>
       </template>
     </v-table>
   
@@ -43,7 +44,7 @@ export default {
       tableColumns: [
         // { "label": "用户ID", "id": "userId" },
         { "label": "用户名称", "id": "userName" },
-        { "label": "联系人", "id": "contackName" },
+        { "label": "联系人", "id": "contactName" },
         { "label": "联系电话", "id": "mobileNumber" },
         { "label": "描述", "id": "description" },
         { "label": "创建者", "id": "createUserName" },
@@ -137,17 +138,17 @@ export default {
     getTableData(pageNum = 1, pageSize = 10) {
       this.apis.getUserList(pageNum, pageSize)
         .then((data) => {
-          if(data.data.total_number==0){
+          if(data.totalNum==0){
             this.$store.commit('show_global_alert',"没有数据")
             return
           }
-          this.tableRows = data.data.list.map((v, i) => {
+          this.tableRows = data.data.map((v, i) => {
             v.number = i + 1
             return v
           })
-          this.total = data.data.total_number
-          this.current = data.data.page_number
-          this.display = data.data.page_size
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
         })
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("错误： " + errMsg))

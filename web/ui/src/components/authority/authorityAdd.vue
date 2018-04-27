@@ -33,16 +33,6 @@
                 </div>
 
                 <div class="line clearfix">
-                   <label for="authFId" class="pull-left"><sup></sup>父权限：</label>
-                   <v-selection 
-                        :vStyle="inputStyle"
-                        :selections="selectionsAuth"
-                        :defaultValue="this.formValue.authFId.value"
-                        @on-change="modalAuthFSelectionChange">
-                    </v-selection>
-                </div>
-
-                <div class="line clearfix">
                    <label for="systemId" class="pull-left"><sup>* </sup>所属系统：</label>
                    <v-selection 
                         :vStyle="inputStyle"
@@ -50,7 +40,17 @@
                         :defaultValue="this.formValue.systemId.value"
                         @on-change="modalSelectionChange">
                     </v-selection>
-                </div>                           
+                </div> 
+
+                <div class="line clearfix">
+                   <label for="authFId" class="pull-left"><sup></sup>父权限：</label>
+                   <v-selection 
+                        :vStyle="inputStyle"
+                        :selections="selectionsAuth"
+                        :defaultValue="this.formValue.authFId.value"
+                        @on-change="modalAuthFSelectionChange">
+                    </v-selection>
+                </div>                          
 
                 <div class="line clearfix">
                     <label for="description" class="pull-left"><sup></sup>备注：</label>
@@ -168,10 +168,24 @@
                 this.formValue.systemId.value=data.value
                 if(!data.value){
                     this.characterTip = false
+                    this.apis.getAuthorityList(1, 10000)
+                        .then((data) => {
+                          this.authList = data.data
+                        })
+                        .catch((errMsg) => {
+                          this.$store.commit('show_global_alert',("错误： " + errMsg))
+                        })                    
                     return
                 }  
                 this.characterTipText = data.label
                 this.characterTip = true 
+                this.apis.getAuthorityBySystemId(this.formValue.systemId.value, 1, 10000)
+                    .then((data) => {
+                      this.authList = data.data
+                    })
+                    .catch((errMsg) => {
+                      this.$store.commit('show_global_alert',("错误： " + errMsg))
+                    })                 
             },
             modalAuthFSelectionChange(data){
                 this.formValue.authFId.value=data.value

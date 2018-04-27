@@ -2,6 +2,13 @@
   <div class="container">
     <head-guild :positions='["授权管理","平台管理"]'></head-guild>
     <v-button @click="addPlatform" class="addBtn" type="primery" text="+ 添加平台"></v-button>
+       <label for="systemId" class="pull-left"><sup></sup>系统：</label>
+       <v-selection 
+            :vStyle="inputStyle"
+            :selections="selections"
+            :defaultValue="this.systemList.value"
+            @on-change="modalSelectionChange">
+        </v-selection>
     <v-table :columns="tableColumns" :rows="tableRows">
       <template slot-scope="props">
         <a href="javascript:;" class="editBtn" @click="edit(props.data)">编辑</a>
@@ -62,10 +69,41 @@ export default {
       canSubmit: true,
     }
   },
+  computed:{
+      selections(){
+          let tmpArr=[{label:"=请选择=",value:""}]
+          this.systemList.forEach((v,i)=>{
+              tmpArr.push({label:v.systemName,value:v.systemId})
+          })
+          return tmpArr
+      }            
+  },  
   methods: {
     addPlatform() {//添加平台
       this.isShowAddDialog = true
     },
+    modalSelectionChange(data){
+        if(!data.value){
+            this.characterTip = false
+            this.getTableData()
+            return
+        }
+        this.characterTipText = data.label
+        this.characterTip = true
+
+        let pageNum = 1, pageSize = 10
+        let value = data.value
+        this.apis.getPlatformBySystemId(value, pageNum, pageSize)
+        .then((data) => {
+            this.tableRows = data.data.map((v, i) => {
+            v.number = i + 1
+            return v
+          })
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
+        })
+    },    
     //确认添加
     comfirmAdd(data) {
       if (this.canSubmit) {
@@ -137,17 +175,17 @@ export default {
     getTableData(pageNum = 1, pageSize = 10) {
       this.apis.getPlatformList(pageNum, pageSize)
         .then((data) => {
-          if(data.data.total_number==0){
+          if(data.totalNum==0){
             this.$store.commit('show_global_alert',"没有数据")
             return
           }
-          this.tableRows = data.data.list.map((v, i) => {
+          this.tableRows = data.data.map((v, i) => {
             v.number = i + 1
             return v
           })
-          this.total = data.data.total_number
-          this.current = data.data.page_number
-          this.display = data.data.page_size
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
         })
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("错误： " + errMsg))
@@ -157,8 +195,8 @@ export default {
   },
   mounted() {
     this.getTableData()
-    this.apis.getSystemList().then((data)=>{
-      this.systemList=data.data.list
+    this.apis.getSystemList(1, 10000).then((data)=>{
+      this.systemList=data.data
     })
   }
 }

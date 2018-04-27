@@ -132,17 +132,17 @@ export default {
     getTableData(pageNum = 1, pageSize = 10) {
       this.apis.getSystemList(pageNum, pageSize)
         .then((data) => {
-          if(data.data.total_number==0){
+          if(data.totalNum==0){
             this.$store.commit('show_global_alert',"没有数据")
             return
           }
-          this.tableRows = data.data.list.map((v, i) => {
+          this.tableRows = data.data.map((v, i) => {
             v.number = i + 1
             return v
           })
-          this.total = data.data.total_number
-          this.current = data.data.page_number
-          this.display = data.data.page_size
+          this.total = data.totalNum
+          this.current = data.pageNum
+          this.display = data.pageSize
         })
         .catch((errMsg) => {
           this.$store.commit('show_global_alert',("错误： " + errMsg))

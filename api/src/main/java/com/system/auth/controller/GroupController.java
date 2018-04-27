@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -57,6 +59,13 @@ public class GroupController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<GroupAddResponse> result = new ResponseMessage<GroupAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(group), request, "", SystemLogging.getOperationStart());
 
@@ -73,6 +82,7 @@ public class GroupController {
         group.setGroupId(groupId);
         group.setCreateTime(java.lang.System.currentTimeMillis());
         group.setUpdateTime(java.lang.System.currentTimeMillis());
+        group.setCreateUserId(user_info.getData().getUserId());
         groupMapper.insertSelective(group);
 
         GroupAddResponse group_response = new GroupAddResponse(group.getGroupId(), group.getGroupName());
@@ -95,6 +105,13 @@ public class GroupController {
     public OperationMessage update(@RequestBody Group group, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(group), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == group.getGroupId()) {
             throw new OperationException(OperationException.getUserInputException(), "group id must not be null");
@@ -136,6 +153,13 @@ public class GroupController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(group), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == group.getGroupId()) {
             throw new OperationException(OperationException.getUserInputException(), "group id must not be null");
         }
@@ -160,6 +184,13 @@ public class GroupController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(groups), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == groups.getGroupIds()) {
             throw new OperationException(OperationException.getUserInputException(), "group id list must not be null");
         }
@@ -183,6 +214,13 @@ public class GroupController {
     public ResponseMessage<GroupView> query(@Validated @RequestBody GroupKey group, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<GroupView> result = new ResponseMessage<GroupView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -210,6 +248,13 @@ public class GroupController {
     public QueryListMessage<GroupView> list(@Validated @RequestBody GroupListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<GroupView> result = new QueryListMessage<GroupView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

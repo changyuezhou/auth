@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -57,6 +59,13 @@ public class RoleController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<RoleAddResponse> result = new ResponseMessage<RoleAddResponse>(302, user_info.getMsg(), null);
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role), request, "", SystemLogging.getOperationStart());
 
@@ -73,6 +82,7 @@ public class RoleController {
         role.setRoleId(roleId);
         role.setCreateTime(java.lang.System.currentTimeMillis());
         role.setUpdateTime(java.lang.System.currentTimeMillis());
+        role.setCreateUserId(user_info.getData().getUserId());
         roleMapper.insertSelective(role);
 
         RoleAddResponse group_response = new RoleAddResponse(role.getRoleId(), role.getRoleName());
@@ -95,6 +105,13 @@ public class RoleController {
     public OperationMessage update(@RequestBody Role role, HttpServletRequest request) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
 
         if (null == role.getRoleId()) {
             throw new OperationException(OperationException.getUserInputException(), "role id must not be null");
@@ -136,6 +153,13 @@ public class RoleController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == role.getRoleId()) {
             throw new OperationException(OperationException.getUserInputException(), "role id must not be null");
         }
@@ -160,6 +184,13 @@ public class RoleController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(roles), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == roles.getRoleIds()) {
             throw new OperationException(OperationException.getUserInputException(), "role id list must not be null");
         }
@@ -183,6 +214,13 @@ public class RoleController {
     public ResponseMessage<RoleView> query(@Validated @RequestBody RoleKey role, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<RoleView> result = new ResponseMessage<RoleView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -210,6 +248,13 @@ public class RoleController {
     public QueryListMessage<RoleView> list(@Validated @RequestBody RoleListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<RoleView> result = new QueryListMessage<RoleView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

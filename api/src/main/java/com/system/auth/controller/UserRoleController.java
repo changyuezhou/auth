@@ -1,5 +1,7 @@
 package com.system.auth.controller;
 
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.dao.*;
 import com.system.auth.model.UserRole;
 import com.system.auth.model.ext.UserRoleView;
@@ -52,6 +54,13 @@ public class UserRoleController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_role), request, "", SystemLogging.getOperationStart());
 
@@ -61,6 +70,7 @@ public class UserRoleController {
 
         user_role.setCreateTime(java.lang.System.currentTimeMillis());
         user_role.setUpdateTime(java.lang.System.currentTimeMillis());
+        user_role.setCreateUserId(user_info.getData().getUserId());
         userRoleMapper.insert(user_role);
 
         OperationMessage result = new OperationMessage(0, "");
@@ -84,6 +94,13 @@ public class UserRoleController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == user_roles.getRoleIds() || 0 >= user_roles.getRoleIds().size()) {
             throw new OperationException(OperationException.getUserInputException(), "role id list must not be empty");
         }
@@ -101,8 +118,10 @@ public class UserRoleController {
 
         UserRoleBulkInsert bulk = new UserRoleBulkInsert();
         bulk.setUserId(user_roles.getUserId());
-        bulk.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
+        bulk.setCreateUserId(user_info.getData().getUserId());
         bulk.setRoleIds(user_roles.getRoleIds());
+        bulk.setCreateTime(java.lang.System.currentTimeMillis());
+        bulk.setUpdateTime(java.lang.System.currentTimeMillis());
 
         userRoleMapper.insertByUserRoleList(bulk);
 
@@ -124,6 +143,13 @@ public class UserRoleController {
     public QueryListMessage<UserRoleView> list(@Validated @RequestBody UserRoleListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<UserRoleView> result = new QueryListMessage<UserRoleView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -156,6 +182,13 @@ public class UserRoleController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_role), request, "", SystemLogging.getOperationStart());
 
@@ -178,6 +211,13 @@ public class UserRoleController {
     public OperationMessage delete(@Validated @RequestBody UserRoleBulk user_role, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

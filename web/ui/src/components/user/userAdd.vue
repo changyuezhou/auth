@@ -24,12 +24,12 @@
                 </div>             
 
                 <div class="line clearfix">
-                    <label for="contackName" class="pull-left"><sup>* </sup>联系人：</label>
+                    <label for="contactName" class="pull-left"><sup>* </sup>联系人：</label>
                     <input 
                         class="inputCom"
                         :style="{'width':'320px'}" 
                         placeholder="请输入联系人"
-                        v-model="formValue.contackName.value"
+                        v-model="formValue.contactName.value"
                         @focus="utils.toggleInputActive($event)"  
                         @blur="utils.toggleInputActive($event)">
                 </div>
@@ -81,7 +81,7 @@
                 isShowWarnTip:false,
                 formValue:{
                     userName:{value:"",label:"用户名称"},
-                    contackName:{value:"",label:"联系人"},
+                    contactName:{value:"",label:"联系人"},
                     mobileNumber:{value:"",label:"联系电话"},
                     description:{value:"",label:"备注信息"}
                 }
@@ -91,9 +91,10 @@
             submitValue(){
                 return  {
                     userName:this.formValue.userName.value,
-                    contackName:this.formValue.contackName.value,
+                    contactName:this.formValue.contactName.value,
                     mobileNumber:this.formValue.mobileNumber.value,
-                    description:this.formValue.description.value
+                    description:this.formValue.description.value,
+                    password: this.utils.md5("111111")
                 }
             }
         },

@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -56,6 +58,13 @@ public class UserGroupController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_group), request, "", SystemLogging.getOperationStart());
 
@@ -65,6 +74,7 @@ public class UserGroupController {
 
         user_group.setCreateTime(java.lang.System.currentTimeMillis());
         user_group.setUpdateTime(java.lang.System.currentTimeMillis());
+        user_group.setCreateUserId(user_info.getData().getUserId());
         userGroupMapper.insert(user_group);
 
         OperationMessage result = new OperationMessage(0, "");
@@ -88,6 +98,13 @@ public class UserGroupController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == user_groups.getGroupIds() || 0 >= user_groups.getGroupIds().size()) {
             throw new OperationException(OperationException.getUserInputException(), "group id list must not be empty");
         }
@@ -105,8 +122,10 @@ public class UserGroupController {
 
         UserGroupBulkInsert bulk = new UserGroupBulkInsert();
         bulk.setUserId(user_groups.getUserId());
-        bulk.setCreateUserId("U06EA2696AE3B4477B9AC6C28AB49A522");
+        bulk.setCreateUserId(user_info.getData().getUserId());
         bulk.setGroupIds(user_groups.getGroupIds());
+        bulk.setUpdateTime(java.lang.System.currentTimeMillis());
+        bulk.setCreateTime(java.lang.System.currentTimeMillis());
 
         userGroupMapper.insertByUserGroupList(bulk);
 
@@ -128,6 +147,13 @@ public class UserGroupController {
     public QueryListMessage<UserGroupView> list(@Validated @RequestBody UserGroupListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<UserGroupView> result = new QueryListMessage<UserGroupView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -160,6 +186,13 @@ public class UserGroupController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user_group), request, "", SystemLogging.getOperationStart());
 
@@ -182,6 +215,13 @@ public class UserGroupController {
     public OperationMessage delete(@Validated @RequestBody UserGroupsBulk user_groups, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

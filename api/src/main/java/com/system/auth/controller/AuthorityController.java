@@ -30,8 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/authority")
@@ -113,17 +112,24 @@ public class AuthorityController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(auth), request, "", SystemLogging.getOperationStart());
 
-        if (null == auth.getAuthId()) {
-            throw new OperationException(OperationException.getUserInputException(), "authority id must not be null");
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
         }
 
-        if (null != auth.getAuthFId()) {
-            throw new OperationException(OperationException.getUserInputException(), "authority parent id can not be changed and you can delete this authority");
+        if (null == auth.getAuthId()) {
+            throw new OperationException(OperationException.getUserInputException(), "authority id must not be null");
         }
 
         AuthorityView auth_view = authorityMapper.selectByPrimaryKey(auth.getAuthId());
         if (null == auth_view) {
             throw new OperationException(OperationException.getUserInputException(), "authority id: " + auth.getAuthFId() + " is not exists");
+        }
+
+        if (null != auth.getAuthFId() && !auth.getAuthFId().equalsIgnoreCase(auth_view.getAuthFId())) {
+            throw new OperationException(OperationException.getUserInputException(), "authority parent id can not be changed and you can delete this authority");
         }
 
         if (null != auth.getSystemId() && !auth.getSystemId().equalsIgnoreCase(auth_view.getSystemId()) && IsSystemIdExists(auth.getSystemId())) {
@@ -161,6 +167,13 @@ public class AuthorityController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(auth), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == auth.getAuthId()) {
             throw new OperationException(OperationException.getUserInputException(), "authority id must not be null");
         }
@@ -185,6 +198,13 @@ public class AuthorityController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(auths), request, "", SystemLogging.getOperationStart());
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == auths.getAuthIds()) {
             throw new OperationException(OperationException.getUserInputException(), "authority id list must not be null");
         }
@@ -208,6 +228,13 @@ public class AuthorityController {
     public ResponseMessage<AuthorityView> query(@Validated @RequestBody AuthorityKey auth, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            ResponseMessage<AuthorityView> result = new ResponseMessage<AuthorityView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -235,6 +262,13 @@ public class AuthorityController {
     public QueryListMessage<AuthorityView> list(@Validated @RequestBody AuthorityListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<AuthorityView> result = new QueryListMessage<AuthorityView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

@@ -17,6 +17,10 @@ public class AuthoritySQL {
                 VALUES("auth_name", "#{authName,jdbcType=VARCHAR}");
             }
 
+            if (null != record.getUrl()) {
+                VALUES("url", "#{url,jdbcType=VARCHAR}");
+            }
+
             if (null != record.getAuthFId()) {
                 VALUES("auth_f_id", "#{authFId,jdbcType=VARCHAR}");
             }
@@ -59,6 +63,10 @@ public class AuthoritySQL {
                 SET("auth_name = #{authName,jdbcType=VARCHAR}");
             }
 
+            if (null != record.getUrl()) {
+                SET("url = #{url,jdbcType=VARCHAR}");
+            }
+
             if (null != record.getAuthFId()) {
                 SET("auth_f_id = #{authFId,jdbcType=VARCHAR}");
             }
@@ -93,7 +101,7 @@ public class AuthoritySQL {
 
     public String selectBySelective(AuthorityListCondition condition) {
         return new SQL() {{
-            SELECT("a.auth_id, a.auth_name, a.auth_f_id, b.auth_name as auth_f_name, a.system_id, c.system_name, a.auth_level, a.auth_f_tree, a.description, a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time");
+            SELECT("a.auth_id, a.auth_name, a.url, a.auth_f_id, b.auth_name as auth_f_name, a.system_id, c.system_name, a.auth_level, a.auth_f_tree, a.description, a.create_user_id, d.user_name as create_user_name, a.update_time, a.create_time");
             FROM("t_authority a, t_authority b, t_system c, t_user d");
             if (null != condition.getAuthId()) {
                 WHERE("a.auth_id = #{authId, jdbcType=VARCHAR}");
@@ -134,7 +142,7 @@ public class AuthoritySQL {
 
     public String selectBySystemIdAuthName(AuthorityListCondition condition) {
         return new SQL() {{
-            SELECT("auth_id, auth_name, auth_f_id, system_id, auth_level, auth_f_tree, description, create_user_id, update_time, create_time");
+            SELECT("auth_id, auth_name, url, auth_f_id, system_id, auth_level, auth_f_tree, description, create_user_id, update_time, create_time");
             FROM("t_authority");
             if (null != condition.getAuthName()) {
                 WHERE("auth_name = #{authName, jdbcType=VARCHAR}");

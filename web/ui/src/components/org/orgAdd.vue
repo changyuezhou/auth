@@ -22,16 +22,6 @@
                 </div>
 
                 <div class="line clearfix">
-                   <label for="organizationFId" class="pull-left"><sup></sup>父组织：</label>
-                   <v-selection 
-                        :vStyle="inputStyle"
-                        :selections="selectionsAuth"
-                        :defaultValue="this.formValue.organizationFId.value"
-                        @on-change="modalAuthFSelectionChange">
-                    </v-selection>
-                </div>
-
-                <div class="line clearfix">
                    <label for="platformId" class="pull-left"><sup>* </sup>所属平台：</label>
                    <v-selection 
                         :vStyle="inputStyle"
@@ -39,7 +29,17 @@
                         :defaultValue="this.formValue.platformId.value"
                         @on-change="modalSelectionChange">
                     </v-selection>
-                </div>                           
+                </div>
+
+                <div class="line clearfix">
+                   <label for="organizationFId" class="pull-left"><sup></sup>父组织：</label>
+                   <v-selection 
+                        :vStyle="inputStyle"
+                        :selections="selectionsOrg"
+                        :defaultValue="this.formValue.organizationFId.value"
+                        @on-change="modalAuthFSelectionChange">
+                    </v-selection>
+                </div>                          
 
                 <div class="line clearfix">
                     <label for="description" class="pull-left"><sup></sup>备注：</label>
@@ -113,7 +113,7 @@
                 })
                 return tmpArr
             },
-            selectionsAuth(){
+            selectionsOrg(){
                 let tmpArr=[{label:"=请选择=",value:""}]
                 this.organizationList.forEach((v,i)=>{
                     tmpArr.push({label:v.organizationName,value:v.organizationId})
@@ -155,10 +155,29 @@
                 this.formValue.platformId.value=data.value
                 if(!data.value){
                     this.characterTip = false
+                    this.apis.getOrganizationList(1, 10000)
+                        .then((data) => {
+                          this.organizationList = data.data
+
+                          this.formValue['organizationFId'].value=""
+                        })
+                        .catch((errMsg) => {
+                          this.$store.commit('show_global_alert',("错误： " + errMsg))
+                        })                        
                     return
                 }  
                 this.characterTipText = data.label
-                this.characterTip = true 
+                this.characterTip = true
+
+                this.apis.getOrganizationByPlatformId(this.formValue.platformId.value, 1, 10000)
+                    .then((data) => {
+                      this.organizationList = data.data
+
+                      this.formValue['organizationFId'].value=""
+                    })
+                    .catch((errMsg) => {
+                      this.$store.commit('show_global_alert',("错误： " + errMsg))
+                    })                     
             },
             modalAuthFSelectionChange(data){
                 this.formValue.organizationFId.value=data.value

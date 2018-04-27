@@ -6,7 +6,7 @@ import org.apache.ibatis.jdbc.SQL;
 public class UserAuthoritySQL {
     public String selectBySelective(UserAuthorityListCondition condition) {
         return new SQL() {{
-            SELECT("user_id, user_name, auth_id, auth_name, platform_id, platform_name, create_user_id, create_user_name, update_time, create_time");
+            SELECT("user_id, user_name, auth_id, auth_name, url, auth_level, auth_f_id, auth_f_name, platform_id, platform_name, create_user_id, create_user_name, update_time, create_time");
             FROM("v_user_authority");
             if (null != condition.getUserId()) {
                 WHERE("user_id = #{userId, jdbcType=VARCHAR}");
@@ -32,6 +32,8 @@ public class UserAuthoritySQL {
 
             ORDER_BY("user_name");
             ORDER_BY("update_time");
+
+            GROUP_BY("auth_id");
         }}.toString();
     }
 

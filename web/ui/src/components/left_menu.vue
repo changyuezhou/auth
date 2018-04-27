@@ -1,14 +1,14 @@
 <template>
     <div class="leftNavContainer">
         <template v-for="(item,index) in leftMenuList"> 
-            <div v-if="null != item.children" :key="item.auth_f_id + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
-                <span class="leftIcon" :style="{backgroundImage: 'url(' + require('@/assets/images/leftNav/icons/menu.png') + ')'}"></span>{{item.auth_name}}<span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
+            <div v-if="null != item.children" :key="item.authFId + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
+                <span class="leftIcon" :style="{backgroundImage: 'url(' + require('@/assets/images/leftNav/icons/menu.png') + ')'}"></span>{{item.authName}}<span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
             </div>
-            <div v-if="null == item.children" :key="item.auth_f_id + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
-                <span class="leftIcon" :style="{backgroundImage: 'url(' + require('@/assets/images/leftNav/icons/menu.png') + ')'}"></span><router-link active-class="select" tag="li" :to="item.url">{{item.auth_name}}</router-link><span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
+            <div v-if="null == item.children" :key="item.authFId + index" class="link" :class="{'active':(index==currentExpendMenu)}" @click="currentExpendMenu=index">
+                <span class="leftIcon" :style="{backgroundImage: 'url(' + require('@/assets/images/leftNav/icons/menu.png') + ')'}"></span><router-link active-class="select" tag="li" :to="item.url">{{item.authName}}</router-link><span class="right-icon" :class="{'dropDown':(index==currentExpendMenu)}"></span>
             </div>
-            <ul  :key="item.auth_id + index" :ref="item.auth_name" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
-                <router-link v-for="(v,i) in item.children" :key="i" active-class="select" tag="li" :to="v.url">{{v.auth_name}}</router-link>
+            <ul  :key="item.authId + index" :ref="item.authName" class="submenu" :style="{'height':(index==currentExpendMenu)?item.subHeight:0}">
+                <router-link v-for="(v,i) in item.children" :key="i" active-class="select" tag="li" :to="v.url">{{v.authName}}</router-link>
             </ul>
         </template>
     </div>

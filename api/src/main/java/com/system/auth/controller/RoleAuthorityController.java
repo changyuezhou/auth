@@ -3,6 +3,8 @@ package com.system.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.system.auth.auth.Auth;
+import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.OperationException;
 import com.system.auth.bean.OperationMessage;
 import com.system.auth.bean.QueryListMessage;
@@ -57,6 +59,13 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role_auth), request, "", SystemLogging.getOperationStart());
 
@@ -66,6 +75,7 @@ public class RoleAuthorityController {
 
         role_auth.setCreateTime(java.lang.System.currentTimeMillis());
         role_auth.setUpdateTime(java.lang.System.currentTimeMillis());
+        role_auth.setCreateUserId(user_info.getData().getUserId());
         roleAuthorityMapper.insert(role_auth);
 
         OperationMessage result = new OperationMessage(0, "");
@@ -89,6 +99,13 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         if (null == role_auths.getAuthIds() || 0 >= role_auths.getAuthIds().size()) {
             throw new OperationException(OperationException.getUserInputException(), "authority id list must not be empty");
         }
@@ -103,6 +120,9 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), "authority ids:" + mapper.writeValueAsString(role_auths.getAuthIds()) + " is not exists");
         }
 
+        role_auths.setCreateUserId(user_info.getData().getUserId());
+        role_auths.setCreateTime(java.lang.System.currentTimeMillis());
+        role_auths.setUpdateTime(java.lang.System.currentTimeMillis());
         roleAuthorityMapper.insertByRoleAuthorityList(role_auths);
 
         OperationMessage result = new OperationMessage(0, "");
@@ -123,6 +143,13 @@ public class RoleAuthorityController {
     public QueryListMessage<RoleAuthorityView> list(@Validated @RequestBody RoleAuthorityListCondition condition, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            QueryListMessage<RoleAuthorityView> result = new QueryListMessage<RoleAuthorityView>(302, user_info.getMsg(), null);
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -155,6 +182,13 @@ public class RoleAuthorityController {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
         }
 
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(role_auth), request, "", SystemLogging.getOperationStart());
 
@@ -177,6 +211,13 @@ public class RoleAuthorityController {
     public OperationMessage delete(@Validated @RequestBody RoleAuthorityBulk role_auths, BindingResult check, HttpServletRequest request) throws Exception {
         if (check.hasErrors()) {
             throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
         }
 
         ObjectMapper mapper = new ObjectMapper();

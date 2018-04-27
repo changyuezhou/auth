@@ -6,7 +6,6 @@ public class OrganizationListCondition {
     private String organizationId;
     private String organizationName;
 
-    @NotNull(message = "platform id can not be null")
     private String platformId;
 
     private String createUserName;

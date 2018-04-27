@@ -29,18 +29,15 @@ axios.interceptors.response.use((res) => {
 export default {
     /* =============================================================获取左侧菜单-start======================================================== */
     getLeftMenuList(){
-        let pageNum = 1
-        let pageSize = 1000
-        let data = { pageNum, pageSize }
-        return postFun("/user_authority/list", data)
+        return postFun("/user_authority/menu_list")
     },
     /* =============================================================获取左侧菜单-end======================================================== */
     
     
     /* =============================================================系统管理-start======================================================== */
     //获取系统列表
-    getSystemList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getSystemList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/system/list', data)
     },
     //添加系统
@@ -59,8 +56,13 @@ export default {
 
     /* =============================================================平台管理-start======================================================== */
     //获取平台列表
-    getPlatformList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getPlatformList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
+        return postFun('/platform/list', data)
+    },
+    //获取平台列表
+    getPlatformBySystemId(systemId, pageNum, pageSize) {
+        let data = { systemId, pageNum, pageSize }
         return postFun('/platform/list', data)
     },
     //添加平台
@@ -79,10 +81,15 @@ export default {
 
 /* =============================================================权限管理-start======================================================== */
     //获取权限列表
-    getAuthorityList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getAuthorityList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/authority/list', data)
-    },
+    },   
+    //获取权限列表
+    getAuthorityBySystemId(systemId, pageNum, pageSize) {
+        let data = { systemId, pageNum, pageSize }
+        return postFun('/authority/list', data)
+    },    
     //添加权限
     addAuthority(data) {
         return postFun('/authority/add', data)
@@ -92,17 +99,21 @@ export default {
         return postFun('/authority/update', data)
     },
     //删除权限
-    deleteAuthority(authorityId) {
-        return postFun('/authority/delete', { authorityId })
+    deleteAuthority(authId) {
+        return postFun('/authority/delete', { authId })
     },
     /* =============================================================权限管理-end======================================================== */ 
 
 /* =============================================================组管理-start======================================================== */
     //获取组列表
-    getGroupList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getGroupList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/group/list', data)
     },
+    getGroupByPlatformId(platformId, pageNum, pageSize) {
+        let data = { platformId, pageNum, pageSize }
+        return postFun('/group/list', data)
+    },    
     //添加组
     addGroup(data) {
         return postFun('/group/add', data)
@@ -116,23 +127,32 @@ export default {
         return postFun('/group/delete', { groupId })
     },
     //获取组权限列表
-    getGroupAuthorityList(groupId) {
-        let data = { groupId }
-        return postFun('/group/auth_list', data)
+    getGroupAuthorityList(groupId, pageNum, pageSize) {
+        let data = { groupId, pageNum, pageSize }
+        return postFun('/group_authority/list', data)
     },
-    //更改组权限列表
-    updateGroupAuthority(groupId, auth_list) {
-        let data = { groupId, auth_list }
-        return postFun('/group/update_auth', data)
-    },       
+    //添加组权限列表
+    addGroupAuthority(groupId, authIds) {
+        let data = { groupId, authIds }
+        return postFun('/group_authority/bulk/add', data)
+    },    
+    //删除组权限列表
+    delGroupAuthority(groupId, authIds) {
+        let data = { groupId, authIds }
+        return postFun('/group_authority/bulk/delete', data)
+    },         
     /* =============================================================组管理-end======================================================== */
 
 /* =============================================================角色管理-start======================================================== */
     //获取角色列表
-    getRoleList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getRoleList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/role/list', data)
     },
+    getRoleByPlatformId(platformId, pageNum, pageSize) {
+        let data = { platformId, pageNum, pageSize }
+        return postFun('/role/list', data)
+    },    
     //添加角色
     addRole(data) {
         return postFun('/role/add', data)
@@ -146,23 +166,32 @@ export default {
         return postFun('/role/delete', { roleId })
     },
     //获取角色权限列表
-    getRoleAuthorityList(roleId) {
-        let data = { roleId }
-        return postFun('/role/auth_list', data)
+    getRoleAuthorityList(roleId, pageNum, pageSize) {
+        let data = { roleId, pageNum, pageSize }
+        return postFun('/role_authority/list', data)
     },
-    //更改角色权限列表
-    updateRoleAuthority(roleId, auth_list) {
-        let data = { roleId, auth_list }
-        return postFun('/role/update_auth', data)
-    },        
+    //添加角色权限列表
+    addRoleAuthority(roleId, authIds) {
+        let data = { roleId, authIds }
+        return postFun('/role_authority/bulk/add', data)
+    },    
+    //删除角色权限列表
+    delRoleAuthority(roleId, authIds) {
+        let data = { roleId, authIds }
+        return postFun('/role_authority/bulk/delete', data)
+    },       
     /* =============================================================角色管理-end======================================================== */
 
     /* =============================================================组织管理-start======================================================== */
     //获取组织列表
-    getOrganizationList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getOrganizationList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/organization/list', data)
     },
+    getOrganizationByPlatformId(platformId, pageNum, pageSize) {
+        let data = { platformId, pageNum, pageSize }
+        return postFun('/organization/list', data)
+    },    
     //添加组织
     addOrganization(data) {
         return postFun('/organization/add', data)
@@ -176,21 +205,26 @@ export default {
         return postFun('/organization/delete', { organizationId })
     },
     //获取组织权限列表
-    getOrganizationAuthorityList(organizationId) {
-        let data = { organizationId }
-        return postFun('/organization/auth_list', data)
+    getOrganizationAuthorityList(organizationId, pageNum, pageSize) {
+        let data = { organizationId, pageNum, pageSize }
+        return postFun('/organization_authority/list', data)
     },
-    //更改组织权限列表
-    updateOrganizationAuthority(organizationId, auth_list) {
-        let data = { organizationId, auth_list }
-        return postFun('/organization/update_auth', data)
-    },       
+    //添加组织权限列表
+    addOrganizationAuthority(organizationId, authIds) {
+        let data = { organizationId, authIds }
+        return postFun('/organization_authority/bulk/add', data)
+    },
+    //删除组织权限列表
+    delOrganizationAuthority(organizationId, authIds) {
+        let data = { organizationId, authIds }
+        return postFun('/organization_authority/bulk/delete', data)
+    },
     /* =============================================================组织管理-end======================================================== */
 
 /* =============================================================用户管理-start======================================================== */
     //获取用户列表
-    getUserList(page_number = 1, page_size = 10) {
-        let data = { page_number, page_size }
+    getUserList(pageNum = 1, pageSize = 10) {
+        let data = { pageNum, pageSize }
         return postFun('/user/list', data)
     },
     //添加用户
@@ -230,20 +264,49 @@ export default {
         return postFun('/user_organization/update', data)
     },
     getUserGroup(userId) {
-        return postFun('/user_group/list', { userId })
+        let pageNum = 1, pageSize = 10
+        return postFun('/user_group/list', { userId, pageNum, pageSize })
     },
     getUserRole(userId) {
-        return postFun('/user_role/list', { userId })
+        let pageNum = 1, pageSize = 10
+        return postFun('/user_role/list', { userId, pageNum, pageSize })
     },
     getUserOrganization(userId) {
-        return postFun('/user_organization/list', { userId })
-    }      
+        let pageNum = 1, pageSize = 10
+        return postFun('/user_organization/list', { userId, pageNum, pageSize })
+    },
+    addUserGroup(userId, groupIds) {
+        return postFun('/user_group/bulk/add', { userId, groupIds })
+    },
+    addUserRole(userId, roleIds) {
+        return postFun('/user_role/bulk/add', { userId, roleIds })
+    },
+    addUserOrganization(userId, organizationIds) {
+        return postFun('/user_organization/bulk/add', { userId, organizationIds })
+    },
+    delUserGroup(userId, groupIds) {
+        return postFun('/user_group/bulk/delete', { userId, groupIds })
+    },
+    delUserRole(userId, roleIds) {
+        return postFun('/user_role/bulk/delete', { userId, roleIds })
+    },
+    delUserOrganization(userId, organizationIds) {
+        return postFun('/user_organization/bulk/delete', { userId, organizationIds })
+    },
+    getAuthorityTreeByPlatformId(platformId) {
+        return postFun('/platform/auth_list', { platformId })
+    },
+    getUserAuthorityList(userId, platformId, pageNum, pageSize) {
+        return postFun('/user_authority/platform_authority', { userId, platformId, pageNum, pageSize })
+    }           
     /* =============================================================用户管理-end======================================================== */
 
 }
 
 
 function postFun(url, data={}) {
+    var getTimestamp=new Date().getTime();  
+    url = url+"?timestamp="+getTimestamp
 
     return new Promise((resolve, reject) => {
         store.commit('SHOW_LOADING')

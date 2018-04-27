@@ -43,6 +43,7 @@
         data(){
             return {
                 id:this.$route.query.id-0,
+                platformId:this.$route.query.platformId-0,
                 type: this.$route.query.type-0,
                 desc: this.$route.query.desc-0,
                 vStyle:{'margin-bottom':0},
@@ -84,6 +85,26 @@
                     this.tableData[f_index].chosed=false
                 }            
             },
+            IsKeyInSet(id, set) {
+              let is_in = false
+              set.forEach((v,i)=>{
+                if (v == id) {
+                  is_in = true
+                }
+              })
+
+              return is_in
+            },
+            diff_set(left, right) {
+              let set = []
+              left.forEach((v,i)=>{
+                if (!this.IsKeyInSet(v, right)) {
+                  set.push(v)
+                }
+              })
+
+              return set
+            },
             //确认提交
             submit() {
                 if (this.canSubmit) {
@@ -91,12 +112,12 @@
                     let tmpArr = []
                     for (let key in this.tableData) {
                         if (this.tableData[key].chosed) {                       
-                            tmpArr.push(this.tableData[key].auth_id)
+                            tmpArr.push(this.tableData[key].authId)
                         }
                         if (null != this.tableData[key].children) {
                             this.tableData[key].children.forEach((v, i) => {
                                 if (v.chosed) {
-                                    tmpArr.push(v.auth_id)
+                                    tmpArr.push(v.authId)
                                 }
                             })
                         }
@@ -109,10 +130,12 @@
                         return
                     }
 
-                    this.grant_list = tmpArr
+                    let del = this.diff_set(this.grant_list, tmpArr)
+                    let add = this.diff_set(tmpArr, this.grant_list)
 
                     if (1 == this.type) {
-                        this.apis.updateGroupAuthority(this.id, this.grant_list)
+                        if (0 < add.length) {
+                            this.apis.addGroupAuthority(this.id, add)
                             .then((res) => {
                                 this.$store.dispatch('showToast','修改成功')
                                 this.canSubmit = true
@@ -124,10 +147,27 @@
                                 this.$store.commit('show_global_alert',("错误： "+errMsg))
                                 this.canSubmit = true
                             })
+                        }
+
+                        if (0 < del.length) {
+                            this.apis.delGroupAuthority(this.id, del)
+                            .then((res) => {
+                                this.$store.dispatch('showToast','修改成功')
+                                this.canSubmit = true
+                                setTimeout(()=>{
+                                    this.$router.push({path:'/groupMng'})
+                                },2100)
+                            })
+                            .catch((errMsg) => {
+                                this.$store.commit('show_global_alert',("错误： "+errMsg))
+                                this.canSubmit = true
+                            })
+                        }                          
                     }
 
                     if (2 == this.type) {
-                        this.apis.updateRoleAuthority(this.id, this.grant_list)
+                        if (0 < add.length) {
+                            this.apis.addRoleAuthority(this.id, add)
                             .then((res) => {
                                 this.$store.dispatch('showToast','修改成功')
                                 this.canSubmit = true
@@ -138,11 +178,28 @@
                             .catch((errMsg) => {
                                 this.$store.commit('show_global_alert',("错误： "+errMsg))
                                 this.canSubmit = true
-                            })                    
+                            })
+                        }
+
+                        if (0 < del.length) {
+                            this.apis.delRoleAuthority(this.id, del)
+                            .then((res) => {
+                                this.$store.dispatch('showToast','修改成功')
+                                this.canSubmit = true
+                                setTimeout(()=>{
+                                    this.$router.push({path:'/roleMng'})
+                                },2100)
+                            })
+                            .catch((errMsg) => {
+                                this.$store.commit('show_global_alert',("错误： "+errMsg))
+                                this.canSubmit = true
+                            })                        
+                        }                 
                     }
 
                     if (3 == this.type) {
-                        this.apis.updateOrganizationAuthority(this.id, this.grant_list)
+                        if (0 < add.length) {
+                            this.apis.addOrganizationAuthority(this.id, add)
                             .then((res) => {
                                 this.$store.dispatch('showToast','修改成功')
                                 this.canSubmit = true
@@ -153,7 +210,23 @@
                             .catch((errMsg) => {
                                 this.$store.commit('show_global_alert',("错误： "+errMsg))
                                 this.canSubmit = true
-                            })                    
+                            })
+                        }
+
+                        if (0 < del.length) {
+                            this.apis.delOrganizationAuthority(this.id, del)
+                            .then((res) => {
+                                this.$store.dispatch('showToast','修改成功')
+                                this.canSubmit = true
+                                setTimeout(()=>{
+                                    this.$router.push({path:'/orgMng'})
+                                },2100)
+                            })
+                            .catch((errMsg) => {
+                                this.$store.commit('show_global_alert',("错误： "+errMsg))
+                                this.canSubmit = true
+                            })                        
+                        }                   
                     }                    
                 } else { return }
             },
@@ -171,16 +244,16 @@
                     this.$router.push({path:"/orgMng"})
                 }                
             },
-            isAuthInList(auth_name, auth_list) {
+            isAuthInList(authName, auth_list) {
                 let is_selected = false
                 auth_list.forEach((v,i)=>{
-                  if (auth_name == v.auth_name) {
+                  if (authName == v.authName) {
                     is_selected = true
                   }
 
                   if (null != v.children) {
                     v.children.forEach((item, j) => {
-                        if (auth_name == item.auth_name) {
+                        if (authName == item.authName) {
                             is_selected = true
                         }                    
                     })
@@ -193,17 +266,17 @@
             fomatTableData(auth_list, grant_auth_list){
                 //父子菜单分离
                 auth_list.forEach((v,i)=>{
-                    v["chosed"] = this.isAuthInList(v.auth_name, grant_auth_list)
+                    v["chosed"] = this.isAuthInList(v.authName, grant_auth_list)
                     v["index"] = i
-                    v["label"] = v.auth_name
-                    v["value"] = v.auth_id
+                    v["label"] = v.authName
+                    v["value"] = v.authId
                     if (null != v.children) {
                         v.children.forEach((item, j) => {
-                          item["chosed"] = this.isAuthInList(item.auth_name, grant_auth_list)
+                          item["chosed"] = this.isAuthInList(item.authName, grant_auth_list)
                           item["index"] = j
                           item["parent"] = i
-                          item["label"] = item.auth_name
-                          item["value"] = item.auth_id                          
+                          item["label"] = item.authName
+                          item["value"] = item.authId                          
                         })
                     }
                 })
@@ -215,10 +288,10 @@
                   return
                 }
                 grant_auth_list.forEach((v,i)=>{
-                  this.grant_list.push(v.auth_id)
+                  this.grant_list.push(v.authId)
                   if (null != v.children) {
                     v.children.forEach((item, j) => {
-                      this.grant_list.push(item.auth_id)                   
+                      this.grant_list.push(item.authId)                   
                     })
                   }
                 })            
@@ -226,17 +299,21 @@
         },
         mounted(){
             (async ()=>{
+                this['id']=this.utils.getUrlParam('Id')
+                this['type']=this.utils.getUrlParam('type')
+                this['platformId']=this.utils.getUrlParam('platformId')
+
                 //1.获取所有权限列表
-                let all_auth_list = (await this.apis.getLeftMenuList()).data.list
+                let all_auth_list = (await this.apis.getAuthorityTreeByPlatformId(this.platformId)).data
                 let grant_auth_list = null
                 if (1 == this.type) {
-                    grant_auth_list = (await this.apis.getGroupAuthorityList(this.id)).data.list
+                    grant_auth_list = (await this.apis.getGroupAuthorityList(this.id, 1, 10000)).data
                 }
                 if (2 == this.type) {
-                    grant_auth_list = (await this.apis.getRoleAuthorityList(this.id)).data.list
+                    grant_auth_list = (await this.apis.getRoleAuthorityList(this.id, 1, 10000)).data
                 }
                 if (3 == this.type) {
-                    grant_auth_list = (await this.apis.getOrganizationAuthorityList(this.id)).data.list
+                    grant_auth_list = (await this.apis.getOrganizationAuthorityList(this.id, 1, 10000)).data
                 }
 
                 if (null != grant_auth_list) {

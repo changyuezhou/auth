@@ -1,11 +1,19 @@
 package com.system.auth.model.ext;
 
+import java.util.List;
+
 public class UserAuthorityView {
     private String userId;
     private String userName;
 
     private String authId;
     private String authName;
+
+    private String url;
+    private Integer authLevel;
+
+    private String authFId;
+    private String authFName;
 
     private String platformId;
     private String platformName;
@@ -63,6 +71,38 @@ public class UserAuthorityView {
 
     public void setAuthName(String authName) {
         this.authName = authName == null ? null : authName.trim();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getAuthLevel() {
+        return authLevel;
+    }
+
+    public void setAuthLevel(Integer authLevel) {
+        this.authLevel = authLevel;
+    }
+
+    public String getAuthFName() {
+        return authFName;
+    }
+
+    public void setAuthFName(String authFName) {
+        this.authFName = authFName;
+    }
+
+    public String getAuthFId() {
+        return authFId;
+    }
+
+    public void setAuthFId(String authFId) {
+        this.authFId = authFId;
     }
 
     public String getCreateUserId() {
