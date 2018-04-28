@@ -244,8 +244,8 @@ export default {
         return postFun('/user/query_by_name', { userName })
     },
     //更改用户密码
-    updatePassword(userId, oldPwd, newPwd) {
-        let data = { userId, oldPwd, newPwd }
+    updatePassword(oldPwd, newPwd) {
+        let data = { oldPwd, newPwd }
         return postFun('/user/update_password', data)
     },
     //更改用户角色

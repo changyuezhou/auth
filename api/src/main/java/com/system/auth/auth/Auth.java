@@ -12,6 +12,9 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import java.io.IOException;
@@ -19,18 +22,22 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.concurrent.TimeUnit;
 
+@Component
+@Configuration
 public class Auth {
-    private static String platformId = "";
-    private static String secretKey = "";
+    private static String platformId;
+    private static String secretKey;
     private static String openIdName = "open_id";
     private static String accessTokenName = "access_token";
     private static String userNameAlias = "user_name";
     private static String authHost = "127.0.0.1";
     private static String authPort = "8081";
     private static String signPath = "sign.html";
+    private static String webHost = "127.0.0.1";
+    private static String webPort = "8081";
     private static String getAccessTokenPath = "/api/auth/access_token";
     private static Integer MAX_RECORDS = 1000;
-    private static Integer EXPIRED_TIME = 84600;  // seconds
+    private static Integer EXPIRED_TIME = 600;  // seconds
 
     private static LoadingCache<String, User> cache =
             CacheBuilder.newBuilder()
@@ -51,21 +58,80 @@ public class Auth {
         return this.accessTokenName;
     }
 
-    public void setOpenIdName(String openIdName) {
-        this.openIdName = openIdName;
-    }
-
-    public void setAccessTokenName(String accessTokenName) {
-        this.accessTokenName = accessTokenName;
-    }
-
     public static String getPlatformId() {
         return platformId;
     }
 
+    public static String getWebHost() {
+        return webHost;
+    }
+
+    public static String getWebPort() {
+        return webPort;
+    }
+
+    @Value("${auth.platform_id}")
+    public void setPlatformId(String platformIdP) {
+        this.platformId = platformIdP;
+    }
+
+    @Value("${auth.secret_key}")
+    public void setSecretKey(String secretKeyP) {
+        this.secretKey = secretKeyP;
+    }
+
+    @Value("${auth.auth_host}")
+    public void setAuthHost(String authHostP) {
+        this.authHost = authHostP;
+    }
+
+    @Value("${auth.auth_port}")
+    public void setAuthPort(String authPortP) {
+        this.authPort = authPortP;
+    }
+
+    @Value("${auth.web_host}")
+    public void setWebHost(String webHostP) {
+        this.webHost = webHostP;
+    }
+
+    @Value("${auth.web_port}")
+    public void setWebPort(String webPortP) {
+        this.webPort = webPortP;
+    }
+
+    @Value("${auth.get_access_token_path}")
+    public void setGetAccessTokenPath(String getAccessTokenPathP) {
+        this.getAccessTokenPath = getAccessTokenPathP;
+    }
+
+    @Value("${auth.cache.max_records}")
+    public void setMaxRecords(Integer maxRecords) {
+        this.MAX_RECORDS = maxRecords;
+    }
+
+    @Value("${auth.cache.expired}")
+    public void setExpiredTime(Integer expiredTime) {
+        this.EXPIRED_TIME = expiredTime;
+    }
+
+    @Value("${auth.cookie.open_id_alisa}")
+    public void setOpenIdName(String openIdAlisa) {
+        this.openIdName = openIdAlisa;
+    }
+
+    @Value("${auth.cookie.access_token_alisa}")
+    public void setAccessTokenName(String accessTokenName) {
+        this.accessTokenName = accessTokenName;
+    }
+
+    @Value("${auth.cookie.user_name_alisa}")
+    public void setUserNameAlias(String userNameAlias) {
+        this.userNameAlias = userNameAlias;
+    }
     // #################################################################################################################
 
-    public static void initialAuth(String platformIdParam, String secretKeyParam, String authHostParam, String authPortParam, String getAccessTokenPathParam, Integer MAX_RECORDS_PARAM, Integer EXPIRED_TIME_PARAM, String openIdNameParam, String accessTokenNameParam, String userNameAliasParam) {
+    public static void initialAuth(String platformIdParam, String secretKeyParam, String authHostParam, String authPortParam, String webHostParam, String webPortParam, String getAccessTokenPathParam, Integer MAX_RECORDS_PARAM, Integer EXPIRED_TIME_PARAM, String openIdNameParam, String accessTokenNameParam, String userNameAliasParam) {
         platformId = platformIdParam;
         secretKey = secretKeyParam;
 
@@ -75,6 +141,14 @@ public class Auth {
 
         if (0 < authPortParam.length()) {
             authPort = authPortParam;
+        }
+
+        if (0 < webHostParam.length()) {
+            webHost = webHostParam;
+        }
+
+        if (0 < webPortParam.length()) {
+            webPort = webPortParam;
         }
 
         if (0 < getAccessTokenPathParam.length()) {
@@ -105,7 +179,7 @@ public class Auth {
     public static UserInfo getUserInfo(HttpServletRequest request) {
         UserInfo userInfo = new UserInfo();
 
-        String redirectBack = "http://" + authHost + ":" + authPort + "/" + getAccessTokenPath + "?openIdName=" + openIdName + "&accessTokenName=" + accessTokenName + "&userNameAlias=" + userNameAlias;
+        String redirectBack = "http://" + webHost + ":" + webPort + "/" + getAccessTokenPath + "?openIdName=" + openIdName + "&accessTokenName=" + accessTokenName + "&userNameAlias=" + userNameAlias;
         String oriURL = request.getHeader("referer");
 
         try {
@@ -115,8 +189,9 @@ public class Auth {
             String openId = getCookieValue(openIdName, request.getCookies());
             String accessToken = getCookieValue(accessTokenName, request.getCookies());
 
-            User user = cache.get(openId + "_" + accessToken);
-            cache.refresh(openId + "_" + accessToken);
+            String key = openId + "_" + accessToken;
+            User user = cache.get(key);
+            cache.put(key, user);
             userInfo.setCode(0);
             userInfo.setMsg("");
             userInfo.setData(user);

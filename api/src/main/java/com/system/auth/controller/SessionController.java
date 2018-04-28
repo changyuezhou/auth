@@ -1,6 +1,7 @@
 package com.system.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.system.auth.auth.Auth;
 import com.system.auth.bean.*;
 import com.system.auth.dao.PlatformMapper;
 import com.system.auth.dao.SessionMapper;
@@ -317,19 +318,19 @@ public class SessionController {
         Cookie open_id_cookie = new Cookie(openIdName, access_token_request.getOpenId());
         open_id_cookie.setMaxAge(tokenExpire);  // (s)
         open_id_cookie.setPath("/");
-        open_id_cookie.setDomain(request.getRemoteHost());
+        open_id_cookie.setDomain(Auth.getWebHost());
         response.addCookie(open_id_cookie);
 
         Cookie access_token_cookie = new Cookie(accessTokenName, access_token);
         access_token_cookie.setMaxAge(tokenExpire);  // (s)
         access_token_cookie.setPath("/");
-        access_token_cookie.setDomain(request.getRemoteHost());
+        access_token_cookie.setDomain(Auth.getWebHost());
         response.addCookie(access_token_cookie);
 
         Cookie user_name_cookie = new Cookie(userNameAlias, user_view.getUserName());
         user_name_cookie.setMaxAge(tokenExpire);  // (s)
         user_name_cookie.setPath("/");
-        user_name_cookie.setDomain(request.getRemoteHost());
+        user_name_cookie.setDomain(Auth.getWebHost());
         response.addCookie(user_name_cookie);
 
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(access_token_request), request, oriURL, SystemLogging.getSUCCESS());

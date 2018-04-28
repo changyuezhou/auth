@@ -22,7 +22,8 @@ export default {
     },
     methods:{
         quit(){
-            let domain = "."+location.hostname
+            let domain = location.hostname
+            console.log("*****************:" + domain)
             this.utils.setCookie('access_token','',-1,domain)
             this.utils.setCookie('open_id','',-1,domain)
             this.utils.setCookie('user_name','',-1,domain)

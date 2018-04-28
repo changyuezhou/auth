@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="line clearfix">
-                    <label for="description" class="pull-left"><sup>* </sup>备注：</label>
+                    <label for="description" class="pull-left"><sup></sup>备注：</label>
                     <input  
                         class="inputCom" 
                         :style="{'width':'180px'}"

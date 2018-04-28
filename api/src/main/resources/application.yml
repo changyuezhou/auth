@@ -1,6 +1,28 @@
 server:
   port: 8081
 
+session:
+  token:
+    expire: 300
+  refresh_token:
+    expire: 600
+
+auth:
+  platform_id: 77e2edcc9b40441200e31dc57dbb8829
+  secret_key: 06848368e2647bf5ec493160c423d453
+  auth_host: auth.system.com
+  auth_port: 8088
+  web_host: auth.system.com
+  web_port: 8088
+  get_access_token_path: /api/auth/access_token
+  cache:
+    max_records: 10000
+    expired: 600
+  cookie:
+    open_id_alisa: open_id
+    access_token_alisa: access_token
+    user_name_alisa: user_name
+
 spring:
   datasource:
      url: jdbc:mysql://127.0.0.1:13306/db_auth?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false

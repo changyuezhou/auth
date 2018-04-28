@@ -8,6 +8,7 @@ import com.system.auth.auth.UserInfo;
 import com.system.auth.bean.*;
 import com.system.auth.model.request.UserBulk;
 import com.system.auth.model.request.UserKey;
+import com.system.auth.model.request.UserUpdatePassword;
 import com.system.auth.model.response.UserAddResponse;
 import com.system.auth.dao.UserMapper;
 import com.system.auth.model.User;
@@ -120,6 +121,48 @@ public class UserController {
 
         user.setUpdateTime(System.currentTimeMillis());
         userMapper.updateByPrimaryKeySelective(user);
+
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, mapper.writeValueAsString(new OperationMessage(0, "")), SystemLogging.getSUCCESS());
+
+        return new OperationMessage(0, "");
+    }
+
+    @ApiOperation(value="修改密码", notes="修改用户密码")
+    @ApiImplicitParam(name = "user", value = "用户密码信息", required = true, dataType = "UserUpdatePassword")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求服务器已处理"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；资源不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")}
+    )
+    @RequestMapping(value = "/update_password", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+    public OperationMessage update_password(@Validated @RequestBody UserUpdatePassword user,  BindingResult check, HttpServletRequest request) throws Exception {
+        if (check.hasErrors()) {
+            throw new OperationException(OperationException.getUserInputException(), check.getAllErrors().get(0).getDefaultMessage());
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, "", SystemLogging.getOperationStart());
+
+        UserInfo user_info = Auth.getUserInfo(request);
+        if (302 == user_info.getCode() || null == user_info.getData()) {
+            OperationMessage result = new OperationMessage(302, user_info.getMsg());
+
+            return result;
+        }
+
+        String password = userMapper.selectPasswordByPrimaryKey(user_info.getData().getUserId());
+        if (null == password) {
+            throw new OperationException(OperationException.getUserInputException(), "user id: " + user_info.getData().getUserId() + " is not exists");
+        }
+
+        if (!password.equalsIgnoreCase(user.getOldPwd())) {
+            throw new OperationException(OperationException.getUserInputException(), "user id: " + user_info.getData().getUserId() + " old password is not correct");
+        }
+
+        user.setUserId(user_info.getData().getUserId());
+        userMapper.updatePasswordByPrimaryKey(user);
 
         SystemLogging.Logging(SystemLogging.getINFO(), mapper.writeValueAsString(user), request, mapper.writeValueAsString(new OperationMessage(0, "")), SystemLogging.getSUCCESS());
 

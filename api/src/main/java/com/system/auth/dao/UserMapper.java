@@ -3,6 +3,7 @@ package com.system.auth.dao;
 import com.system.auth.model.User;
 import com.system.auth.model.ext.UserView;
 import com.system.auth.model.request.UserBulk;
+import com.system.auth.model.request.UserUpdatePassword;
 import com.system.auth.sql.UserSQL;
 import com.system.auth.model.request.UserListCondition;
 import org.apache.ibatis.annotations.*;
@@ -61,6 +62,14 @@ public interface UserMapper {
 
     @Select({
             "select",
+            "password ",
+            "from t_user",
+            "where user_id = #{userId,jdbcType=VARCHAR}"
+    })
+    String selectPasswordByPrimaryKey(String userId);
+
+    @Select({
+            "select",
             "a.user_id, a.user_name, a.password, a.status, a.mobile_number, a.contact_name, a.description, ",
             "a.create_user_id, b.user_name as create_user_name, a.update_time, a.create_time",
             "from t_user a, t_user b",
@@ -111,4 +120,11 @@ public interface UserMapper {
         "where user_id = #{userId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(User record);
+
+    @Update({
+            "update t_user",
+            "set password = #{newPwd,jdbcType=VARCHAR}",
+            "where user_id = #{userId,jdbcType=VARCHAR}"
+    })
+    int updatePasswordByPrimaryKey(UserUpdatePassword user);
 }
