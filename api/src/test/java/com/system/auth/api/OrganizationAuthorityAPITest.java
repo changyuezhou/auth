@@ -1,11 +1,15 @@
 package com.system.auth.api;
 
+import com.system.auth.auth.Auth;
 import com.system.auth.bean.*;
+import com.system.auth.dao.UserMapper;
 import com.system.auth.model.*;
 import com.system.auth.model.System;
 import com.system.auth.model.ext.OrganizationAuthorityView;
 import com.system.auth.model.provider.OrganizationAuthorityBulkInsert;
 import com.system.auth.model.request.*;
+import com.system.auth.util.MybatisUtil;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -15,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
@@ -56,6 +62,43 @@ public class OrganizationAuthorityAPITest {
 
     private static int time_diff_base = 10000;
 
+    @Autowired
+    SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();
+    UserMapper userMapper = session.getMapper(UserMapper.class);
+
+    // add session user
+    @Test
+    public void d_test01() throws Exception {
+        User user = new User();
+        user.setUserId(UserBean.getUserId());
+        user.setUserName(UserBean.getUserName());
+        user.setDescription(UserBean.getDescription());
+        user.setCreateUserId(UserBean.getUserId());
+        user.setCreateTime(UserBean.getCreateTime());
+        user.setUpdateTime(UserBean.getUpdateTime());
+        user.setPassword(UserBean.getPassword());
+        user.setMobileNumber(UserBean.getMobileNumber());
+        user.setContactName(UserBean.getContactName());
+        user.setStatus(UserBean.getStatus());
+
+        userMapper.insertSelective(user);
+
+        com.system.auth.auth.User auth_user = new com.system.auth.auth.User();
+        auth_user.setUserId(UserBean.getUserId());
+        auth_user.setUserName(UserBean.getUserName());
+        auth_user.setDescription(UserBean.getDescription());
+        auth_user.setCreateUserId(UserBean.getUserId());
+        auth_user.setCreateTime(UserBean.getCreateTime());
+        auth_user.setUpdateTime(UserBean.getUpdateTime());
+        auth_user.setMobileNumber(UserBean.getMobileNumber());
+        auth_user.setContactName(UserBean.getContactName());
+        auth_user.setStatus(UserBean.getStatus());
+
+        String key = SessionBean.getOpenId() + "_" + SessionBean.getAccessToken();
+
+        Auth.setUserInfo(key, auth_user);
+    }
+
     // add user test
     @Test
     public void test01() throws Exception {
@@ -66,8 +109,15 @@ public class OrganizationAuthorityAPITest {
         user.setContactName("contact name");
         user.setMobileNumber("138000000000");
         user.setPassword("12345678901234567890");
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<User> req_entity = new HttpEntity<User>(user, requestHeaders);
+
         ResponseEntity<UserAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user/add", user,  UserAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/user/add", req_entity,  UserAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -82,10 +132,16 @@ public class OrganizationAuthorityAPITest {
     public void test02() throws Exception {
         System new_system = new System();
         new_system.setSystemName(systemName);
-        new_system.setCreateUserId(userId);
         new_system.setDescription("测试");
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<System> req_entity = new HttpEntity<System>(new_system, requestHeaders);
+
         ResponseEntity<SystemAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/system/add", new_system,  SystemAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/system/add", req_entity,  SystemAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -105,10 +161,15 @@ public class OrganizationAuthorityAPITest {
         new_platform.setPlatformDomain("www");
         new_platform.setPlatformName(platformName);
         new_platform.setDescription("description");
-        new_platform.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Platform> req_entity = new HttpEntity<Platform>(new_platform, requestHeaders);
 
         ResponseEntity<PlatformAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/add", new_platform,  PlatformAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/platform/add", req_entity,  PlatformAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -125,10 +186,15 @@ public class OrganizationAuthorityAPITest {
         new_organization.setPlatformId(platformId);
         new_organization.setOrganizationName(organizationName);
         new_organization.setDescription("description");
-        new_organization.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Organization> req_entity = new HttpEntity<Organization>(new_organization, requestHeaders);
 
         ResponseEntity<OrganizationAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization/add", new_organization,  OrganizationAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/organization/add", req_entity,  OrganizationAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -148,10 +214,15 @@ public class OrganizationAuthorityAPITest {
         new_authority.setAuthLevel(0);
         new_authority.setAuthName(authName);
         new_authority.setDescription("description");
-        new_authority.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Authority> req_entity = new HttpEntity<Authority>(new_authority, requestHeaders);
 
         ResponseEntity<AuthorityAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/add", new_authority,  AuthorityAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/authority/add", req_entity,  AuthorityAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -166,10 +237,15 @@ public class OrganizationAuthorityAPITest {
     public void test21() throws Exception {
         new_organization_auth.setAuthId(authId);
         new_organization_auth.setOrganizationId(organizationId);
-        new_organization_auth.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthority> req_entity = new HttpEntity<OrganizationAuthority>(new_organization_auth, requestHeaders);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/add", new_organization_auth,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization_authority/add", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -183,13 +259,19 @@ public class OrganizationAuthorityAPITest {
         condition.setOrganizationName(organizationName);
         condition.setOrganizationId(new_organization_auth.getOrganizationId());
         condition.setPlatformId(platformId);
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
+        condition.setCreateUserId(UserBean.getUserId());
+        condition.setCreateUserName(UserBean.getUserName());
         condition.setPageSize(10);
         condition.setPageNum(0);
 
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthorityListCondition> req_entity = new HttpEntity<OrganizationAuthorityListCondition>(condition, requestHeaders);
+
         ResponseEntity<OrganizationAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/list", condition,  OrganizationAuthorityListResponseTest.class);
+                "http://localhost:" + this.port + "/api/organization_authority/list", req_entity,  OrganizationAuthorityListResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -203,8 +285,8 @@ public class OrganizationAuthorityAPITest {
         then(organization_authority_view.getPlatformName()).isEqualTo(platformName);
         then(organization_authority_view.getOrganizationId()).isEqualTo(new_organization_auth.getOrganizationId());
         then(organization_authority_view.getOrganizationName()).isEqualTo(organizationName);
-        then(organization_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(organization_authority_view.getCreateUserId()).isEqualTo(userId);
+        then(organization_authority_view.getCreateUserName()).isEqualTo(UserBean.getUserName());
+        then(organization_authority_view.getCreateUserId()).isEqualTo(UserBean.getUserId());
     }
 
     // delete
@@ -213,8 +295,15 @@ public class OrganizationAuthorityAPITest {
         OrganizationAuthorityKey organization_req = new OrganizationAuthorityKey();
         organization_req.setAuthId(authId);
         organization_req.setOrganizationId(organizationId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthorityKey> req_entity = new HttpEntity<OrganizationAuthorityKey>(organization_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/delete", organization_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization_authority/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -229,10 +318,15 @@ public class OrganizationAuthorityAPITest {
         list.add(authId);
         organization_auths.setAuthIds(list);
         organization_auths.setOrganizationId(organizationId);
-        organization_auths.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthorityBulkInsert> req_entity = new HttpEntity<OrganizationAuthorityBulkInsert>(organization_auths, requestHeaders);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/bulk/add", organization_auths,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization_authority/bulk/add", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -246,13 +340,19 @@ public class OrganizationAuthorityAPITest {
         condition.setOrganizationName(organizationName);
         condition.setOrganizationId(new_organization_auth.getOrganizationId());
         condition.setPlatformId(platformId);
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
+        condition.setCreateUserId(UserBean.getUserId());
+        condition.setCreateUserName(UserBean.getUserName());
         condition.setPageSize(10);
         condition.setPageNum(0);
 
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthorityListCondition> req_entity = new HttpEntity<OrganizationAuthorityListCondition>(condition, requestHeaders);
+
         ResponseEntity<OrganizationAuthorityListResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/list", condition,  OrganizationAuthorityListResponseTest.class);
+                "http://localhost:" + this.port + "/api/organization_authority/list", req_entity,  OrganizationAuthorityListResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -266,8 +366,8 @@ public class OrganizationAuthorityAPITest {
         then(organization_authority_view.getPlatformName()).isEqualTo(platformName);
         then(organization_authority_view.getOrganizationId()).isEqualTo(new_organization_auth.getOrganizationId());
         then(organization_authority_view.getOrganizationName()).isEqualTo(organizationName);
-        then(organization_authority_view.getCreateUserName()).isEqualTo(userName);
-        then(organization_authority_view.getCreateUserId()).isEqualTo(userId);
+        then(organization_authority_view.getCreateUserName()).isEqualTo(UserBean.getUserName());
+        then(organization_authority_view.getCreateUserId()).isEqualTo(UserBean.getUserId());
     }
 
     // bulk delete
@@ -279,8 +379,14 @@ public class OrganizationAuthorityAPITest {
         organization_auths.setAuthIds(list);
         organization_auths.setOrganizationId(organizationId);
 
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationAuthorityBulk> req_entity = new HttpEntity<OrganizationAuthorityBulk>(organization_auths, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/bulk/delete", organization_auths,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization_authority/bulk/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -291,8 +397,15 @@ public class OrganizationAuthorityAPITest {
     @Test
     public void test94() throws Exception {
         AuthorityKey authority_req = new AuthorityKey(authId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<AuthorityKey> req_entity = new HttpEntity<AuthorityKey>(authority_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/delete", authority_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/authority/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -303,8 +416,15 @@ public class OrganizationAuthorityAPITest {
     @Test
     public void test95() throws Exception {
         OrganizationKey organization_req = new OrganizationKey(organizationId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<OrganizationKey> req_entity = new HttpEntity<OrganizationKey>(organization_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization/delete", organization_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -315,8 +435,15 @@ public class OrganizationAuthorityAPITest {
     @Test
     public void test96() throws Exception {
         PlatformKey platform_req = new PlatformKey(platformId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<PlatformKey> req_entity = new HttpEntity<PlatformKey>(platform_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/delete", platform_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/platform/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -326,9 +453,16 @@ public class OrganizationAuthorityAPITest {
     // delete
     @Test
     public void test97() throws Exception {
-        SystemKey user_req = new SystemKey(systemId);
+        SystemKey system_req = new SystemKey(systemId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<SystemKey> req_entity = new HttpEntity<SystemKey>(system_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/system/delete", user_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/system/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -339,8 +473,15 @@ public class OrganizationAuthorityAPITest {
     @Test
     public void test98() throws Exception {
         UserKey user_req = new UserKey(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<UserKey> req_entity = new HttpEntity<UserKey>(user_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user/delete", user_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/user/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -349,11 +490,23 @@ public class OrganizationAuthorityAPITest {
 
     @Test
     public void test99() throws Exception {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<String> req_entity = new HttpEntity<String>("{}", requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/organization_authority/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/organization_authority/not_found", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());
         then(entity.getBody().getMsg()).isEqualTo(OperationException.getExceptionMsg());
+    }
+
+    // delete session user
+    @Test
+    public void z_test01() throws Exception {
+        userMapper.deleteByPrimaryKey(UserBean.getUserId());
     }
 }

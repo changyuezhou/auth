@@ -70,6 +70,10 @@ public class Auth {
         return webPort;
     }
 
+    public static void setUserInfo(String key, User user) {
+        cache.put(key, user);
+    }
+
     @Value("${auth.platform_id}")
     public void setPlatformId(String platformIdP) {
         this.platformId = platformIdP;
@@ -183,13 +187,16 @@ public class Auth {
         String oriURL = request.getHeader("referer");
 
         try {
-            redirectBack += "&oriURL=" + URLEncoder.encode(oriURL, "UTF-8");
+            if (null != oriURL) {
+                redirectBack += "&oriURL=" + URLEncoder.encode(oriURL, "UTF-8");
+            }
             redirectBack = URLEncoder.encode(redirectBack, "UTF-8");
 
             String openId = getCookieValue(openIdName, request.getCookies());
             String accessToken = getCookieValue(accessTokenName, request.getCookies());
 
             String key = openId + "_" + accessToken;
+            System.out.print(" ######################################### key:" + key + "\r\n");
             User user = cache.get(key);
             cache.put(key, user);
             userInfo.setCode(0);
@@ -198,7 +205,6 @@ public class Auth {
             return userInfo;
         } catch (Exception e) {
             // e.printStackTrace();
-
             String authToken = getAuthToken();
             String redirectURL = "http://" + authHost + ":" + authPort + "/" + signPath + "?isShow=true&authToken=" + authToken + "&platformId=" + platformId + "&redirectBack=" + redirectBack;
             userInfo.setCode(302);

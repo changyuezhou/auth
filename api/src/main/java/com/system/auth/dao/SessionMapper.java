@@ -14,6 +14,22 @@ import org.apache.ibatis.type.JdbcType;
 import java.util.List;
 
 public interface SessionMapper {
+    @Insert({
+            "insert into t_session (platform_id, auth_token_create_time, ",
+            "auth_token_expire, auth_token, auth_token_used, open_id, user_id, code, ",
+            "code_create_time, code_expire, code_used, access_token, access_token_create_time, ",
+            "access_token_expire, access_token_used, refresh_token, refresh_token_create_time,",
+            "refresh_token_expire, refresh_token_used)",
+            "values (#{platformId,jdbcType=VARCHAR},",
+            "#{authTokenCreateTime,jdbcType=INTEGER}, #{authTokenExpire,jdbcType=INTEGER}, #{authToken,jdbcType=VARCHAR},#{authTokenUsed,jdbcType=INTEGER},",
+            "#{openId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},",
+            "#{code,jdbcType=VARCHAR}, #{codeCreateTime,jdbcType=INTEGER}, #{codeExpire,jdbcType=INTEGER},#{codeUsed,jdbcType=INTEGER},",
+            "#{accessToken,jdbcType=VARCHAR}, #{accessTokenCreateTime,jdbcType=INTEGER}, #{accessTokenExpire,jdbcType=INTEGER},#{accessTokenUsed,jdbcType=INTEGER},",
+            "#{refreshToken,jdbcType=VARCHAR}, #{refreshTokenCreateTime,jdbcType=INTEGER}, #{refreshTokenExpire,jdbcType=INTEGER},#{refreshTokenUsed,jdbcType=INTEGER}",
+            ")"
+    })
+    int insert(Session session);
+
     @InsertProvider(type = SessionSQL.class, method = "insertByAuthToken")
     int insertByAuthToken(Session session);
 
@@ -101,4 +117,10 @@ public interface SessionMapper {
             @Result(column="create_time", property="createTime", jdbcType=JdbcType.BIGINT)
     })
     List<UserAuthorityView> selectUserAuthorityByUserSession(UserSessionQuery request);
+
+    @Delete({
+            "delete from t_session where platform_id=",
+            "#{platformId, jdbcType=VARCHAR} and user_id=#{userId, jdbcType=VARCHAR}"
+    })
+    int delete(Session session);
 }

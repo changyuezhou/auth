@@ -1,11 +1,15 @@
 package com.system.auth.api;
 
+import com.system.auth.auth.Auth;
 import com.system.auth.bean.*;
+import com.system.auth.dao.UserMapper;
 import com.system.auth.model.*;
 import com.system.auth.model.System;
 import com.system.auth.model.ext.AuthorityView;
 import com.system.auth.model.ext.UserAuthorityView;
 import com.system.auth.model.request.*;
+import com.system.auth.util.MybatisUtil;
+import org.apache.ibatis.session.SqlSession;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -15,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
@@ -54,6 +60,43 @@ public class UserRoleAPITest {
 
     private static int time_diff_base = 10000;
 
+    @Autowired
+    SqlSession session = MybatisUtil.getSqlSessionFactory().openSession();
+    UserMapper userMapper = session.getMapper(UserMapper.class);
+
+    // add session user
+    @Test
+    public void d_test01() throws Exception {
+        User user = new User();
+        user.setUserId(UserBean.getUserId());
+        user.setUserName(UserBean.getUserName());
+        user.setDescription(UserBean.getDescription());
+        user.setCreateUserId(UserBean.getUserId());
+        user.setCreateTime(UserBean.getCreateTime());
+        user.setUpdateTime(UserBean.getUpdateTime());
+        user.setPassword(UserBean.getPassword());
+        user.setMobileNumber(UserBean.getMobileNumber());
+        user.setContactName(UserBean.getContactName());
+        user.setStatus(UserBean.getStatus());
+
+        userMapper.insertSelective(user);
+
+        com.system.auth.auth.User auth_user = new com.system.auth.auth.User();
+        auth_user.setUserId(UserBean.getUserId());
+        auth_user.setUserName(UserBean.getUserName());
+        auth_user.setDescription(UserBean.getDescription());
+        auth_user.setCreateUserId(UserBean.getUserId());
+        auth_user.setCreateTime(UserBean.getCreateTime());
+        auth_user.setUpdateTime(UserBean.getUpdateTime());
+        auth_user.setMobileNumber(UserBean.getMobileNumber());
+        auth_user.setContactName(UserBean.getContactName());
+        auth_user.setStatus(UserBean.getStatus());
+
+        String key = SessionBean.getOpenId() + "_" + SessionBean.getAccessToken();
+
+        Auth.setUserInfo(key, auth_user);
+    }
+
     // add user test
     @Test
     public void test01() throws Exception {
@@ -64,8 +107,15 @@ public class UserRoleAPITest {
         user.setContactName("contact name");
         user.setMobileNumber("138000000000");
         user.setPassword("12345678901234567890");
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<User> req_entity = new HttpEntity<User>(user, requestHeaders);
+
         ResponseEntity<UserAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user/add", user,  UserAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/user/add", req_entity,  UserAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -80,10 +130,16 @@ public class UserRoleAPITest {
     public void test02() throws Exception {
         System new_system = new System();
         new_system.setSystemName(systemName);
-        new_system.setCreateUserId(userId);
         new_system.setDescription("测试");
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<System> req_entity = new HttpEntity<System>(new_system, requestHeaders);
+
         ResponseEntity<SystemAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/system/add", new_system,  SystemAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/system/add", req_entity,  SystemAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -92,6 +148,7 @@ public class UserRoleAPITest {
 
         systemId = entity.getBody().getData().getSystemId();
     }
+
 
     // add platform test
     @Test
@@ -103,10 +160,15 @@ public class UserRoleAPITest {
         new_platform.setPlatformDomain("www");
         new_platform.setPlatformName(platformName);
         new_platform.setDescription("description");
-        new_platform.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Platform> req_entity = new HttpEntity<Platform>(new_platform, requestHeaders);
 
         ResponseEntity<PlatformAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/add", new_platform,  PlatformAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/platform/add", req_entity,  PlatformAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -123,10 +185,15 @@ public class UserRoleAPITest {
         new_role.setPlatformId(platformId);
         new_role.setRoleName(roleName);
         new_role.setDescription("description");
-        new_role.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Role> req_entity = new HttpEntity<Role>(new_role, requestHeaders);
 
         ResponseEntity<RoleAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/role/add", new_role,  RoleAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/role/add", req_entity,  RoleAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -146,10 +213,15 @@ public class UserRoleAPITest {
         new_authority.setAuthLevel(0);
         new_authority.setAuthName(authName);
         new_authority.setDescription("description");
-        new_authority.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<Authority> req_entity = new HttpEntity<Authority>(new_authority, requestHeaders);
 
         ResponseEntity<AuthorityAddResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/add", new_authority,  AuthorityAddResponseTest.class);
+                "http://localhost:" + this.port + "/api/authority/add", req_entity,  AuthorityAddResponseTest.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -166,10 +238,15 @@ public class UserRoleAPITest {
 
         new_role_auth.setAuthId(authId);
         new_role_auth.setRoleId(roleId);
-        new_role_auth.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<RoleAuthority> req_entity = new HttpEntity<RoleAuthority>(new_role_auth, requestHeaders);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/role_authority/add", new_role_auth,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/role_authority/add", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -181,10 +258,15 @@ public class UserRoleAPITest {
     public void test21() throws Exception {
         new_user_role.setUserId(userId);
         new_user_role.setRoleId(roleId);
-        new_user_role.setCreateUserId(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<UserRole> req_entity = new HttpEntity<UserRole>(new_user_role, requestHeaders);
 
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user_role/add", new_user_role,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/user_role/add", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -199,13 +281,19 @@ public class UserRoleAPITest {
         condition.setPlatformId(platformId);
         condition.setUserId(userId);
         condition.setUserName(userName);
-        condition.setCreateUserId(userId);
-        condition.setCreateUserName(userName);
+        condition.setCreateUserId(UserBean.getUserId());
+        condition.setCreateUserName(UserBean.getUserName());
         condition.setPageSize(10);
         condition.setPageNum(1);
 
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<UserAuthorityListCondition> req_entity = new HttpEntity<UserAuthorityListCondition>(condition, requestHeaders);
+
         ResponseEntity<UserAuthorityListConditionResponseTest> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user_authority/list", condition,  UserAuthorityListConditionResponseTest.class);
+                "http://localhost:" + this.port + "/api/user_authority/platform_authority", req_entity,  UserAuthorityListConditionResponseTest.class);
 
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
@@ -221,8 +309,8 @@ public class UserRoleAPITest {
         then(authority_view.getPlatformName()).isEqualTo(platformName);
         then(authority_view.getAuthId()).isEqualTo(authId);
         then(authority_view.getAuthName()).isEqualTo(authName);
-        then(authority_view.getCreateUserName()).isEqualTo(userName);
-        then(authority_view.getCreateUserId()).isEqualTo(userId);
+        then(authority_view.getCreateUserName()).isEqualTo(UserBean.getUserName());
+        then(authority_view.getCreateUserId()).isEqualTo(UserBean.getUserId());
     }
 
     // delete
@@ -231,8 +319,15 @@ public class UserRoleAPITest {
         UserRoleKey user_role_req = new UserRoleKey();
         user_role_req.setUserId(userId);
         user_role_req.setRoleId(roleId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<UserRoleKey> req_entity = new HttpEntity<UserRoleKey>(user_role_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user_role/delete", user_role_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/user_role/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -245,8 +340,15 @@ public class UserRoleAPITest {
         RoleAuthorityKey role_req = new RoleAuthorityKey();
         role_req.setAuthId(authId);
         role_req.setRoleId(roleId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<RoleAuthorityKey> req_entity = new HttpEntity<RoleAuthorityKey>(role_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/role_authority/delete", role_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/role_authority/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -257,8 +359,15 @@ public class UserRoleAPITest {
     @Test
     public void test94() throws Exception {
         AuthorityKey authority_req = new AuthorityKey(authId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<AuthorityKey> req_entity = new HttpEntity<AuthorityKey>(authority_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/authority/delete", authority_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/authority/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -269,8 +378,15 @@ public class UserRoleAPITest {
     @Test
     public void test95() throws Exception {
         RoleKey role_req = new RoleKey(roleId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<RoleKey> req_entity = new HttpEntity<RoleKey>(role_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/role/delete", role_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/role/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -281,8 +397,15 @@ public class UserRoleAPITest {
     @Test
     public void test96() throws Exception {
         PlatformKey platform_req = new PlatformKey(platformId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<PlatformKey> req_entity = new HttpEntity<PlatformKey>(platform_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/platform/delete", platform_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/platform/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -292,9 +415,16 @@ public class UserRoleAPITest {
     // delete
     @Test
     public void test97() throws Exception {
-        SystemKey user_req = new SystemKey(systemId);
+        SystemKey system_req = new SystemKey(systemId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<SystemKey> req_entity = new HttpEntity<SystemKey>(system_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/system/delete", user_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/system/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
@@ -305,21 +435,41 @@ public class UserRoleAPITest {
     @Test
     public void test98() throws Exception {
         UserKey user_req = new UserKey(userId);
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<UserKey> req_entity = new HttpEntity<UserKey>(user_req, requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user/delete", user_req,  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/user/delete", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(0);
         then(entity.getBody().getMsg()).isEqualTo("");
     }
 
+
     @Test
     public void test99() throws Exception {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie", "open_id=" + SessionBean.getOpenId());
+        requestHeaders.add("Cookie", "access_token=" + SessionBean.getAccessToken());
+
+        HttpEntity<String> req_entity = new HttpEntity<String>("{}", requestHeaders);
+
         ResponseEntity<OperationMessage> entity = this.testRestTemplate.postForEntity(
-                "http://localhost:" + this.port + "/user_role/not_found", "",  OperationMessage.class);
+                "http://localhost:" + this.port + "/api/user_role/not_found", req_entity,  OperationMessage.class);
         then(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(entity.hasBody()).isEqualTo(true);
         then(entity.getBody().getCode()).isEqualTo(OperationException.getServiceException());
         then(entity.getBody().getMsg()).isEqualTo(OperationException.getExceptionMsg());
+    }
+
+    // delete session user
+    @Test
+    public void z_test01() throws Exception {
+        userMapper.deleteByPrimaryKey(UserBean.getUserId());
     }
 }
