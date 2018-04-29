@@ -37,7 +37,7 @@ public class Auth {
     private static String webPort = "8081";
     private static String getAccessTokenPath = "/api/auth/access_token";
     private static Integer MAX_RECORDS = 1000;
-    private static Integer EXPIRED_TIME = 600;  // seconds
+    private static Integer EXPIRED_TIME = 6000;  // seconds
 
     private static LoadingCache<String, User> cache =
             CacheBuilder.newBuilder()
@@ -72,6 +72,9 @@ public class Auth {
 
     public static void setUserInfo(String key, User user) {
         cache.put(key, user);
+    }
+    public static void refresh(String key) {
+        cache.refresh(key);
     }
 
     @Value("${auth.platform_id}")
