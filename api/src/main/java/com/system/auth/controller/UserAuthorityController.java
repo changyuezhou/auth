@@ -53,7 +53,6 @@ public class UserAuthorityController {
         ObjectMapper mapper = new ObjectMapper();
         SystemLogging.Logging(SystemLogging.getINFO(), "/menu_list", request, "", SystemLogging.getOperationStart());
 
-        System.out.print(" *************************************** " + Auth.getPlatformId() + " \r\n");
         UserInfo user_info = Auth.getUserInfo(request);
         if (302 == user_info.getCode() || null == user_info.getData()) {
             ResponseMessage<List<UserMenuAuthorityView>> result = new ResponseMessage<List<UserMenuAuthorityView>>(302, user_info.getMsg(), null);

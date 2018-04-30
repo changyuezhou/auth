@@ -9,17 +9,17 @@ import java.io.InputStream;
 
 public class MybatisUtil {
     private static SqlSessionFactory sqlSessionFactory;
-    static {
+
+   static  {
         String resource = "spring-mybatis-config.xml";
-        InputStream inputStream;
+
         try {
-            inputStream = Resources.getResourceAsStream(resource);
+            InputStream inputStream = Resources.getResourceAsStream(resource);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     public static SqlSessionFactory getSqlSessionFactory(){
         return sqlSessionFactory;
     }

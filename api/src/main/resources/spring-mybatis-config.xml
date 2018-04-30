@@ -3,6 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <properties resource="application.properties">
+    </properties>
     <typeAliases>
         <package name="tk.mybatis.pagehelper.domain"/>
     </typeAliases>
@@ -10,29 +12,16 @@
         <plugin interceptor="com.github.pagehelper.PageInterceptor">
         </plugin>
     </plugins>
-    <environments default="development">
-        <environment id="development">
-            <transactionManager type="MANAGED"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="${jdbc.driver}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.user}"/>
-                <property name="password" value="${jdbc.password}"/>
-                <!--property name="poolMaximumActiveConnections" value="120"/>
-                <property name="poolMaximumIdleConnections" value="1"/>
-                <property name="poolPingEnabled" value="true"/>
-                <property name="poolPingQuery" value="select 1"/-->
-            </dataSource>
-        </environment>
+    <environments default="product">
         <environment id="product">
             <transactionManager type="MANAGED"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://127.0.0.1:13306/db_auth"/>
-                <property name="username" value="suxin"/>
-                <property name="password" value="suxin@2017"/>
-                <property name="poolMaximumActiveConnections" value="120"/>
-                <property name="poolMaximumIdleConnections" value="1"/>
+                <property name="driver" value="${spring.datasource.driver-class-name}"/>
+                <property name="url" value="${spring.datasource.url}"/>
+                <property name="username" value="${spring.datasource.username}"/>
+                <property name="password" value="${spring.datasource.password}"/>
+                <property name="poolMaximumActiveConnections" value="${spring.datasource.maxActive}"/>
+                <property name="poolMaximumIdleConnections" value="${spring.datasource.minIdle}"/>
                 <property name="poolPingEnabled" value="true"/>
                 <property name="poolPingQuery" value="select 1"/>
             </dataSource>

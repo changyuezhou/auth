@@ -1,6 +1,7 @@
 package com.system.auth;
 
 import com.system.auth.auth.Auth;
+import com.system.auth.util.MybatisUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

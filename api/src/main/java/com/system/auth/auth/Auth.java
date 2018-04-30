@@ -5,6 +5,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import javax.servlet.http.HttpServletRequest;
+
+import com.system.auth.util.MybatisUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -199,7 +201,6 @@ public class Auth {
             String accessToken = getCookieValue(accessTokenName, request.getCookies());
 
             String key = openId + "_" + accessToken;
-            System.out.print(" ######################################### key:" + key + "\r\n");
             User user = cache.get(key);
             cache.put(key, user);
             userInfo.setCode(0);
